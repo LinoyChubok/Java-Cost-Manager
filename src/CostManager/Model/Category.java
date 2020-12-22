@@ -17,7 +17,6 @@ public class Category {
         this.categoryName = categoryName;
     }
 
-
     /**
      * Category Parameterized Constructor that builds Category object without id.
      *
@@ -32,10 +31,11 @@ public class Category {
     /**
      * CostItem Getters
      */
-    public int getId() {
-        return id;
-    }
-    public String getCategoryName() {
-        return categoryName;
-    }
+    public int getId() { return id; }
+    public String getCategoryName() { return categoryName; }
+
+    /**
+     * CostItem Setters
+     */
+    public void setCategoryName(String categoryName) { this.categoryName = categoryName; }
 }
