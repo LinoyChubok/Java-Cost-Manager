@@ -56,12 +56,12 @@ public class CostItem {
     public double getTotalPrice() { return totalPrice; }
     public Currency getCurrency() { return currency; }
 
+    /**
+     * CostItem Setters
+     * !!!!! need to add proper validation and move to the constructor
+     */
+    public void setCategory(Category category) { this.category = category; }
     public void setDescription(String description) { this.description = description; }
+    public void setTotalPrice(double totalPrice) { this.totalPrice = totalPrice; }
     public void setCurrency(Currency currency) { this.currency = currency; }
-//
-//    public void setSum(double sum) {
-//        this.sum = sum;
-//    }
-
-
 }
