@@ -11,11 +11,11 @@ public class CostItem {
     /**
      * CostItem Parameterized Constructor that builds CostItem object from Database.
      *
-     @param id - Variable for holding the cost id from the database.
-     @param category - Represents the category that the cost item belong to.
-     @param description - Represents any info about the cost item.
-     @param totalPrice  - The total price of the cost.
-     @param currency - The currency that used during the purchase.
+     @param id          Variable for holding the cost id from the database.
+     @param category    Represents the category that the cost item belong to.
+     @param description Represents any info about the cost item.
+     @param totalPrice  The total price of the cost.
+     @param currency    The currency that used during the purchase.
      *
      */
     public CostItem(int id, Category category, String description, double totalPrice, Currency currency) {
@@ -29,10 +29,10 @@ public class CostItem {
     /**
      * CostItem Parameterized Constructor that builds CostItem object without id.
      *
-     @param category - Represents the category that the cost item belong to.
-     @param description - Represents any info about the cost item.
-     @param totalPrice  - The total price of the cost.
-     @param currency - The currency that used during the purchase.
+     @param category    Represents the category that the cost item belong to.
+     @param description Represents any info about the cost item.
+     @param totalPrice  The total price of the cost.
+     @param currency    The currency that used during the purchase.
      *
      */
     public CostItem(Category category, String description, double totalPrice, Currency currency) {
