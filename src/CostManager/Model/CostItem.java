@@ -43,27 +43,25 @@ public class CostItem {
         this.currency = currency;
     }
 
+    /**
+     * CostItem Getters
+     */
+    public double getId() { return id; }
+    public Category getCategory() {
+        return category;
+    }
     public String getDescription() {
         return description;
     }
+    public double getTotalPrice() { return totalPrice; }
+    public Currency getCurrency() { return currency; }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-//    public double getSum() {
-//        return sum;
-//    }
+    public void setDescription(String description) { this.description = description; }
+    public void setCurrency(Currency currency) { this.currency = currency; }
 //
 //    public void setSum(double sum) {
 //        this.sum = sum;
 //    }
 
-    //public Currency getCurrency() {
-    //   return currency;
-    //}
 
-    //public void setCurrency(Currency currency) {
-    //this.currency = currency;
-    //}
 }
