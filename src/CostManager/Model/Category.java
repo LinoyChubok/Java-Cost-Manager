@@ -14,7 +14,7 @@ public class Category {
      */
     public Category(int id, String categoryName) {
         this.id = id;
-        this.categoryName = categoryName;
+        setCategoryName(categoryName);
     }
 
     /**
@@ -25,17 +25,17 @@ public class Category {
      */
     public Category(String categoryName) {
         this.id = -1;
-        this.categoryName = categoryName;
+        setCategoryName(categoryName);
     }
 
     /**
-     * CostItem Getters
+     * Category Getters
      */
     public int getId() { return id; }
     public String getCategoryName() { return categoryName; }
 
     /**
-     * CostItem Setters
+     * Category Setters
      */
     public void setCategoryName(String categoryName) { this.categoryName = categoryName; }
 }
