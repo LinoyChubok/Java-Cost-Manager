@@ -22,7 +22,7 @@ public class CostItem {
      @param currency    The currency that used during the purchase.
      *
      */
-    public CostItem(int id, Date date, Category category, String description, Currency currency, double totalPrice) {
+    public CostItem(int id, Date date, Category category, String description, Currency currency, double totalPrice) throws CostManagerException{
         this.id = id;
         setDate(date);
         setCategory(category);
@@ -41,7 +41,7 @@ public class CostItem {
      @param currency    The currency that used during the purchase.
      *
      */
-    public CostItem(Date date, Category category, String description, Currency currency, double totalPrice) {
+    public CostItem(Date date, Category category, String description, Currency currency, double totalPrice) throws CostManagerException{
         this.id = -1;
         setDate(date);
         setCategory(category);
@@ -66,11 +66,16 @@ public class CostItem {
 
     /**
      * CostItem Setters
-     * !!!!! need to add proper validation and move to the constructor
      */
     public void setDate(Date date) { this.date = date; }
     public void setCategory(Category category) { this.category = category; }
     public void setDescription(String description) { this.description = description; }
     public void setCurrency(Currency currency) { this.currency = currency; }
-    public void setTotalPrice(double totalPrice) { this.totalPrice = totalPrice; }
+    public void setTotalPrice(double totalPrice) throws CostManagerException
+    {
+        if(totalPrice <= 0)
+            throw new CostManagerException("Invalid price!");
+        else
+            this.totalPrice = totalPrice;
+    }
 }
