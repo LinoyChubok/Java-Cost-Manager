@@ -20,7 +20,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dfb3612a-dd11-4f16-b2f0-520b5280ef35" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/CostManager/Model/IModel.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/CostManager/Model/Currency.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
