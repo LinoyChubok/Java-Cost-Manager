@@ -8,8 +8,8 @@ public class Category {
     /**
      * Category Parameterized Constructor that builds Category object from Database.
      *
-     @param id          Variable for holding the category id from the database.
-     @param categoryName    Represents the category that the cost item belong to.
+     @param id              Variable for holding the category id from the database.
+     @param categoryName    Represents the category name that the cost items will be belong to.
      *
      */
     public Category(int id, String categoryName) {
@@ -17,10 +17,11 @@ public class Category {
         this.categoryName = categoryName;
     }
 
+
     /**
      * Category Parameterized Constructor that builds Category object without id.
      *
-     @param categoryName    Represents the category that the cost item belong to.
+     @param categoryName    Represents the category name that the cost items will be belong to.
      *
      */
     public Category(String categoryName) {
@@ -28,4 +29,13 @@ public class Category {
         this.categoryName = categoryName;
     }
 
+    /**
+     * CostItem Getters
+     */
+    public int getId() {
+        return id;
+    }
+    public String getCategoryName() {
+        return categoryName;
+    }
 }
