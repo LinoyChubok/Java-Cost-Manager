@@ -57,7 +57,7 @@ public class Category {
     /**
      * equals Method
      *
-     * @return          Check if the Category equals to another object
+     * @return          Check if the Category object equals to another object
      *
      */
     @Override

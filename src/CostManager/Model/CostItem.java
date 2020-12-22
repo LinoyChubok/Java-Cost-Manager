@@ -1,6 +1,7 @@
 package CostManager.Model;
 
 import java.sql.Date;
+import java.util.Objects;
 
 public class CostItem {
 
@@ -81,7 +82,7 @@ public class CostItem {
     /**
      * toString Method
      *
-     * @return          string representation of CostItem object
+     * @return          String representation of CostItem object
      *
      */
     @Override
@@ -93,5 +94,29 @@ public class CostItem {
                 ", description = " + description +
                 ", currency = " + currency +
                 ", totalPrice = " + totalPrice + '}';
+    }
+
+    /**
+     * equals Method
+     *
+     * @return          Check if the CostItem object equals to another object
+     *
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+
+        if (obj == null || getClass() != obj.getClass())
+            return false;
+
+        CostItem costItem = (CostItem) obj;
+
+        return id == costItem.id &&
+                Objects.equals(date, costItem.date) &&
+                Objects.equals(category, costItem.category) &&
+                Objects.equals(description, costItem.description) &&
+                currency == costItem.currency &&
+                Double.compare(costItem.totalPrice, totalPrice) == 0;
     }
 }
