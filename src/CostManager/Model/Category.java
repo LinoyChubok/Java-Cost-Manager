@@ -1,5 +1,7 @@
 package CostManager.Model;
 
+import java.util.Objects;
+
 public class Category {
 
     private int id;
@@ -42,7 +44,7 @@ public class Category {
     /**
      * toString Method
      *
-     * @return          string representation of Category object
+     * @return          String representation of Category object
      *
      */
     @Override
@@ -50,5 +52,24 @@ public class Category {
         return "Category: {" +
                 "id = " + id +
                 ", category name = " + categoryName + '}';
+    }
+
+    /**
+     * equals Method
+     *
+     * @return          Check if the Category equals to another object
+     *
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+
+        if (obj == null || getClass() != obj.getClass())
+            return false;
+
+        Category category = (Category) obj;
+
+        return id == category.id && Objects.equals(categoryName, category.categoryName);
     }
 }
