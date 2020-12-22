@@ -38,4 +38,17 @@ public class Category {
      * Category Setters
      */
     public void setCategoryName(String categoryName) { this.categoryName = categoryName; }
+
+    /**
+     * toString Method
+     *
+     * @return          string representation of Category object
+     *
+     */
+    @Override
+    public String toString() {
+        return "Category: {" +
+                "id = " + id +
+                ", category name = " + categoryName + '}';
+    }
 }
