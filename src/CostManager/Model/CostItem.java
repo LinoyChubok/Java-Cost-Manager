@@ -3,7 +3,7 @@ package CostManager.Model;
 public class CostItem {
     private String description;
     private double sum;
-    //private Currency currency;
+    private Currency currency;
     private int id;
 
     public CostItem(String description, double sum) {
