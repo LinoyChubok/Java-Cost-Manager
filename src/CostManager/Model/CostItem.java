@@ -71,11 +71,27 @@ public class CostItem {
     public void setCategory(Category category) { this.category = category; }
     public void setDescription(String description) { this.description = description; }
     public void setCurrency(Currency currency) { this.currency = currency; }
-    public void setTotalPrice(double totalPrice) throws CostManagerException
-    {
-        if(totalPrice <= 0)
+    public void setTotalPrice(double totalPrice) throws CostManagerException {
+        if (totalPrice <= 0)
             throw new CostManagerException("Invalid price!");
         else
             this.totalPrice = totalPrice;
+    }
+
+    /**
+     * toString Method
+     *
+     * @return          string representation of CostItem object
+     *
+     */
+    @Override
+    public String toString() {
+        return "CostItem: {" +
+                "id = " + id +
+                ", date = " + date +
+                ", category = " + category +
+                ", description = " + description +
+                ", currency = " + currency +
+                ", totalPrice = " + totalPrice + '}';
     }
 }
