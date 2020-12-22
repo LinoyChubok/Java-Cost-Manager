@@ -24,11 +24,11 @@ public class CostItem {
      */
     public CostItem(int id, Date date, Category category, String description, Currency currency, double totalPrice) {
         this.id = id;
-        this.date = date;
-        this.category = category;
-        this.description = description;
-        this.currency = currency;
-        this.totalPrice = totalPrice;
+        setDate(date);
+        setCategory(category);
+        setDescription(description);
+        setCurrency(currency);
+        setTotalPrice(totalPrice);
     }
 
     /**
@@ -43,11 +43,11 @@ public class CostItem {
      */
     public CostItem(Date date, Category category, String description, Currency currency, double totalPrice) {
         this.id = -1;
-        this.date = date;
-        this.category = category;
-        this.description = description;
-        this.currency = currency;
-        this.totalPrice = totalPrice;
+        setDate(date);
+        setCategory(category);
+        setDescription(description);
+        setCurrency(currency);
+        setTotalPrice(totalPrice);
     }
 
     /**
