@@ -1,10 +1,11 @@
 package CostManager.Model;
 
 public class CostItem {
-    private String description;
-    private double sum;
-    //private Currency currency;
+
     private int id;
+    private String description;
+    private double totalPrice;
+    private Currency currency;
 
     public CostItem(String description, double sum) {
         //this.description = description;
