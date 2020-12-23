@@ -123,7 +123,13 @@ public class DerbyDBModel implements IModel {
      * @param category              Represents a new category
      */
     @Override
-    public void addCategory(Category category) throws CostManagerException { }
+    public void addCategory(Category category) throws CostManagerException {
+        try {
+            statement.execute("INSERT INTO Categories (name) " + "VALUES ('" + category.getCategoryName() + "')");
+        } catch (SQLException e) {
+            throw new CostManagerException("Error with adding a new category", e);
+        }
+    }
 
     /**
      * Delete a category by id from the database
