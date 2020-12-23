@@ -30,8 +30,24 @@ public class DerbyDBModel implements IModel {
         startConnection();
     }
 
+    /**
+     * Start the Derby database connection.
+     */
     @Override
-    public void startConnection() throws CostManagerException { }
+    public void startConnection() throws CostManagerException {
+        String connectionUrl = PROTOCOL + "CostManagerDB"+";create=true";
+        try {
+            Class.forName(DRIVER);
+            connection = DriverManager.getConnection(connectionUrl);
+            connection.setAutoCommit(false);
+            statement = connection.createStatement();
+            createTables();
+        } catch (SQLException e) {
+            throw new CostManagerException("Could not open Derby DB at " + connectionUrl, e);
+        } catch (ClassNotFoundException e) {
+            throw new CostManagerException("Could not find Derby driver " + DRIVER, e);
+        }
+    }
 
     @Override
     public void closeConnection() throws CostManagerException { }
