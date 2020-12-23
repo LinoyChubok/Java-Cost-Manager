@@ -1,6 +1,7 @@
 package CostManager.Model;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class DerbyDBModel implements IModel {
 
@@ -116,5 +117,28 @@ public class DerbyDBModel implements IModel {
             throw new CostManagerException("Error with creating CostItems table", e);
         }
     }
+
+
+    @Override
+    public void addCategory(Category category) throws CostManagerException { }
+
+    @Override
+    public void deleteCategory(int id) throws CostManagerException { }
+
+    @Override
+    public ArrayList<Category> getAllCategories() throws CostManagerException { }
+
+
+    @Override
+    public void addCostItem(CostItem item) throws CostManagerException { }
+
+    @Override
+    public void deleteCostItem(int id) throws CostManagerException { }
+
+    @Override
+    public ArrayList<CostItem> getAllCostItems() throws CostManagerException { }
+
+    @Override
+    public ArrayList<CostItem> getAllCostItems(Date fromDate, Date toDate) throws CostManagerException { }
 }
 
