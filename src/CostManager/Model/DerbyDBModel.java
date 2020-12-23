@@ -87,6 +87,34 @@ public class DerbyDBModel implements IModel {
             }
     }
 
+    /**
+     * createTables methods creates the CostItems table and the Categories table on the database.
+     *
+     * @throws CostManagerException if there any problem at the creating the tables.
+     */
     @Override
-    public void createTables() throws CostManagerException { }
+    public void createTables() throws CostManagerException {
+        // Categories Table
+        try {
+            statement.execute("create table Categories(" +
+                    "id INT NOT NULL UNIQUE GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), " +
+                    "name VARCHAR(30) UNIQUE)");
+        } catch (SQLException e) {
+            throw new CostManagerException("Error with creating Categories Category", e);
+        }
+        // CostItems Table
+        try {
+            statement.execute("create table CostItems(" +
+                    "id INT NOT NULL UNIQUE GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), " +
+                    "date DATE, " +
+                    "category VARCHAR(30), " +
+                    "FOREIGN KEY (category) REFERENCES Categories(name), " +
+                    "description VARCHAR(100), " +
+                    "currency VARCHAR(5) NOT NULL, " +
+                    "totalprice DOUBLE NOT NULL)");
+        } catch (SQLException e) {
+            throw new CostManagerException("Error with creating CostItems table", e);
+        }
+    }
 }
+
