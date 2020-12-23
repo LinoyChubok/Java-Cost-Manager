@@ -150,7 +150,18 @@ public class DerbyDBModel implements IModel {
      */
     @Override
     public ArrayList<Category> getAllCategories() throws CostManagerException {
-        ArrayList<Category> categories = new ArrayList<Category>();
+        ArrayList<Category> categories = new ArrayList<>();
+
+        try {
+            rs = statement.executeQuery("SELECT * FROM Categories");
+            while (rs.next()) {
+                Category category = new Category( rs.getInt("id"), rs.getString("name"));
+                categories.add(category);
+            }
+        } catch (SQLException e) {
+            throw new CostManagerException("Error with get all categories", e);
+        }
+
         return categories;
     }
 
