@@ -112,7 +112,7 @@ public class DerbyDBModel implements IModel {
                     "FOREIGN KEY (category) REFERENCES Categories(name), " +
                     "description VARCHAR(100), " +
                     "currency VARCHAR(5) NOT NULL, " +
-                    "totalprice DOUBLE NOT NULL)");
+                    "totalPrice DOUBLE NOT NULL)");
         } catch (SQLException e) {
             throw new CostManagerException("Error with creating CostItems table", e);
         }
@@ -198,11 +198,27 @@ public class DerbyDBModel implements IModel {
 
     /**
      * Get all the cost items from the database
-     * @return items                array list of cost items
+     * @return items                Array list of cost items
      */
     @Override
     public ArrayList<CostItem> getAllCostItems() throws CostManagerException {
-        ArrayList<CostItem> items = new ArrayList<CostItem>();
+        ArrayList<CostItem> items = new ArrayList<>();
+
+        try {
+            rs = statement.executeQuery("SELECT * FROM CostItems");
+            while (rs.next()) {
+                CostItem item = new CostItem (rs.getInt("id"),
+                        rs.getDate("date"),
+                        new Category(rs.getString("category")),
+                        rs.getString("description"),
+                        Currency.valueOf(rs.getString("currency")),
+                        rs.getDouble("totalPrice"));
+                items.add(item);
+            }
+        } catch (SQLException e) {
+            throw new CostManagerException("Error with get all cost items", e);
+        }
+
         return items;
     }
 

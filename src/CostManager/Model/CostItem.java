@@ -19,8 +19,8 @@ public class CostItem {
      @param date        Represents the date of the purchase.
      @param category    Represents the category that the cost item belong to.
      @param description Represents any info about the cost item.
-     @param totalPrice  The total price of the cost.
      @param currency    The currency that used during the purchase.
+     @param totalPrice  The total price of the cost.
      *
      */
     public CostItem(int id, Date date, Category category, String description, Currency currency, double totalPrice) throws CostManagerException{
@@ -38,8 +38,8 @@ public class CostItem {
      @param date        Represents the date of the purchase.
      @param category    Represents the category that the cost item belong to.
      @param description Represents any info about the cost item.
-     @param totalPrice  The total price of the cost.
      @param currency    The currency that used during the purchase.
+     @param totalPrice  The total price of the cost.
      *
      */
     public CostItem(Date date, Category category, String description, Currency currency, double totalPrice) throws CostManagerException{
