@@ -188,7 +188,13 @@ public class DerbyDBModel implements IModel {
      * @param id                    Represents id of a cost item
      */
     @Override
-    public void deleteCostItem(int id) throws CostManagerException { }
+    public void deleteCostItem(int id) throws CostManagerException {
+        try {
+            statement.execute("DELETE FROM CostItems WHERE id=" + id );
+        } catch (SQLException e) {
+            throw new CostManagerException("Error with deleting a specific cost item", e);
+        }
+    }
 
     /**
      * Get all the cost items from the database
