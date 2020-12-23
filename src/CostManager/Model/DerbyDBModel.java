@@ -119,34 +119,34 @@ public class DerbyDBModel implements IModel {
     }
 
     /**
-     * Inserts a new Category object to the database
-     * @param category              Represents a new category
+     * Inserts a new Category object to the database.
+     * @param category              Represents a new category.
      */
     @Override
     public void addCategory(Category category) throws CostManagerException {
         try {
             statement.execute("INSERT INTO Categories (name) " + "VALUES ('" + category.getCategoryName() + "')");
         } catch (SQLException e) {
-            throw new CostManagerException("Error with adding a new category", e);
+            throw new CostManagerException("Error with adding a new category to the database", e);
         }
     }
 
     /**
-     * Delete a category by id from the database
-     * @param id                    Represents id of a category
+     * Delete a category by id from the database.
+     * @param id                    Represents id of a category.
      */
     @Override
     public void deleteCategory(int id) throws CostManagerException {
         try {
             statement.execute("DELETE FROM Categories WHERE id=" + id );
         } catch (SQLException e) {
-            throw new CostManagerException("Error with deleting a specific category", e);
+            throw new CostManagerException("Error with deleting a specific category from the database", e);
         }
     }
 
     /**
-     * Get all the categories from the database
-     * @return categories            Array list of categories
+     * Get all the categories from the database.
+     * @return categories            Array list of categories.
      */
     @Override
     public ArrayList<Category> getAllCategories() throws CostManagerException {
@@ -166,8 +166,8 @@ public class DerbyDBModel implements IModel {
     }
 
     /**
-     * Inserts a new CostItem object to the database
-     * @param item                  Represents a new cost item
+     * Inserts a new CostItem object to the database.
+     * @param item                  Represents a new cost item.
      */
     @Override
     public void addCostItem(CostItem item) throws CostManagerException {
@@ -179,26 +179,26 @@ public class DerbyDBModel implements IModel {
                     "', '" + item.getCurrency().name() +
                     "', '" + item.getTotalPrice() + "')");
         } catch (SQLException e) {
-            throw new CostManagerException("Error with adding a new cost item", e);
+            throw new CostManagerException("Error with adding a new cost item to database", e);
         }
     }
 
     /**
-     * Delete a cost item by id from the database
-     * @param id                    Represents id of a cost item
+     * Delete a cost item by id from the database.
+     * @param id                    Represents id of a cost item.
      */
     @Override
     public void deleteCostItem(int id) throws CostManagerException {
         try {
             statement.execute("DELETE FROM CostItems WHERE id=" + id );
         } catch (SQLException e) {
-            throw new CostManagerException("Error with deleting a specific cost item", e);
+            throw new CostManagerException("Error with deleting a specific cost item from the database", e);
         }
     }
 
     /**
-     * Get all the cost items from the database
-     * @return items                Array list of cost items
+     * Get all the cost items from the database.
+     * @return items                Array list of cost items.
      */
     @Override
     public ArrayList<CostItem> getAllCostItems() throws CostManagerException {
@@ -216,19 +216,35 @@ public class DerbyDBModel implements IModel {
                 items.add(item);
             }
         } catch (SQLException e) {
-            throw new CostManagerException("Error with get all cost items", e);
+            throw new CostManagerException("Error with get all thw cost items from the database", e);
         }
 
         return items;
     }
 
     /**
-     * Get all the cost items between two dates from the database
-     * @return items                array list of cost items
+     * Get all the cost items between two dates from the database.
+     * @return items                Array list of cost items.
      */
     @Override
     public ArrayList<CostItem> getAllCostItems(Date fromDate, Date toDate) throws CostManagerException {
-        ArrayList<CostItem> items = new ArrayList<CostItem>();
+        ArrayList<CostItem> items = new ArrayList<>();
+
+        try {
+            rs = statement.executeQuery("SELECT * FROM CostItems WHERE date BETWEEN DATE('" + fromDate.toLocalDate() + "') and DATE('" + toDate.toLocalDate() + "')");
+            while (rs.next()) {
+                CostItem item = new CostItem (rs.getInt("id"),
+                        rs.getDate("date"),
+                        new Category(rs.getString("category")),
+                        rs.getString("description"),
+                        Currency.valueOf(rs.getString("currency")),
+                        rs.getDouble("totalPrice"));
+                items.add(item);
+            }
+        } catch (SQLException e) {
+            throw new CostManagerException("Error with get all cost items between two dates from the database", e);
+        }
+
         return items;
     }
 }
