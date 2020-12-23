@@ -116,7 +116,7 @@ class CostItemTest {
         String expected =  "CostItem: {" +
                 "id = " + "-1" +
                 ", date = " + "2020-12-22" +
-                ", category = " + "Food" +
+                ", category = " + "Category: {id = -1, category name = Food}" +
                 ", description = " + "Pizza Slice" +
                 ", currency = " + "ILS" +
                 ", totalPrice = " + "27.6" + '}';
