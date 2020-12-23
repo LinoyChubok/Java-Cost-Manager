@@ -118,26 +118,49 @@ public class DerbyDBModel implements IModel {
         }
     }
 
-
+    /**
+     * Inserts a new Category object to the database
+     * @param category      Represents a new category
+     */
     @Override
     public void addCategory(Category category) throws CostManagerException { }
 
+    /**
+     * Delete a category by id from the database
+     * @param id            Represents id of a category
+     */
     @Override
     public void deleteCategory(int id) throws CostManagerException { }
 
+    /**
+     * Get all the categories from the database
+     */
     @Override
     public ArrayList<Category> getAllCategories() throws CostManagerException { }
 
-
+    /**
+     * Inserts a new CostItem object to the database
+     * @param item          Represents a new cost item
+     */
     @Override
     public void addCostItem(CostItem item) throws CostManagerException { }
 
+    /**
+     * Delete a cost item by id from the database
+     * @param id            Represents id of a cost item
+     */
     @Override
     public void deleteCostItem(int id) throws CostManagerException { }
 
+    /**
+     * Get all the cost items from the database
+     */
     @Override
     public ArrayList<CostItem> getAllCostItems() throws CostManagerException { }
 
+    /**
+     * Get all the cost items between two dates from the database
+     */
     @Override
     public ArrayList<CostItem> getAllCostItems(Date fromDate, Date toDate) throws CostManagerException { }
 }
