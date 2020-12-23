@@ -8,11 +8,11 @@ public class DerbyDBModel implements IModel {
     /**
      * DerbyDBModel will implement IModel (Each Database type has different implementations).
      *
-     * @param PROTOCOL         Describes the communication type
-     * @param DRIVER           Describes the driver type
-     * @param connection       Holds the database connection details
-     * @param statement        Used for executing requests to the database
-     * @param rs               Holds the information that comes back from the database
+     * @param PROTOCOL              Describes the communication type
+     * @param DRIVER                Describes the driver type
+     * @param connection            Holds the database connection details
+     * @param statement             Used for executing requests to the database
+     * @param rs                    Holds the information that comes back from the database
      */
 
     private static final String PROTOCOL = "jdbc:derby:";
@@ -120,48 +120,60 @@ public class DerbyDBModel implements IModel {
 
     /**
      * Inserts a new Category object to the database
-     * @param category      Represents a new category
+     * @param category              Represents a new category
      */
     @Override
     public void addCategory(Category category) throws CostManagerException { }
 
     /**
      * Delete a category by id from the database
-     * @param id            Represents id of a category
+     * @param id                    Represents id of a category
      */
     @Override
     public void deleteCategory(int id) throws CostManagerException { }
 
     /**
      * Get all the categories from the database
+     * @return categories            array list of categories
      */
     @Override
-    public ArrayList<Category> getAllCategories() throws CostManagerException { }
+    public ArrayList<Category> getAllCategories() throws CostManagerException {
+        ArrayList<Category> categories = new ArrayList<Category>();
+        return categories;
+    }
 
     /**
      * Inserts a new CostItem object to the database
-     * @param item          Represents a new cost item
+     * @param item                  Represents a new cost item
      */
     @Override
     public void addCostItem(CostItem item) throws CostManagerException { }
 
     /**
      * Delete a cost item by id from the database
-     * @param id            Represents id of a cost item
+     * @param id                    Represents id of a cost item
      */
     @Override
     public void deleteCostItem(int id) throws CostManagerException { }
 
     /**
      * Get all the cost items from the database
+     * @return items                array list of cost items
      */
     @Override
-    public ArrayList<CostItem> getAllCostItems() throws CostManagerException { }
+    public ArrayList<CostItem> getAllCostItems() throws CostManagerException {
+        ArrayList<CostItem> items = new ArrayList<CostItem>();
+        return items;
+    }
 
     /**
      * Get all the cost items between two dates from the database
+     * @return items                array list of cost items
      */
     @Override
-    public ArrayList<CostItem> getAllCostItems(Date fromDate, Date toDate) throws CostManagerException { }
+    public ArrayList<CostItem> getAllCostItems(Date fromDate, Date toDate) throws CostManagerException {
+        ArrayList<CostItem> items = new ArrayList<CostItem>();
+        return items;
+    }
 }
 
