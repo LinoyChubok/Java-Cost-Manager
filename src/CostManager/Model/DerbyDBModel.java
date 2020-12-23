@@ -49,8 +49,43 @@ public class DerbyDBModel implements IModel {
         }
     }
 
+    /**
+     * Closes the Derby database connection.
+     *
+     * @throws CostManagerException if there any problem at the connection closing.
+     */
     @Override
-    public void closeConnection() throws CostManagerException { }
+    public void closeConnection() throws CostManagerException {
+        try {
+            DriverManager.getConnection(    PROTOCOL+";shutdown=true");
+        } catch (SQLTimeoutException e) {
+            throw new CostManagerException("A timeout has been exceeded.", e);
+        } catch (SQLException e) {
+            if (!((e.getErrorCode() == 50000) && ("XJ015".equals(e.getSQLState()))))
+                throw new CostManagerException("Database access error or the url is null.", e);
+        }
+
+        if (statement != null)
+            try {
+                statement.close();
+            } catch (SQLException e) {
+                throw new CostManagerException("Error releasing Statement.", e);
+            }
+
+        if (connection != null)
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                throw new CostManagerException("Error closing DB connection.", e);
+            }
+
+        if (rs != null)
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                throw new CostManagerException("Error releasing ResultSet.", e);
+            }
+    }
 
     @Override
     public void createTables() throws CostManagerException { }
