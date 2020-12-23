@@ -1,12 +1,12 @@
 package CostManager.Model;
 
 public class DerbyDBModel implements IModel {
-//    @Override
-//    public void addCostItem(CostItem item) throws CostManagerException { }
-//
-//    @Override
-//    public CostItem[] getCostItems() throws CostManagerException { return new CostItem[0]; }
-//
-//    @Override
-//    public void deleteCostItem(CostItem item) throws CostManagerException { }
+    @Override
+    public void startConnection() throws CostManagerException { }
+
+    @Override
+    public void closeConnection() throws CostManagerException { }
+
+    @Override
+    public void createTables() throws CostManagerException { }
 }
