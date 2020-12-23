@@ -136,7 +136,13 @@ public class DerbyDBModel implements IModel {
      * @param id                    Represents id of a category
      */
     @Override
-    public void deleteCategory(int id) throws CostManagerException { }
+    public void deleteCategory(int id) throws CostManagerException {
+        try {
+            statement.execute("DELETE FROM Categories WHERE id=" + id );
+        } catch (SQLException e) {
+            throw new CostManagerException("Error with deleting a specific category", e);
+        }
+    }
 
     /**
      * Get all the categories from the database
