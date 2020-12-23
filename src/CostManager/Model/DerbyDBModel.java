@@ -119,13 +119,32 @@ public class DerbyDBModel implements IModel {
     }
 
     /**
+     * Checking if a specific category object exists in the database
+     */
+    @Override
+    public int categoryExist(String categoryName) throws CostManagerException {
+        int categoryId = -1;
+        try {
+            rs = statement.executeQuery("SELECT * FROM Categories WHERE name ='" + categoryName + "'");
+            if(rs.next())
+                categoryId = rs.getInt("id");
+            return categoryId;
+        } catch (SQLException e) {
+            throw new CostManagerException("Error with checking category", e);
+        }
+    }
+
+    /**
      * Inserts a new Category object to the database.
      * @param category              Represents a new category.
      */
     @Override
     public void addCategory(Category category) throws CostManagerException {
         try {
-            statement.execute("INSERT INTO Categories (name) " + "VALUES ('" + category.getCategoryName() + "')");
+            String categoryName = category.getCategoryName();
+            if(categoryExist(categoryName) == -1)
+                statement.execute("INSERT INTO Categories (name) " + "VALUES ('" + categoryName + "')");
+            else throw new CostManagerException("Error duplicated category");
         } catch (SQLException e) {
             throw new CostManagerException("Error with adding a new category to the database", e);
         }
@@ -177,7 +196,7 @@ public class DerbyDBModel implements IModel {
                     "', '" + item.getCategory().getCategoryName() +
                     "','" + item.getDescription() +
                     "', '" + item.getCurrency().name() +
-                    "', '" + item.getTotalPrice() + "')");
+                    "', " + item.getTotalPrice() + ")");
         } catch (SQLException e) {
             throw new CostManagerException("Error with adding a new cost item to database", e);
         }
@@ -205,7 +224,7 @@ public class DerbyDBModel implements IModel {
         ArrayList<CostItem> items = new ArrayList<>();
 
         try {
-            rs = statement.executeQuery("SELECT * FROM CostItems");
+            ResultSet rs = statement.executeQuery("SELECT * FROM CostItems");
             while (rs.next()) {
                 CostItem item = new CostItem (rs.getInt("id"),
                         rs.getDate("date"),
@@ -215,8 +234,8 @@ public class DerbyDBModel implements IModel {
                         rs.getDouble("totalPrice"));
                 items.add(item);
             }
-        } catch (SQLException e) {
-            throw new CostManagerException("Error with get all thw cost items from the database", e);
+        } catch (SQLException | CostManagerException e) {
+            throw new CostManagerException("Error with get all the cost items from the database", e);
         }
 
         return items;

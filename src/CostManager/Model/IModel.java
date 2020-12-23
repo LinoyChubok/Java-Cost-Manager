@@ -15,6 +15,7 @@ public interface IModel {
     /**
      * Categories queries implementation
      */
+    public abstract int categoryExist(String categoryName) throws CostManagerException;
     public abstract void addCategory(Category category) throws CostManagerException;
     public abstract void deleteCategory(int id) throws CostManagerException;
     public abstract ArrayList<Category> getAllCategories() throws CostManagerException;

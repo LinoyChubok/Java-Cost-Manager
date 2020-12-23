@@ -54,7 +54,7 @@ public class CostItem {
     /**
      * CostItem Getters
      */
-    public double getId() { return id; }
+    public int getId() { return id; }
     public Date getDate() { return date; }
     public Category getCategory() {
         return category;
