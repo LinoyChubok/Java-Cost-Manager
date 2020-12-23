@@ -146,7 +146,7 @@ public class DerbyDBModel implements IModel {
 
     /**
      * Get all the categories from the database
-     * @return categories            array list of categories
+     * @return categories            Array list of categories
      */
     @Override
     public ArrayList<Category> getAllCategories() throws CostManagerException {
@@ -170,7 +170,18 @@ public class DerbyDBModel implements IModel {
      * @param item                  Represents a new cost item
      */
     @Override
-    public void addCostItem(CostItem item) throws CostManagerException { }
+    public void addCostItem(CostItem item) throws CostManagerException {
+        try {
+            statement.execute("INSERT INTO CostItems (date, category, description, currency, totalPrice)" +
+                    "VALUES ('" + item.getDate() +
+                    "', '" + item.getCategory().getCategoryName() +
+                    "','" + item.getDescription() +
+                    "', '" + item.getCurrency().name() +
+                    "', '" + item.getTotalPrice() + "')");
+        } catch (SQLException e) {
+            throw new CostManagerException("Error with adding a new cost item", e);
+        }
+    }
 
     /**
      * Delete a cost item by id from the database
