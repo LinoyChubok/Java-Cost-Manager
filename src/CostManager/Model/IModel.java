@@ -1,7 +1,8 @@
 package CostManager.Model;
 
 public interface IModel {
-    //public void addCostItem(CostItem item) throws CostManagerException;
-    //public CostItem[] getCostItems() throws CostManagerException;
-    //public void deleteCostItem(CostItem item) throws CostManagerException;
+    public abstract void startConnection() throws CostManagerException;
+    public abstract void closeConnection() throws CostManagerException;
+    public abstract void createTables() throws CostManagerException;
 }
+
