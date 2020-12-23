@@ -21,6 +21,15 @@ public class DerbyDBModel implements IModel {
     private static Statement statement = null;
     private static ResultSet rs = null;
 
+    /**
+     * The constructor calls the startConnection method that initializes the connection.
+     *
+     * @throws CostManagerException if there any problem at the connection creating.
+     */
+    public DerbyDBModel() throws CostManagerException {
+        startConnection();
+    }
+
     @Override
     public void startConnection() throws CostManagerException { }
 
