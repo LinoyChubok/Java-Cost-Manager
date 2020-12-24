@@ -6,17 +6,16 @@ import java.util.ArrayList;
 public class DerbyDBModel implements IModel {
 
     /**
-     * DerbyDBModel will implement IModel (Each Database type has different implementations).
+     * DerbyDBModel will implement IModel (different implementations for each database).
      *
      * @param PROTOCOL              Describes the communication type
      * @param DRIVER                Describes the driver type
-     * @param connection            Holds the database connection details
-     * @param statement             Used for executing requests to the database
-     * @param rs                    Holds the information that comes back from the database
+     * @param DB_NAME               Describes the database name
      */
 
     private static final String PROTOCOL = "jdbc:derby:";
     private static final String DRIVER = "org.apache.derby.jdbc.EmbeddedDriver";
+    private static final String DB_NAME = "CostManagerDB";
 
     private static Connection connection = null;
     private static Statement statement = null;
@@ -36,7 +35,7 @@ public class DerbyDBModel implements IModel {
      */
     @Override
     public void startConnection() throws CostManagerException {
-        String connectionUrl = PROTOCOL + "CostManagerDB"+";create=true";
+        String connectionUrl = PROTOCOL + DB_NAME + ";create=true";
         try {
             Class.forName(DRIVER);
             connection = DriverManager.getConnection(connectionUrl);
@@ -58,7 +57,7 @@ public class DerbyDBModel implements IModel {
     @Override
     public void closeConnection() throws CostManagerException {
         try {
-            DriverManager.getConnection(    PROTOCOL+";shutdown=true");
+            DriverManager.getConnection(PROTOCOL + ";shutdown=true");
         } catch (SQLTimeoutException e) {
             throw new CostManagerException("A timeout has been exceeded.", e);
         } catch (SQLException e) {
@@ -77,7 +76,7 @@ public class DerbyDBModel implements IModel {
             try {
                 connection.close();
             } catch (SQLException e) {
-                throw new CostManagerException("Error closing DB connection.", e);
+                throw new CostManagerException("Error closing database connection.", e);
             }
 
         if (rs != null)
@@ -119,7 +118,7 @@ public class DerbyDBModel implements IModel {
     }
 
     /**
-     * Checking if a specific category object exists in the database
+     * Checking if a specific category object exists in the database (duplicated value)
      */
     @Override
     public int categoryExist(String categoryName) throws CostManagerException {

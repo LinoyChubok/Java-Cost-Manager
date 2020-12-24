@@ -117,6 +117,6 @@ public class CostItem {
                 Objects.equals(category, costItem.category) &&
                 Objects.equals(description, costItem.description) &&
                 currency == costItem.currency &&
-                Double.compare(costItem.totalPrice, totalPrice) == 0;
+                Double.compare(totalPrice, costItem.totalPrice) == 0;
     }
 }
