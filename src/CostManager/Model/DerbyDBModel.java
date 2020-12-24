@@ -4,7 +4,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class DerbyDBModel implements IModel {
-
+    // !!!!!! Need to open connection and close connection for each function !!!!!!!
     /**
      * DerbyDBModel will implement IModel (different implementations for each database).
      *
