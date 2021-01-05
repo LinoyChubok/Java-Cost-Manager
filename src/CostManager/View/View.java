@@ -9,10 +9,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-// [X] Main Page
-// [X] Cost Page
-// [ ] Category Page
-// [ ] View Page
 
 public class View implements IView {
 
@@ -41,12 +37,14 @@ public class View implements IView {
         private MainPanel mainPanel;
         private CostPanel costPanel;
         private CategoryPanel categoryPanel;
+        private viewResultsPanel viewResultsPanel;
 
         public ApplicationUI() {
 
             mainPanel = new MainPanel();
             costPanel = new CostPanel();
             categoryPanel = new CategoryPanel();
+            viewResultsPanel = new viewResultsPanel();
 
             frame = new JFrame("CostManager");
             frame.setLayout(new BorderLayout());
@@ -68,7 +66,7 @@ public class View implements IView {
             private JPanel btnsPanel;
             private JButton addCostBtn;
             private JButton addCategoryBtn;
-            private JButton viewBtn;
+            private JButton viewResultsBtn;
 
             public MainPanel() {
                 btnsPanel = new JPanel(new GridLayout(2, 2, 50, 50));
@@ -76,12 +74,12 @@ public class View implements IView {
                 title = new JLabel("<html><h1><strong>Cost Manager - Java Course Final Project</strong></h1><hr><br></html>");
                 addCostBtn = new JButton("Add a new Cost");
                 addCategoryBtn = new JButton("Add a new Category");
-                viewBtn = new JButton("View detailed report & pie chart diagram");
+                viewResultsBtn = new JButton("View detailed report & pie chart diagram");
 
                 add(title);
                 btnsPanel.add(addCostBtn);
                 btnsPanel.add(addCategoryBtn);
-                btnsPanel.add(viewBtn);
+                btnsPanel.add(viewResultsBtn);
                 add(btnsPanel);
 
                 addCostBtn.addActionListener(new ActionListener() {
@@ -100,6 +98,13 @@ public class View implements IView {
                     }
                 });
 
+                viewResultsBtn.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        ApplicationUI.this.costPanel.clearInputs();
+                        ApplicationUI.this.changeScreen(ApplicationUI.this.viewResultsPanel);
+                    }
+                });
             }
         }
 
@@ -201,6 +206,92 @@ public class View implements IView {
              }
 
         }
+
+
+        public class viewResultsPanel extends JPanel {
+            private JPanel headerPanel;
+            private JPanel resultsFormPanel;
+            private JPanel radioPanel;
+            private JPanel datesPanel;
+
+            private JPanel showResultsPanel;
+            private JPanel btnPanel;
+
+            private ButtonGroup bg;
+
+            private JLabel title;
+            private JLabel chooseResultsLabel;
+            private JLabel startDateLabel;
+            private JLabel endDateLabel;
+
+            private JRadioButton reportRBtb;
+            private JRadioButton pieRBtb;
+
+            private JTextField startDateTF;
+            private JTextField endDateTF;
+
+            private JButton showResultsBtn;
+
+            public viewResultsPanel() {
+                setBorder(BorderFactory.createEmptyBorder(0,30,30,30));
+                setLayout(new GridLayout(4,1,20,20));
+                headerPanel = new JPanel();
+                resultsFormPanel = new JPanel();
+                resultsFormPanel.setLayout(new GridLayout(2,1,10,10));
+                btnPanel = new JPanel();
+                title = new JLabel("<html><h1><strong>View Results</strong></h1><hr></html>");
+
+                datesPanel = new JPanel();
+                datesPanel.setLayout(new GridLayout(2,2,10,10));
+                startDateLabel = new JLabel("Start date");
+                startDateTF = new JTextField();
+                endDateLabel = new JLabel("End date");
+                endDateTF = new JTextField();
+
+                radioPanel = new JPanel();
+                radioPanel.setLayout(new GridLayout(1,1,0,0));
+                chooseResultsLabel = new JLabel("Choose Results Type");
+                bg = new ButtonGroup();
+                reportRBtb = new JRadioButton("View detailed report");
+                reportRBtb.setSelected(true);
+                pieRBtb = new JRadioButton("View pie chart diagram");
+
+                showResultsPanel = new JPanel();
+
+                showResultsBtn = new JButton("Show Results");
+
+                headerPanel.add(title);
+
+                datesPanel.add(startDateLabel);
+                datesPanel.add(startDateTF);
+                datesPanel.add(endDateLabel);
+                datesPanel.add(endDateTF);
+                resultsFormPanel.add(datesPanel);
+
+                radioPanel.add(chooseResultsLabel);
+                radioPanel.add(reportRBtb);
+                radioPanel.add(pieRBtb);
+                bg.add(reportRBtb);
+                bg.add(pieRBtb);
+                resultsFormPanel.add(radioPanel);
+
+                btnPanel.add(showResultsBtn);
+
+                add(headerPanel);
+                add(resultsFormPanel);
+                add(showResultsPanel);
+                add(btnPanel);
+
+            }
+
+             public void clearInputs() {
+                startDateTF.setText("");
+                endDateTF.setText("");
+
+             }
+
+        }
+
 
         public void displayMainMenu() {
             this.panel = mainPanel;
