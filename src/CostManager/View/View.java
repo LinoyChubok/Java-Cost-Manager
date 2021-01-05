@@ -40,11 +40,13 @@ public class View implements IView {
         private JPanel panel;
         private MainPanel mainPanel;
         private CostPanel costPanel;
+        private CategoryPanel categoryPanel;
 
         public ApplicationUI() {
 
             mainPanel = new MainPanel();
             costPanel = new CostPanel();
+            categoryPanel = new CategoryPanel();
 
             frame = new JFrame("CostManager");
             frame.setLayout(new BorderLayout());
@@ -86,10 +88,18 @@ public class View implements IView {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         ApplicationUI.this.costPanel.clearInputs();
-                        ApplicationUI.this.changeScreen
-                                (ApplicationUI.this.costPanel);
+                        ApplicationUI.this.changeScreen(ApplicationUI.this.costPanel);
                     }
                 });
+
+                addCategoryBtn.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        ApplicationUI.this.costPanel.clearInputs();
+                        ApplicationUI.this.changeScreen(ApplicationUI.this.categoryPanel);
+                    }
+                });
+
             }
         }
 
@@ -150,6 +160,45 @@ public class View implements IView {
                 descriptionTF.setText("");
              }
 
+        }
+
+
+        public class CategoryPanel extends JPanel {
+            private JPanel headerPanel;
+            private JPanel categoryFormPanel;
+            private JPanel btnPanel;
+            private JLabel title;
+            private JLabel categoryLabel;
+            private JTextField categoryTF;
+            private JButton addBtn;
+
+            public CategoryPanel() {
+                setBorder(BorderFactory.createEmptyBorder(0,30,30,30));
+                setLayout(new GridLayout(3,1,20,20));
+                headerPanel = new JPanel();
+                categoryFormPanel = new JPanel();
+                categoryFormPanel.setLayout(new GridLayout(1,2));
+                btnPanel = new JPanel();
+                title = new JLabel("<html><h1><strong>Add a New Categoty</strong></h1><hr></html>");
+                categoryLabel = new JLabel("Category");
+                categoryTF = new JTextField();
+
+                addBtn = new JButton("Add");
+
+                headerPanel.add(title);
+                categoryFormPanel.add(categoryLabel);
+                categoryFormPanel.add(categoryTF);
+                btnPanel.add(addBtn);
+
+                add(headerPanel);
+                add(categoryFormPanel);
+                add(btnPanel);
+
+            }
+
+             public void clearInputs() {
+                categoryTF.setText("");
+             }
 
         }
 
