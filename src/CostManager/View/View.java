@@ -10,10 +10,9 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 // [X] Main Page
-// [ ] Cost Page
+// [X] Cost Page
 // [ ] Category Page
 // [ ] View Page
-
 
 public class View implements IView {
 
@@ -40,10 +39,12 @@ public class View implements IView {
         private JFrame frame;
         private JPanel panel;
         private MainPanel mainPanel;
+        private CostPanel costPanel;
 
         public ApplicationUI() {
 
             mainPanel = new MainPanel();
+            costPanel = new CostPanel();
 
             frame = new JFrame("CostManager");
             frame.setLayout(new BorderLayout());
@@ -61,20 +62,95 @@ public class View implements IView {
 
 
         public class MainPanel extends JPanel {
+            private JLabel title;
+            private JPanel btnsPanel;
             private JButton addCostBtn;
             private JButton addCategoryBtn;
             private JButton viewBtn;
 
             public MainPanel() {
-                add(new JLabel("<html><h1><strong>Cost Manager - Java Course Final Project</strong></h1><hr><br></html>"));
-                JPanel btnPanel = new JPanel(new GridLayout(2, 2, 50, 50));
-                btnPanel.setSize(300, 150);
+                btnsPanel = new JPanel(new GridLayout(2, 2, 50, 50));
+                btnsPanel.setSize(300, 150);
+                title = new JLabel("<html><h1><strong>Cost Manager - Java Course Final Project</strong></h1><hr><br></html>");
+                addCostBtn = new JButton("Add a new Cost");
+                addCategoryBtn = new JButton("Add a new Category");
+                viewBtn = new JButton("View detailed report & pie chart diagram");
 
-                btnPanel.add(new JButton("Add a new Cost"));
-                btnPanel.add(new JButton("Add a new Category"));
-                btnPanel.add(new JButton("View detailed report & pie chart diagram"));
-                add(btnPanel);
+                add(title);
+                btnsPanel.add(addCostBtn);
+                btnsPanel.add(addCategoryBtn);
+                btnsPanel.add(viewBtn);
+                add(btnsPanel);
+
+                addCostBtn.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        ApplicationUI.this.costPanel.clearInputs();
+                        ApplicationUI.this.changeScreen
+                                (ApplicationUI.this.costPanel);
+                    }
+                });
             }
+        }
+
+        public class CostPanel extends JPanel {
+            private JPanel headerPanel;
+            private JPanel costFormPanel;
+            private JPanel btnPanel;
+            private JLabel title;
+            private JLabel categoryLabel;
+            private JLabel currencyLabel;
+            private JLabel amountLabel;
+            private JLabel descriptionLabel;
+            private JComboBox categoryCB;
+            private JComboBox currencyCB;
+            private TextField amountTF;
+            private TextField descriptionTF;
+            private JButton saveBtn;
+
+            public CostPanel() {
+                setBorder(BorderFactory.createEmptyBorder(0,30,30,30));
+                setLayout(new GridLayout(3,1,20,20));
+                headerPanel = new JPanel();
+                costFormPanel = new JPanel();
+                costFormPanel.setLayout(new GridLayout(4,2,10,10));
+                btnPanel = new JPanel();
+                title = new JLabel("<html><h1><strong>Add a New Cost</strong></h1><hr></html>");
+                categoryLabel = new JLabel("Category");
+                categoryCB = new JComboBox();
+                currencyLabel = new JLabel("Currency");
+                currencyCB = new JComboBox();
+                amountLabel = new JLabel("Amount");
+                amountTF = new TextField();
+                descriptionLabel = new JLabel("Description");
+                descriptionTF = new TextField();
+                saveBtn = new JButton("Save");
+
+                headerPanel.add(title);
+                costFormPanel.add(categoryLabel);
+                costFormPanel.add(categoryCB);
+                costFormPanel.add(currencyLabel);
+                costFormPanel.add(currencyCB);
+                costFormPanel.add(amountLabel);
+                costFormPanel.add(amountTF);
+                costFormPanel.add(descriptionLabel);
+                costFormPanel.add(descriptionTF);
+                btnPanel.add(saveBtn);
+
+                add(headerPanel);
+                add(costFormPanel);
+                add(btnPanel);
+
+            }
+
+             public void clearInputs() {
+                categoryCB.setSelectedIndex(-1);
+                currencyCB.setSelectedIndex(-1);
+                amountTF.setText("");
+                descriptionTF.setText("");
+             }
+
+
         }
 
         public void displayMainMenu() {
@@ -82,6 +158,14 @@ public class View implements IView {
             frame.getContentPane().add(this.panel);
             frame.setVisible(true);
         }
+
+         public void changeScreen(JPanel nextPanel) {
+            frame.remove(this.panel);
+            frame.repaint();
+            this.panel = nextPanel;
+            frame.add(this.panel);
+            frame.setVisible(true);
+         }
 
         public void start() {
             displayMainMenu();
