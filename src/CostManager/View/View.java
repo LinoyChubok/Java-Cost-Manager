@@ -9,6 +9,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+// [X] Main Page
+// [ ] Cost Page
+// [ ] Category Page
+// [ ] View Page
+
 
 public class View implements IView {
 
@@ -61,14 +66,14 @@ public class View implements IView {
             private JButton viewBtn;
 
             public MainPanel() {
-            add(new JLabel("<html><h1><strong>Cost Manager - Java Course Final Project</strong></h1><hr><br></html>"));
-            JPanel btnPanel = new JPanel(new GridLayout(2, 2, 50, 50));
-            btnPanel.setSize(300, 150);
+                add(new JLabel("<html><h1><strong>Cost Manager - Java Course Final Project</strong></h1><hr><br></html>"));
+                JPanel btnPanel = new JPanel(new GridLayout(2, 2, 50, 50));
+                btnPanel.setSize(300, 150);
 
-            btnPanel.add(new JButton("Add a new Cost"));
-            btnPanel.add(new JButton("Add a new Category"));
-            btnPanel.add(new JButton("View detailed report & pie chart diagram"));
-            add(btnPanel);
+                btnPanel.add(new JButton("Add a new Cost"));
+                btnPanel.add(new JButton("Add a new Category"));
+                btnPanel.add(new JButton("View detailed report & pie chart diagram"));
+                add(btnPanel);
             }
         }
 
