@@ -20,8 +20,7 @@ class DerbyDBModelTest {
     }
 
     @AfterEach
-    void tearDown() throws CostManagerException {
-        db.closeConnection();
+    void tearDown() {
         db = null;
     }
 

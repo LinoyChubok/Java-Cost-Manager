@@ -8,14 +8,11 @@ public interface IModel {
     /**
      * Database implementation
      */
-    public abstract void startConnection() throws CostManagerException;
-    public abstract void closeConnection() throws CostManagerException;
     public abstract void createTables() throws CostManagerException;
 
     /**
      * Categories queries implementation
      */
-    public abstract int categoryExist(String categoryName) throws CostManagerException;
     public abstract void addCategory(Category category) throws CostManagerException;
     public abstract void deleteCategory(int id) throws CostManagerException;
     public abstract ArrayList<Category> getAllCategories() throws CostManagerException;
