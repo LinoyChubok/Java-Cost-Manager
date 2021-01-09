@@ -60,7 +60,9 @@ public class DerbyDBModel implements IModel {
 
             if (!foundCategoriesTbl) {
                 try {
-                    statement.execute("create table Categories(" + "id INT NOT NULL UNIQUE GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), " + "name VARCHAR(30) UNIQUE)");
+                    statement.execute("create table Categories(" +
+                            "id INT NOT NULL UNIQUE GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), " +
+                            "name VARCHAR(30) UNIQUE)");
                 } catch(SQLException e) {
                     throw new CostManagerException("Error with creating Categories Category", e);
                 }
@@ -68,7 +70,14 @@ public class DerbyDBModel implements IModel {
 
             if (!foundCostItemsTbl) {
                 try {
-                    statement.execute("create table CostItems(" + "id INT NOT NULL UNIQUE GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), " + "date DATE, " + "category VARCHAR(30), " + "FOREIGN KEY (category) REFERENCES Categories(name), " + "description VARCHAR(100), " + "currency VARCHAR(5) NOT NULL, " + "totalPrice DOUBLE NOT NULL)");
+                    statement.execute("create table CostItems(" +
+                            "id INT NOT NULL UNIQUE GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), " +
+                            "date DATE, " +
+                            "category VARCHAR(30), " +
+                            "FOREIGN KEY (category) REFERENCES Categories(name), " +
+                            "description VARCHAR(100), " +
+                            "currency VARCHAR(5) NOT NULL, " +
+                            "totalPrice DOUBLE NOT NULL)");
                 } catch(SQLException e) {
                     throw new CostManagerException("Error with creating CostItems table", e);
                 }
@@ -277,7 +286,12 @@ public class DerbyDBModel implements IModel {
             statement = connection.createStatement();
 
             try {
-                statement.execute("INSERT INTO CostItems (date, category, description, currency, totalPrice)" + "VALUES ('" + item.getDate() + "', '" + item.getCategory().getCategoryName() + "','" + item.getDescription() + "', '" + item.getCurrency().name() + "', " + item.getTotalPrice() + ")");
+                statement.execute("INSERT INTO CostItems (date, category, description, currency, totalPrice)" +
+                        "VALUES ('" + item.getDate() +
+                        "', '" + item.getCategory().getCategoryName() +
+                        "','" + item.getDescription() +
+                        "', '" + item.getCurrency().name() +
+                        "', " + item.getTotalPrice() + ")");
             } catch(SQLException e) {
                 throw new CostManagerException("Error with adding a new cost item to database", e);
             }
@@ -368,7 +382,12 @@ public class DerbyDBModel implements IModel {
             try {
                 rs = statement.executeQuery("SELECT * FROM CostItems");
                 while (rs.next()) {
-                    CostItem item = new CostItem(rs.getInt("id"), rs.getDate("date"), new Category(rs.getString("category")), rs.getString("description"), Currency.valueOf(rs.getString("currency")), rs.getDouble("totalPrice"));
+                    CostItem item = new CostItem (rs.getInt("id"),
+                            rs.getDate("date"),
+                            new Category(rs.getString("category")),
+                            rs.getString("description"),
+                            Currency.valueOf(rs.getString("currency")),
+                            rs.getDouble("totalPrice"));
                     items.add(item);
                 }
             } catch(SQLException | CostManagerException e) {
