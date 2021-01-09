@@ -42,6 +42,8 @@ cmake-build-*/
 *.iws
 # IntelliJ
 out/
+# DB
+CostManagerDB/
 # mpeltonen/sbt-idea plugin
 .idea_modules/
 # JIRA plugin
