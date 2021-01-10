@@ -198,7 +198,6 @@ public class View implements IView {
                 table = new JTable(data, columnNames);
                 table.setBackground(Color.white);
                 scroll = new JScrollPane(table);
-                scroll.setPreferredSize(new Dimension(480, 300));
                 table.setPreferredScrollableViewportSize(table.getPreferredSize());
                 table.setFillsViewportHeight(true);
                 tablePanel.add(scroll, BorderLayout.CENTER); // ScrollPane include table
@@ -282,40 +281,111 @@ public class View implements IView {
 
         public class CategoryPanel extends JPanel {
             private JPanel headerPanel;
-            private JPanel categoryFormPanel;
+            private JPanel centerPanel;
+            private JPanel southPanel;
+
+            private JPanel costFormPanel;
+            private JPanel tablePanel;
             private JPanel btnPanel;
+
+            private JTable table;
+            private JScrollPane scroll;
+
+            private JLabel image;
             private JLabel title;
+
             private JLabel categoryLabel;
-            private JTextField categoryTF;
+            private JLabel messageLabel;
+            private TextField messageTF;
+            private TextField categoryTF;
+
             private JButton addBtn;
+            private JButton updateBtn;
+            private JButton deleteBtn;
+            private JButton backBtn;
+
 
             public CategoryPanel() {
-                setBorder(BorderFactory.createEmptyBorder(0,30,30,30));
-                setLayout(new GridLayout(3,1,20,20));
+                setLayout(new BorderLayout());
+
                 headerPanel = new JPanel();
-                categoryFormPanel = new JPanel();
-                categoryFormPanel.setLayout(new GridLayout(1,2));
-                btnPanel = new JPanel();
-                title = new JLabel("<html><h1><strong><font color=blue>Add a New Category</font></strong></h1><hr></html>");
-                categoryLabel = new JLabel("Category");
-                categoryTF = new JTextField();
+                headerPanel.setBackground(new Color(38, 112, 226));
+                image = new JLabel(new ImageIcon(getClass().getResource("/resources/images/logo.png")));
+                title = new JLabel("<html><h1><strong><font color=white>Cost Manager - Track Your Costs!</font></strong></h1></html>");
+
+                centerPanel = new JPanel(new BorderLayout());
+
+                costFormPanel = new JPanel(new GridLayout(1, 2, 10, 10));
+                costFormPanel.setBorder(BorderFactory.createEmptyBorder(20, 200, 20, 200));
+
+                tablePanel = new JPanel(new BorderLayout());
+                tablePanel.setBorder(BorderFactory.createEmptyBorder(50, 0, 50, 0));
+                String[] columnNames = {"ID", "CATEGORY"};
+                String[][] data = {
+                        {"1", "Shopping"},
+                        {"2", "Movies"},
+                        {"3", "Food"},
+                        {"4", "TV"},
+                        {"5", "Water"},
+                };
+                table = new JTable(data, columnNames);
+                table.setBackground(Color.white);
+                scroll = new JScrollPane(table);
+                table.setPreferredScrollableViewportSize(table.getPreferredSize());
+                table.setFillsViewportHeight(true);
+                tablePanel.add(scroll, BorderLayout.CENTER); // ScrollPane include table
+
+                btnPanel = new JPanel(new FlowLayout());
+                btnPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
+
+                southPanel = new JPanel();
+                southPanel.setBackground(Color.lightGray);
+                messageLabel = new JLabel("Message");
+                messageTF = new TextField("", 40);
+                messageTF.setEnabled(false);
+                backBtn = new JButton("Back to Main Page");
+
+                categoryLabel = new JLabel("Category Name");
+                categoryTF = new TextField();
 
                 addBtn = new JButton("Add");
+                updateBtn = new JButton("Update");
+                deleteBtn = new JButton("Delete");
 
+                headerPanel.add(image);
                 headerPanel.add(title);
-                categoryFormPanel.add(categoryLabel);
-                categoryFormPanel.add(categoryTF);
-                btnPanel.add(addBtn);
 
-                add(headerPanel);
-                add(categoryFormPanel);
-                add(btnPanel);
+                costFormPanel.add(categoryLabel);
+                costFormPanel.add(categoryTF);
+
+                btnPanel.add(addBtn);
+                btnPanel.add(updateBtn);
+                btnPanel.add(deleteBtn);
+
+                centerPanel.add(costFormPanel, BorderLayout.NORTH);
+                centerPanel.add(tablePanel, BorderLayout.CENTER);
+                centerPanel.add(btnPanel, BorderLayout.SOUTH);
+
+                southPanel.add(messageLabel);
+                southPanel.add(messageTF);
+                southPanel.add(backBtn);
+
+                add(headerPanel, BorderLayout.NORTH);
+                add(centerPanel, BorderLayout.CENTER);
+                add(southPanel, BorderLayout.SOUTH);
+
+                backBtn.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        ApplicationUI.this.changeScreen(ApplicationUI.this.mainPanel);
+                    }
+                });
 
             }
 
-             public void clearInputs() {
+            public void clearInputs() {
                 categoryTF.setText("");
-             }
+            }
 
         }
 
