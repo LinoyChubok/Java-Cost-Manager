@@ -52,7 +52,7 @@ public class View implements IView {
 
             frame = new JFrame("CostManager");
             frame.setLayout(new BorderLayout());
-            frame.setSize(800,600);
+            frame.setSize(800,650);
             frame.setResizable(false);
             frame.addWindowListener(new WindowAdapter() {
                 @Override
@@ -79,19 +79,18 @@ public class View implements IView {
                 setLayout(new BorderLayout());
 
                 image = new JLabel(new ImageIcon(getClass().getResource("/resources/images/logo.png")));
-                title = new JLabel("<html><h1><strong><font color=white>Cost Manager - Java Course Final Project</font></strong></h1><br></html>");
+                title = new JLabel("<html><h1><strong><font color=white>Cost Manager - Track Your Costs!</font></strong></h1></html>");
                 headerPanel = new JPanel();
                 headerPanel.setBackground(new Color(38, 112, 226));
 
                 btnsPanel = new JPanel();
                 btnsPanel = new JPanel(new GridLayout(2, 2, 20, 20));
-                btnsPanel.setBorder(BorderFactory.createEmptyBorder(100, 100, 100, 100));
+                btnsPanel.setBorder(BorderFactory.createEmptyBorder(120, 120, 120, 120));
 
                 CostBtn = new JButton("Costs");
                 CategoryBtn = new JButton("Categories");
                 ReportsBtn = new JButton("Reports");
                 PieChartBtn = new JButton("Pie Chart Diagram");
-
 
                 headerPanel.add(image);
                 headerPanel.add(title);
@@ -99,7 +98,6 @@ public class View implements IView {
                 btnsPanel.add(CategoryBtn);
                 btnsPanel.add(ReportsBtn);
                 btnsPanel.add(PieChartBtn);
-
 
                 add(headerPanel, BorderLayout.NORTH);
                 add(btnsPanel, BorderLayout.CENTER);
@@ -132,60 +130,152 @@ public class View implements IView {
 
         public class CostPanel extends JPanel {
             private JPanel headerPanel;
+            private JPanel centerPanel;
+            private JPanel southPanel;
+
             private JPanel costFormPanel;
+            private JPanel tablePanel;
             private JPanel btnPanel;
+
+            private JTable table;
+            private JScrollPane scroll;
+
+            private JLabel image;
             private JLabel title;
+
+            private JLabel dateLabel;
             private JLabel categoryLabel;
-            private JLabel currencyLabel;
-            private JLabel amountLabel;
             private JLabel descriptionLabel;
+            private JLabel currencyLabel;
+            private JLabel totalPriceLabel;
+            private JLabel messageLabel;
             private JComboBox categoryCB;
             private JComboBox currencyCB;
-            private TextField amountTF;
+
+            private TextField dateTF;
             private TextField descriptionTF;
-            private JButton saveBtn;
+            private TextField totalPriceTF;
+            private TextField messageTF;
+
+            private JButton addBtn;
+            private JButton updateBtn;
+            private JButton deleteBtn;
+            private JButton backBtn;
 
             public CostPanel() {
-                setBorder(BorderFactory.createEmptyBorder(0,30,30,30));
-                setLayout(new GridLayout(3,1,20,20));
+                setLayout(new BorderLayout());
+
                 headerPanel = new JPanel();
-                costFormPanel = new JPanel();
-                costFormPanel.setLayout(new GridLayout(4,2,10,10));
-                btnPanel = new JPanel();
-                title = new JLabel("<html><h1><strong><font color=blue>Add a New Cost</font></strong></h1><hr></html>");
+                headerPanel.setBackground(new Color(38, 112, 226));
+                image = new JLabel(new ImageIcon(getClass().getResource("/resources/images/logo.png")));
+                title = new JLabel("<html><h1><strong><font color=white>Cost Manager - Track Your Costs!</font></strong></h1></html>");
+
+                centerPanel = new JPanel(new BorderLayout());
+
+                costFormPanel = new JPanel(new GridLayout(5,2,10,10));
+                costFormPanel.setBorder(BorderFactory.createEmptyBorder(20, 200, 20, 200));
+
+                tablePanel = new JPanel(new BorderLayout());
+                String[] columnNames = { "ID", "DATE", "CATEGORY", "DESCRIPTION", "CURRENCY", "TOTALPRICE" };
+                String[][] data = {
+                        { "Kundan Kumar Jha", "4031", "CSE", "Kundan Kumar Jha", "4031", "CSE" },
+                        { "Anand Jha", "6014", "IT", "Anand Jha", "6014", "IT" },
+                        { "Kundan Kumar Jha", "4031", "CSE", "Kundan Kumar Jha", "4031", "CSE" },
+                        { "Anand Jha", "6014", "IT", "Anand Jha", "6014", "IT" },
+                        { "Kundan Kumar Jha", "4031", "CSE", "Kundan Kumar Jha", "4031", "CSE" },
+                        { "Anand Jha", "6014", "IT", "Anand Jha", "6014", "IT" },
+                        { "Kundan Kumar Jha", "4031", "CSE", "Kundan Kumar Jha", "4031", "CSE" },
+                        { "Anand Jha", "6014", "IT", "Anand Jha", "6014", "IT" },
+                        { "Kundan Kumar Jha", "4031", "CSE", "Kundan Kumar Jha", "4031", "CSE" },
+                        { "Anand Jha", "6014", "IT", "Anand Jha", "6014", "IT" },
+                        { "Kundan Kumar Jha", "4031", "CSE", "Kundan Kumar Jha", "4031", "CSE" },
+                        { "Anand Jha", "6014", "IT", "Anand Jha", "6014", "IT" },
+                        { "Kundan Kumar Jha", "4031", "CSE", "Kundan Kumar Jha", "4031", "CSE" },
+                        { "Anand Jha", "6014", "IT", "Anand Jha", "6014", "IT" },
+                        { "Kundan Kumar Jha", "4031", "CSE", "Kundan Kumar Jha", "4031", "CSE" },
+                        { "Anand Jha", "6014", "IT", "Anand Jha", "6014", "IT" }
+                };
+                table = new JTable(data, columnNames);
+                table.setBackground(Color.white);
+                scroll = new JScrollPane(table);
+                scroll.setPreferredSize(new Dimension(480, 300));
+                table.setPreferredScrollableViewportSize(table.getPreferredSize());
+                table.setFillsViewportHeight(true);
+                tablePanel.add(scroll, BorderLayout.CENTER); // ScrollPane include table
+
+                btnPanel = new JPanel(new FlowLayout());
+                btnPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
+
+                southPanel = new JPanel();
+                southPanel.setBackground(Color.lightGray);
+                messageLabel = new JLabel("Message");
+                messageTF = new TextField("", 40);
+                messageTF.setEnabled(false);
+                backBtn = new JButton("Back to Main Page");
+
+                dateLabel = new JLabel("Date (YYYY-MM-DD)");
+                dateTF = new TextField();
                 categoryLabel = new JLabel("Category");
                 categoryCB = new JComboBox();
-                currencyLabel = new JLabel("Currency");
-                currencyCB = new JComboBox();
-                amountLabel = new JLabel("Amount");
-                amountTF = new TextField();
                 descriptionLabel = new JLabel("Description");
                 descriptionTF = new TextField();
-                saveBtn = new JButton("Save");
+                currencyLabel = new JLabel("Currency");
+                currencyCB = new JComboBox();
+                totalPriceLabel = new JLabel("Total Price");
+                totalPriceTF = new TextField();
 
+                addBtn = new JButton("Add");
+                updateBtn = new JButton("Update");
+                deleteBtn = new JButton("Delete");
+
+                headerPanel.add(image);
                 headerPanel.add(title);
+
+                costFormPanel.add(dateLabel);
+                costFormPanel.add(dateTF);
                 costFormPanel.add(categoryLabel);
                 costFormPanel.add(categoryCB);
-                costFormPanel.add(currencyLabel);
-                costFormPanel.add(currencyCB);
-                costFormPanel.add(amountLabel);
-                costFormPanel.add(amountTF);
                 costFormPanel.add(descriptionLabel);
                 costFormPanel.add(descriptionTF);
-                btnPanel.add(saveBtn);
+                costFormPanel.add(currencyLabel);
+                costFormPanel.add(currencyCB);
+                costFormPanel.add(totalPriceLabel);
+                costFormPanel.add(totalPriceTF);
 
-                add(headerPanel);
-                add(costFormPanel);
-                add(btnPanel);
+                btnPanel.add(addBtn);
+                btnPanel.add(updateBtn);
+                btnPanel.add(deleteBtn);
+
+                centerPanel.add(costFormPanel, BorderLayout.NORTH);
+                centerPanel.add(tablePanel, BorderLayout.CENTER);
+                centerPanel.add(btnPanel, BorderLayout.SOUTH);
+
+                southPanel.add(messageLabel);
+                southPanel.add(messageTF);
+                southPanel.add(backBtn);
+
+                add(headerPanel, BorderLayout.NORTH);
+                add(centerPanel, BorderLayout.CENTER);
+                add(southPanel, BorderLayout.SOUTH);
+
+                backBtn.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        ApplicationUI.this.changeScreen(ApplicationUI.this.mainPanel);
+                    }
+                });
 
             }
 
              public void clearInputs() {
                 categoryCB.setSelectedIndex(-1);
                 currencyCB.setSelectedIndex(-1);
-                amountTF.setText("");
+                dateTF.setText("");
+                totalPriceTF.setText("");
                 descriptionTF.setText("");
              }
+
+
 
         }
 
