@@ -2,16 +2,12 @@ package CostManager.View;
 
 import CostManager.ViewModel.IViewModel;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 
 public class View implements IView {
@@ -43,14 +39,16 @@ public class View implements IView {
         private PieChartPanel pieChartPanel;
 
         public ApplicationUI() {
-
+            // Create instances of panels
             mainPanel = new MainPanel();
             costPanel = new CostPanel();
             categoryPanel = new CategoryPanel();
             reportsPanel = new ReportsPanel();
             pieChartPanel = new PieChartPanel();
 
+            // Create instance of JFrame with name "frame"
             frame = new JFrame("CostManager");
+            // Set the frame as BorderLayout
             frame.setLayout(new BorderLayout());
             frame.setSize(800,650);
             frame.setResizable(false);
@@ -64,8 +62,8 @@ public class View implements IView {
             });
         }
 
-
         public class MainPanel extends JPanel {
+            // Components of the MainPanel
             private JLabel title;
             private JPanel headerPanel;
             private JPanel btnsPanel;
@@ -76,14 +74,17 @@ public class View implements IView {
             private JLabel image;
 
             public MainPanel() {
+                // Set the window layout manager as BorderLayout
                 setLayout(new BorderLayout());
 
+                // Create the components of MainPanel
                 image = new JLabel(new ImageIcon(getClass().getResource("/resources/images/logo.png")));
                 title = new JLabel("<html><h1><strong><font color=white>Cost Manager - Track Your Costs!</font></strong></h1></html>");
+
                 headerPanel = new JPanel();
                 headerPanel.setBackground(new Color(38, 112, 226));
 
-                btnsPanel = new JPanel();
+                // Create btnsPanel as GridLayout
                 btnsPanel = new JPanel(new GridLayout(2, 2, 20, 20));
                 btnsPanel.setBorder(BorderFactory.createEmptyBorder(120, 120, 120, 120));
 
@@ -92,6 +93,7 @@ public class View implements IView {
                 ReportsBtn = new JButton("Reports");
                 PieChartBtn = new JButton("Pie Chart Diagram");
 
+                // Add each component to his specific panel
                 headerPanel.add(image);
                 headerPanel.add(title);
                 btnsPanel.add(CostBtn);
@@ -99,9 +101,11 @@ public class View implements IView {
                 btnsPanel.add(ReportsBtn);
                 btnsPanel.add(PieChartBtn);
 
+                // Add panels to MainPanel using BorderLayout
                 add(headerPanel, BorderLayout.NORTH);
                 add(btnsPanel, BorderLayout.CENTER);
 
+                // Handling cost button click
                 CostBtn.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -110,6 +114,7 @@ public class View implements IView {
                     }
                 });
 
+                // Handling category button click
                 CategoryBtn.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -118,6 +123,7 @@ public class View implements IView {
                     }
                 });
 
+                // Handling reports button click
                 ReportsBtn.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -126,6 +132,7 @@ public class View implements IView {
                     }
                 });
 
+                // Handling pie chart button click
                 PieChartBtn.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -135,8 +142,8 @@ public class View implements IView {
                 });
             }
         }
-
         public class CostPanel extends JPanel {
+            // Components of the CostPanel
             private JPanel headerPanel;
             private JPanel centerPanel;
             private JPanel southPanel;
@@ -170,19 +177,24 @@ public class View implements IView {
             private JButton deleteBtn;
             private JButton backBtn;
 
+            // Constructor, to initialize the components
             public CostPanel() {
+                // Set the window layout manager as BorderLayout
                 setLayout(new BorderLayout());
-
+                // Create the components of CostPanel
                 headerPanel = new JPanel();
                 headerPanel.setBackground(new Color(38, 112, 226));
                 image = new JLabel(new ImageIcon(getClass().getResource("/resources/images/logo.png")));
                 title = new JLabel("<html><h1><strong><font color=white>Cost Manager - Track Your Costs!</font></strong></h1></html>");
 
+                // Set the centerPanel as BorderLayout
                 centerPanel = new JPanel(new BorderLayout());
 
+                // Create costFormPanel as GridLayout
                 costFormPanel = new JPanel(new GridLayout(5,2,10,10));
                 costFormPanel.setBorder(BorderFactory.createEmptyBorder(20, 200, 20, 200));
 
+                // Set the tablePanel as BorderLayout
                 tablePanel = new JPanel(new BorderLayout());
                 String[] columnNames = { "ID", "DATE", "CATEGORY", "DESCRIPTION", "CURRENCY", "TOTALPRICE" };
                 String[][] data = {
@@ -203,6 +215,7 @@ public class View implements IView {
                         { "Kundan Kumar Jha", "4031", "CSE", "Kundan Kumar Jha", "4031", "CSE" },
                         { "Anand Jha", "6014", "IT", "Anand Jha", "6014", "IT" }
                 };
+                // Create table with costs data
                 table = new JTable(data, columnNames);
                 table.setBackground(Color.white);
                 scroll = new JScrollPane(table);
@@ -210,6 +223,7 @@ public class View implements IView {
                 table.setFillsViewportHeight(true);
                 tablePanel.add(scroll, BorderLayout.CENTER); // ScrollPane include table
 
+                // Create btnPanel as FlowLayout
                 btnPanel = new JPanel(new FlowLayout());
                 btnPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
 
@@ -218,7 +232,7 @@ public class View implements IView {
                 messageLabel = new JLabel("Message");
                 messageTF = new TextField("", 40);
                 messageTF.setEnabled(false);
-                backBtn = new JButton("Back to Main Page");
+                backBtn = new JButton("Back to Dashboard");
 
                 dateLabel = new JLabel("Date (YYYY-MM-DD)");
                 dateTF = new TextField();
@@ -235,6 +249,7 @@ public class View implements IView {
                 updateBtn = new JButton("Update");
                 deleteBtn = new JButton("Delete");
 
+                // Add each component to his specific panel
                 headerPanel.add(image);
                 headerPanel.add(title);
 
@@ -261,10 +276,12 @@ public class View implements IView {
                 southPanel.add(messageTF);
                 southPanel.add(backBtn);
 
+                // Add panels to CostPanel using BorderLayout
                 add(headerPanel, BorderLayout.NORTH);
                 add(centerPanel, BorderLayout.CENTER);
                 add(southPanel, BorderLayout.SOUTH);
 
+                // Back to Dashboard (mainPanel)
                 backBtn.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -273,7 +290,7 @@ public class View implements IView {
                 });
 
             }
-
+            // Clear inputs
              public void clearInputs() {
                 categoryCB.setSelectedIndex(-1);
                 currencyCB.setSelectedIndex(-1);
@@ -282,9 +299,8 @@ public class View implements IView {
                 descriptionTF.setText("");
              }
         }
-
-
         public class CategoryPanel extends JPanel {
+            // Components of the CategoryPanel
             private JPanel headerPanel;
             private JPanel centerPanel;
             private JPanel southPanel;
@@ -309,20 +325,24 @@ public class View implements IView {
             private JButton deleteBtn;
             private JButton backBtn;
 
-
+            // Constructor, to initialize the components
             public CategoryPanel() {
+                // Set the window layout manager as BorderLayout
                 setLayout(new BorderLayout());
-
+                // Create the components of CategoryPanel
                 headerPanel = new JPanel();
                 headerPanel.setBackground(new Color(38, 112, 226));
                 image = new JLabel(new ImageIcon(getClass().getResource("/resources/images/logo.png")));
                 title = new JLabel("<html><h1><strong><font color=white>Cost Manager - Track Your Costs!</font></strong></h1></html>");
 
+                // Set the centerPanel as BorderLayout
                 centerPanel = new JPanel(new BorderLayout());
 
+                // Create costFormPanel as GridLayout
                 costFormPanel = new JPanel(new GridLayout(1, 2, 10, 10));
                 costFormPanel.setBorder(BorderFactory.createEmptyBorder(20, 200, 20, 200));
 
+                // Set the tablePanel as BorderLayout
                 tablePanel = new JPanel(new BorderLayout());
                 tablePanel.setBorder(BorderFactory.createEmptyBorder(50, 0, 50, 0));
                 String[] columnNames = {"ID", "CATEGORY"};
@@ -333,6 +353,7 @@ public class View implements IView {
                         {"4", "TV"},
                         {"5", "Water"},
                 };
+                // Create table with categories data
                 table = new JTable(data, columnNames);
                 table.setBackground(Color.white);
                 scroll = new JScrollPane(table);
@@ -340,6 +361,7 @@ public class View implements IView {
                 table.setFillsViewportHeight(true);
                 tablePanel.add(scroll, BorderLayout.CENTER); // ScrollPane include table
 
+                // Create btnPanel as FlowLayout
                 btnPanel = new JPanel(new FlowLayout());
                 btnPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
 
@@ -348,7 +370,7 @@ public class View implements IView {
                 messageLabel = new JLabel("Message");
                 messageTF = new TextField("", 40);
                 messageTF.setEnabled(false);
-                backBtn = new JButton("Back to Main Page");
+                backBtn = new JButton("Back to Dashboard");
 
                 categoryLabel = new JLabel("Category Name");
                 categoryTF = new TextField();
@@ -357,6 +379,7 @@ public class View implements IView {
                 updateBtn = new JButton("Update");
                 deleteBtn = new JButton("Delete");
 
+                // Add each component to his specific panel
                 headerPanel.add(image);
                 headerPanel.add(title);
 
@@ -375,10 +398,12 @@ public class View implements IView {
                 southPanel.add(messageTF);
                 southPanel.add(backBtn);
 
+                // Add panels to CategoryPanel using BorderLayout
                 add(headerPanel, BorderLayout.NORTH);
                 add(centerPanel, BorderLayout.CENTER);
                 add(southPanel, BorderLayout.SOUTH);
 
+                // Back to Dashboard (mainPanel)
                 backBtn.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -387,15 +412,14 @@ public class View implements IView {
                 });
 
             }
-
+            // Clear inputs
             public void clearInputs() {
                 categoryTF.setText("");
             }
 
         }
-
-
         public class ReportsPanel extends JPanel {
+            // Components of the ReportsPanel
             private JPanel headerPanel;
             private JPanel centerPanel;
             private JPanel southPanel;
@@ -420,25 +444,31 @@ public class View implements IView {
             private JButton showBtn;
             private JButton backBtn;
 
+            // Constructor, to initialize the components
             public ReportsPanel() {
+                // Set the window layout manager as BorderLayout
                 setLayout(new BorderLayout());
-
+                // Create the components of ReportsPanel
                 headerPanel = new JPanel();
                 headerPanel.setBackground(new Color(38, 112, 226));
                 image = new JLabel(new ImageIcon(getClass().getResource("/resources/images/logo.png")));
                 title = new JLabel("<html><h1><strong><font color=white>Cost Manager - Track Your Costs!</font></strong></h1></html>");
 
+                // Set the centerPanel as BorderLayout
                 centerPanel = new JPanel(new BorderLayout());
 
+                // Create costFormPanel as GridLayout
                 costFormPanel = new JPanel(new GridLayout(2, 2, 10, 10));
                 costFormPanel.setBorder(BorderFactory.createEmptyBorder(20, 200, 20, 200));
 
+                // Set the listPanel as BorderLayout
                 listPanel = new JPanel(new BorderLayout());
                 list = new JList();
                 list.setBackground(Color.white);
                 scroll = new JScrollPane(list);
                 listPanel.add(scroll, BorderLayout.CENTER); // ScrollPane include list
 
+                // Create btnPanel as FlowLayout
                 btnPanel = new JPanel(new FlowLayout());
                 btnPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
                 showBtn = new JButton("Show Results");
@@ -448,13 +478,14 @@ public class View implements IView {
                 messageLabel = new JLabel("Message");
                 messageTF = new TextField("", 40);
                 messageTF.setEnabled(false);
-                backBtn = new JButton("Back to Main Page");
+                backBtn = new JButton("Back to Dashboard");
 
                 startDateLabel = new JLabel("Start Date (YYYY-MM-DD)");
                 startDateTF = new TextField();
                 endDateLabel = new JLabel("End Date (YYYY-MM-DD)");
                 endDateTF = new TextField();
 
+                // Add each component to his specific panel
                 headerPanel.add(image);
                 headerPanel.add(title);
 
@@ -473,10 +504,12 @@ public class View implements IView {
                 southPanel.add(messageTF);
                 southPanel.add(backBtn);
 
+                // Add panels to ReportsPanel using BorderLayout
                 add(headerPanel, BorderLayout.NORTH);
                 add(centerPanel, BorderLayout.CENTER);
                 add(southPanel, BorderLayout.SOUTH);
 
+                // Back to Dashboard (mainPanel)
                 backBtn.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -485,15 +518,15 @@ public class View implements IView {
                 });
 
             }
-
-             public void clearInputs() {
+            // Clear inputs
+            public void clearInputs() {
                 startDateTF.setText("");
                 endDateTF.setText("");
              }
 
         }
-
         public class PieChartPanel extends JPanel {
+            // Components of the PieChartPanel
             private JPanel headerPanel;
             private JPanel centerPanel;
             private JPanel southPanel;
@@ -515,21 +548,26 @@ public class View implements IView {
             private JButton showBtn;
             private JButton backBtn;
 
+            // Constructor, to initialize the components
             public PieChartPanel() {
+                // Set the window layout manager as BorderLayout
                 setLayout(new BorderLayout());
-
+                // Create the components of PieChartPanel
                 headerPanel = new JPanel();
                 headerPanel.setBackground(new Color(38, 112, 226));
                 image = new JLabel(new ImageIcon(getClass().getResource("/resources/images/logo.png")));
                 title = new JLabel("<html><h1><strong><font color=white>Cost Manager - Track Your Costs!</font></strong></h1></html>");
 
+                // Set the centerPanel as BorderLayout
                 centerPanel = new JPanel(new BorderLayout());
 
                 costFormPanel = new JPanel(new GridLayout(2, 2, 10, 10));
                 costFormPanel.setBorder(BorderFactory.createEmptyBorder(20, 200, 20, 200));
 
+                // Set the panel as BorderLayout
                 panel = new JPanel(new BorderLayout());
 
+                // Create btnPanel as FlowLayout
                 btnPanel = new JPanel(new FlowLayout());
                 btnPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
                 showBtn = new JButton("Show Results");
@@ -539,13 +577,14 @@ public class View implements IView {
                 messageLabel = new JLabel("Message");
                 messageTF = new TextField("", 40);
                 messageTF.setEnabled(false);
-                backBtn = new JButton("Back to Main Page");
+                backBtn = new JButton("Back to Dashboard");
 
                 startDateLabel = new JLabel("Start Date (YYYY-MM-DD)");
                 startDateTF = new TextField();
                 endDateLabel = new JLabel("End Date (YYYY-MM-DD)");
                 endDateTF = new TextField();
 
+                // Add each component to his specific panel
                 headerPanel.add(image);
                 headerPanel.add(title);
 
@@ -563,11 +602,12 @@ public class View implements IView {
                 southPanel.add(messageLabel);
                 southPanel.add(messageTF);
                 southPanel.add(backBtn);
-
+                // Add panels to PieChartPanel using BorderLayout
                 add(headerPanel, BorderLayout.NORTH);
                 add(centerPanel, BorderLayout.CENTER);
                 add(southPanel, BorderLayout.SOUTH);
 
+                // Back to Dashboard (mainPanel)
                 backBtn.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -576,7 +616,7 @@ public class View implements IView {
                 });
 
             }
-
+            // Clear inputs
             public void clearInputs() {
                 startDateTF.setText("");
                 endDateTF.setText("");
@@ -584,14 +624,13 @@ public class View implements IView {
 
         }
 
-
         public void displayMainMenu() {
             this.panel = mainPanel;
             frame.getContentPane().add(this.panel);
             frame.setVisible(true);
         }
 
-         public void changeScreen(JPanel nextPanel) {
+        public void changeScreen(JPanel nextPanel) {
             frame.remove(this.panel);
             frame.repaint();
             this.panel = nextPanel;
