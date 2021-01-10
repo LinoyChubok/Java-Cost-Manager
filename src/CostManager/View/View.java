@@ -40,7 +40,7 @@ public class View implements IView {
         private CostPanel costPanel;
         private CategoryPanel categoryPanel;
         private ReportsPanel reportsPanel;
-    //    private PieChartPanel pieChartPanel;
+        private PieChartPanel pieChartPanel;
 
         public ApplicationUI() {
 
@@ -48,7 +48,7 @@ public class View implements IView {
             costPanel = new CostPanel();
             categoryPanel = new CategoryPanel();
             reportsPanel = new ReportsPanel();
-       //     pieChartPanel = new PieChartPanel();
+            pieChartPanel = new PieChartPanel();
 
             frame = new JFrame("CostManager");
             frame.setLayout(new BorderLayout());
@@ -123,6 +123,14 @@ public class View implements IView {
                     public void actionPerformed(ActionEvent e) {
                         ApplicationUI.this.costPanel.clearInputs();
                         ApplicationUI.this.changeScreen(ApplicationUI.this.reportsPanel);
+                    }
+                });
+
+                PieChartBtn.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        ApplicationUI.this.costPanel.clearInputs();
+                        ApplicationUI.this.changeScreen(ApplicationUI.this.pieChartPanel);
                     }
                 });
             }
@@ -482,6 +490,97 @@ public class View implements IView {
                 startDateTF.setText("");
                 endDateTF.setText("");
              }
+
+        }
+
+        public class PieChartPanel extends JPanel {
+            private JPanel headerPanel;
+            private JPanel centerPanel;
+            private JPanel southPanel;
+
+            private JPanel costFormPanel;
+            private JPanel panel;
+            private JPanel btnPanel;
+
+            private JLabel image;
+            private JLabel title;
+
+            private JLabel startDateLabel;
+            private JLabel endDateLabel;
+            private JLabel messageLabel;
+            private TextField messageTF;
+            private TextField startDateTF;
+            private TextField endDateTF;
+
+            private JButton showBtn;
+            private JButton backBtn;
+
+            public PieChartPanel() {
+                setLayout(new BorderLayout());
+
+                headerPanel = new JPanel();
+                headerPanel.setBackground(new Color(38, 112, 226));
+                image = new JLabel(new ImageIcon(getClass().getResource("/resources/images/logo.png")));
+                title = new JLabel("<html><h1><strong><font color=white>Cost Manager - Track Your Costs!</font></strong></h1></html>");
+
+                centerPanel = new JPanel(new BorderLayout());
+
+                costFormPanel = new JPanel(new GridLayout(2, 2, 10, 10));
+                costFormPanel.setBorder(BorderFactory.createEmptyBorder(20, 200, 20, 200));
+
+                panel = new JPanel(new BorderLayout());
+
+                btnPanel = new JPanel(new FlowLayout());
+                btnPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
+                showBtn = new JButton("Show Results");
+
+                southPanel = new JPanel();
+                southPanel.setBackground(Color.lightGray);
+                messageLabel = new JLabel("Message");
+                messageTF = new TextField("", 40);
+                messageTF.setEnabled(false);
+                backBtn = new JButton("Back to Main Page");
+
+                startDateLabel = new JLabel("Start Date (YYYY-MM-DD)");
+                startDateTF = new TextField();
+                endDateLabel = new JLabel("End Date (YYYY-MM-DD)");
+                endDateTF = new TextField();
+
+                headerPanel.add(image);
+                headerPanel.add(title);
+
+                costFormPanel.add(startDateLabel);
+                costFormPanel.add(startDateTF);
+                costFormPanel.add(endDateLabel);
+                costFormPanel.add(endDateTF);
+
+                btnPanel.add(showBtn);
+
+                centerPanel.add(costFormPanel, BorderLayout.NORTH);
+                centerPanel.add(panel, BorderLayout.CENTER);
+                centerPanel.add(btnPanel, BorderLayout.SOUTH);
+
+                southPanel.add(messageLabel);
+                southPanel.add(messageTF);
+                southPanel.add(backBtn);
+
+                add(headerPanel, BorderLayout.NORTH);
+                add(centerPanel, BorderLayout.CENTER);
+                add(southPanel, BorderLayout.SOUTH);
+
+                backBtn.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        ApplicationUI.this.changeScreen(ApplicationUI.this.mainPanel);
+                    }
+                });
+
+            }
+
+            public void clearInputs() {
+                startDateTF.setText("");
+                endDateTF.setText("");
+            }
 
         }
 
