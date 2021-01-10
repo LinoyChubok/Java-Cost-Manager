@@ -2,12 +2,16 @@ package CostManager.View;
 
 import CostManager.ViewModel.IViewModel;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 
 public class View implements IView {
@@ -37,14 +41,14 @@ public class View implements IView {
         private MainPanel mainPanel;
         private CostPanel costPanel;
         private CategoryPanel categoryPanel;
-        private viewResultsPanel viewResultsPanel;
+        private ResultsPanel resultsPanel;
 
         public ApplicationUI() {
 
             mainPanel = new MainPanel();
             costPanel = new CostPanel();
             categoryPanel = new CategoryPanel();
-            viewResultsPanel = new viewResultsPanel();
+            resultsPanel = new ResultsPanel();
 
             frame = new JFrame("CostManager");
             frame.setLayout(new BorderLayout());
@@ -63,26 +67,44 @@ public class View implements IView {
 
         public class MainPanel extends JPanel {
             private JLabel title;
+            private JPanel headerPanel;
             private JPanel btnsPanel;
-            private JButton addCostBtn;
-            private JButton addCategoryBtn;
-            private JButton viewResultsBtn;
+            private JButton CostBtn;
+            private JButton CategoryBtn;
+            private JButton ReportsBtn;
+            private JButton PieChartBtn;
+            private JLabel image;
 
             public MainPanel() {
-                btnsPanel = new JPanel(new GridLayout(2, 2, 50, 50));
-                btnsPanel.setSize(300, 150);
-                title = new JLabel("<html><h1><strong>Cost Manager - Java Course Final Project</strong></h1><hr><br></html>");
-                addCostBtn = new JButton("Add a new Cost");
-                addCategoryBtn = new JButton("Add a new Category");
-                viewResultsBtn = new JButton("View detailed report & pie chart diagram");
+                setLayout(new BorderLayout());
 
-                add(title);
-                btnsPanel.add(addCostBtn);
-                btnsPanel.add(addCategoryBtn);
-                btnsPanel.add(viewResultsBtn);
-                add(btnsPanel);
+                image = new JLabel(new ImageIcon(getClass().getResource("/resources/images/logo.png")));
+                title = new JLabel("<html><h1><strong><font color=white>Cost Manager - Java Course Final Project</font></strong></h1><br></html>");
+                headerPanel = new JPanel();
+                headerPanel.setBackground(new Color(38, 112, 226));
 
-                addCostBtn.addActionListener(new ActionListener() {
+                btnsPanel = new JPanel();
+                btnsPanel = new JPanel(new GridLayout(2, 2, 20, 20));
+                btnsPanel.setBorder(BorderFactory.createEmptyBorder(100, 100, 100, 100));
+
+                CostBtn = new JButton("Costs");
+                CategoryBtn = new JButton("Categories");
+                ReportsBtn = new JButton("Reports");
+                PieChartBtn = new JButton("Pie Chart Diagram");
+
+
+                headerPanel.add(image);
+                headerPanel.add(title);
+                btnsPanel.add(CostBtn);
+                btnsPanel.add(CategoryBtn);
+                btnsPanel.add(ReportsBtn);
+                btnsPanel.add(PieChartBtn);
+
+
+                add(headerPanel, BorderLayout.NORTH);
+                add(btnsPanel, BorderLayout.CENTER);
+
+                CostBtn.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         ApplicationUI.this.costPanel.clearInputs();
@@ -90,7 +112,7 @@ public class View implements IView {
                     }
                 });
 
-                addCategoryBtn.addActionListener(new ActionListener() {
+                CategoryBtn.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         ApplicationUI.this.costPanel.clearInputs();
@@ -98,11 +120,11 @@ public class View implements IView {
                     }
                 });
 
-                viewResultsBtn.addActionListener(new ActionListener() {
+                ReportsBtn.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         ApplicationUI.this.costPanel.clearInputs();
-                        ApplicationUI.this.changeScreen(ApplicationUI.this.viewResultsPanel);
+                        ApplicationUI.this.changeScreen(ApplicationUI.this.resultsPanel);
                     }
                 });
             }
@@ -130,7 +152,7 @@ public class View implements IView {
                 costFormPanel = new JPanel();
                 costFormPanel.setLayout(new GridLayout(4,2,10,10));
                 btnPanel = new JPanel();
-                title = new JLabel("<html><h1><strong>Add a New Cost</strong></h1><hr></html>");
+                title = new JLabel("<html><h1><strong><font color=blue>Add a New Cost</font></strong></h1><hr></html>");
                 categoryLabel = new JLabel("Category");
                 categoryCB = new JComboBox();
                 currencyLabel = new JLabel("Currency");
@@ -184,7 +206,7 @@ public class View implements IView {
                 categoryFormPanel = new JPanel();
                 categoryFormPanel.setLayout(new GridLayout(1,2));
                 btnPanel = new JPanel();
-                title = new JLabel("<html><h1><strong>Add a New Categoty</strong></h1><hr></html>");
+                title = new JLabel("<html><h1><strong><font color=blue>Add a New Category</font></strong></h1><hr></html>");
                 categoryLabel = new JLabel("Category");
                 categoryTF = new JTextField();
 
@@ -208,7 +230,7 @@ public class View implements IView {
         }
 
 
-        public class viewResultsPanel extends JPanel {
+        public class ResultsPanel extends JPanel {
             private JPanel headerPanel;
             private JPanel resultsFormPanel;
             private JPanel radioPanel;
@@ -232,14 +254,14 @@ public class View implements IView {
 
             private JButton showResultsBtn;
 
-            public viewResultsPanel() {
+            public ResultsPanel() {
                 setBorder(BorderFactory.createEmptyBorder(0,30,30,30));
                 setLayout(new GridLayout(4,1,20,20));
                 headerPanel = new JPanel();
                 resultsFormPanel = new JPanel();
                 resultsFormPanel.setLayout(new GridLayout(2,1,10,10));
                 btnPanel = new JPanel();
-                title = new JLabel("<html><h1><strong>View Results</strong></h1><hr></html>");
+                title = new JLabel("<html><h1><strong><font color=blue>View Results</font></strong></h1><hr></html>");
 
                 datesPanel = new JPanel();
                 datesPanel.setLayout(new GridLayout(2,2,10,10));
