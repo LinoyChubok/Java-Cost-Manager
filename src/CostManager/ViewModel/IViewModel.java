@@ -6,8 +6,8 @@ import CostManager.View.IView;
 
 public interface IViewModel {
 
-    public void setView(IView view);
-    public void setModel(IModel model);
+    public abstract void setView(IView view);
+    public abstract void setModel(IModel model);
 
 }
 

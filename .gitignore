@@ -44,6 +44,7 @@ cmake-build-*/
 out/
 # DB
 CostManagerDB/
+derby.log
 # mpeltonen/sbt-idea plugin
 .idea_modules/
 # JIRA plugin

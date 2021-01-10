@@ -18,19 +18,17 @@ public class View implements IView {
 
     private IViewModel vm;
     private ApplicationUI ui;
-
-    @Override
-    public void setViewModel(IViewModel vm) {
-        this.vm = vm;
-    }
-
+    
     public View() {
-
         SwingUtilities.invokeLater(() -> {
             View.this.ui = new ApplicationUI();
             View.this.ui.start();
         });
+    }
 
+    @Override
+    public void setViewModel(IViewModel vm) {
+        this.vm = vm;
     }
 
     public static class ApplicationUI {
@@ -273,9 +271,6 @@ public class View implements IView {
                 totalPriceTF.setText("");
                 descriptionTF.setText("");
              }
-
-
-
         }
 
 
