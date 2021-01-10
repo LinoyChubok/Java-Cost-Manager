@@ -5,7 +5,7 @@ import java.util.Objects;
 
 public class CostItem {
 
-    private int id;
+    private final int id;
     private Date date;
     private Category category;
     private String description;

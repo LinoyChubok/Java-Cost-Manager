@@ -4,31 +4,24 @@ import java.sql. * ;
 import java.util.ArrayList;
 
 public class DerbyDBModel implements IModel {
-    /**
-     * DerbyDBModel will implement IModel (different implementations for each database).
-     *
-     * DRIVER                Describes the driver type
-     * PROTOCOL              Describes the communication type
-     * DB_NAME               Describes the database name
-     */
 
     private static final String DRIVER = "org.apache.derby.jdbc.EmbeddedDriver";
     private static final String PROTOCOL = "jdbc:derby:";
     private static final String DB_NAME = "CostManagerDB";
 
     /**
-     * The constructor call createTables function
+     * DerbyDBModel will implement IModel (different implementations for each database)
+     * The constructor will call createTables method.
      *
-     * @throws CostManagerException if there any problem at the creating the tables.
      */
     public DerbyDBModel() throws CostManagerException {
         createTables();
     }
 
     /**
-     * createTables methods creates the CostItems table and the Categories table on the database.
+     * This method will create CostItems table and also Categories table,
+     * if they do not exist on our database.
      *
-     * @throws CostManagerException if there any problem at the creating the tables.
      */
     @Override
     public void createTables() throws CostManagerException {
@@ -110,8 +103,9 @@ public class DerbyDBModel implements IModel {
     }
 
     /**
-     * Inserts a new Category object to the database.
-     * @param category              Represents a new category.
+     * Inserts a new Category object into the database,
+     * if the category do not exist on our database.
+     *
      */
     @Override
     public void addCategory(Category category) throws CostManagerException {
@@ -168,8 +162,8 @@ public class DerbyDBModel implements IModel {
     }
 
     /**
-     * Delete a category by id from the database.
-     * @param id                    Represents id of a category.
+     * Delete a category according to specific id from the database.
+     *
      */
     @Override
     public void deleteCategory(int id) throws CostManagerException {
@@ -212,7 +206,7 @@ public class DerbyDBModel implements IModel {
 
     /**
      * Get all the categories from the database.
-     * @return categories            Array list of categories.
+     *
      */
     @Override
     public ArrayList < Category > getAllCategories() throws CostManagerException {
@@ -269,8 +263,8 @@ public class DerbyDBModel implements IModel {
     }
 
     /**
-     * Inserts a new CostItem object to the database.
-     * @param item                  Represents a new cost item.
+     * Inserts a new CostItem object into the database.
+     *
      */
     @Override
     public void addCostItem(CostItem item) throws CostManagerException {
@@ -317,8 +311,8 @@ public class DerbyDBModel implements IModel {
     }
 
     /**
-     * Delete a cost item by id from the database.
-     * @param id                    Represents id of a cost item.
+     * Delete a cost item according to specific id from the database.
+     *
      */
     @Override
     public void deleteCostItem(int id) throws CostManagerException {
@@ -361,7 +355,7 @@ public class DerbyDBModel implements IModel {
 
     /**
      * Get all the cost items from the database.
-     * @return items                Array list of cost items.
+     *
      */
     @Override
     public ArrayList < CostItem > getAllCostItems() throws CostManagerException {
@@ -424,7 +418,7 @@ public class DerbyDBModel implements IModel {
 
     /**
      * Get all the cost items between two dates from the database.
-     * @return items                Array list of cost items.
+     *
      */
     @Override
     public ArrayList < CostItem > getAllCostItems(Date fromDate, Date toDate) throws CostManagerException {

@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class Category {
 
-    private int id;
+    private final int id;
     private String categoryName;
 
     /**
