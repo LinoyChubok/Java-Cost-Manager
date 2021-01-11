@@ -129,6 +129,7 @@ public class DerbyDBModel implements IModel {
                 if (rs.next()) {
                     categoryId = rs.getInt("id");
                 }
+                // Check if category not found and insert values
                 if (categoryId == -1) statement.execute("INSERT INTO Categories (name) " + "VALUES ('" + categoryName + "')");
                 else throw new CostManagerException("Error duplicated category");
             } catch(SQLException e) {
@@ -158,6 +159,49 @@ public class DerbyDBModel implements IModel {
             rs.close();
         } catch(SQLException e) {
             throw new CostManagerException("Error releasing ResultSet.", e);
+        }
+    }
+    /**
+     * Update a category item that exit in the database.
+     *
+     */
+    @Override
+    public void updateCategory(Category category) throws CostManagerException {
+        // Start the Derby database connection.
+        String connectionUrl = PROTOCOL + DB_NAME + ";create=true";
+
+        Connection connection;
+        Statement statement;
+        ResultSet rs;
+
+        try {
+            Class.forName(DRIVER);
+            connection = DriverManager.getConnection(connectionUrl);
+            statement = connection.createStatement();
+
+            try {
+                statement.execute("UPDATE Categories SET name = '" + category.getCategoryName() + "' WHERE id = " + category.getId());
+            } catch(SQLException e) {
+                throw new CostManagerException("Error with updating a new category", e);
+            }
+
+        } catch(SQLException e) {
+            throw new CostManagerException("Could not open Derby DB at " + connectionUrl, e);
+        } catch(ClassNotFoundException e) {
+            throw new CostManagerException("Could not find Derby driver " + DRIVER, e);
+        }
+
+        // Closes the Derby database connection.
+        try {
+            statement.close();
+        } catch(SQLException e) {
+            throw new CostManagerException("Error releasing Statement.", e);
+        }
+
+        try {
+            connection.close();
+        } catch(SQLException e) {
+            throw new CostManagerException("Error closing database connection.", e);
         }
     }
 
@@ -288,6 +332,49 @@ public class DerbyDBModel implements IModel {
                         "', " + item.getTotalPrice() + ")");
             } catch(SQLException e) {
                 throw new CostManagerException("Error with adding a new cost item to database", e);
+            }
+
+        } catch(SQLException e) {
+            throw new CostManagerException("Could not open Derby DB at " + connectionUrl, e);
+        } catch(ClassNotFoundException e) {
+            throw new CostManagerException("Could not find Derby driver " + DRIVER, e);
+        }
+
+        // Closes the Derby database connection.
+        try {
+            statement.close();
+        } catch(SQLException e) {
+            throw new CostManagerException("Error releasing Statement.", e);
+        }
+
+        try {
+            connection.close();
+        } catch(SQLException e) {
+            throw new CostManagerException("Error closing database connection.", e);
+        }
+    }
+    /**
+     * Update a cost item that exit in the database.
+     *
+     */
+    @Override
+    public void updateCostItem(CostItem item) throws CostManagerException {
+        // Start the Derby database connection.
+        String connectionUrl = PROTOCOL + DB_NAME + ";create=true";
+
+        Connection connection;
+        Statement statement;
+        ResultSet rs;
+
+        try {
+            Class.forName(DRIVER);
+            connection = DriverManager.getConnection(connectionUrl);
+            statement = connection.createStatement();
+
+            try {
+                statement.execute("UPDATE CostItems SET date = '" + item.getDate() + "', category = '" + item.getCategory().getCategoryName() + "', description = '" + item.getDescription() + "', currency = '" + item.getCurrency().name() + "', totalPrice = '" + "' WHERE id = " + item.getId());
+            } catch(SQLException e) {
+                throw new CostManagerException("Error with updating a new cost item", e);
             }
 
         } catch(SQLException e) {
