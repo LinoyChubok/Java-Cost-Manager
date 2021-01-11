@@ -72,7 +72,7 @@ class CostItemTest {
     }
 
     @Test
-    void setDate() {
+    void setDate() throws CostManagerException {
         Date expected = Date.valueOf("2020-07-06");
         item.setDate(Date.valueOf("2020-07-06"));
         Date actual = item.getDate();

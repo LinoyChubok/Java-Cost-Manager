@@ -1,6 +1,8 @@
 package CostManager.Model;
 
 import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Objects;
 
 public class CostItem {
@@ -68,7 +70,17 @@ public class CostItem {
     /**
      * CostItem Setters
      */
-    public void setDate(Date date) { this.date = date; }
+    public void setDate(Date date) throws CostManagerException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-d");
+
+        try {
+            sdf.parse(date.toString());
+            sdf.setLenient(false);
+        } catch (ParseException e) {
+            throw new CostManagerException("Invalid date!");
+        }
+        this.date = date;
+    }
     public void setCategory(Category category) { this.category = category; }
     public void setDescription(String description) { this.description = description; }
     public void setCurrency(Currency currency) { this.currency = currency; }
