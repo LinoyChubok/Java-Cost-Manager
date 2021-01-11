@@ -31,17 +31,14 @@ public class ViewModel implements IViewModel{
 
     @Override
     public void addCostItem(CostItem item) {
-        pool.submit(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    model.addCostItem(item);
-                    view.showMessage("Cost item was added successfully");
-                    ArrayList<CostItem> items = model.getAllCostItems();
-                    //view.showItems(items);
-                } catch(CostManagerException e) {
-                    view.showMessage(e.getMessage());
-                }
+        pool.submit(() -> {
+            try {
+                model.addCostItem(item);
+                view.showMessage("Cost item was added successfully");
+                ArrayList<CostItem> items = model.getAllCostItems();
+                view.showItems(items);
+            } catch(CostManagerException e) {
+                view.showMessage(e.getMessage());
             }
         });
     }

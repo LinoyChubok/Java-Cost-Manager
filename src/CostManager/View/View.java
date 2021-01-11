@@ -1,7 +1,11 @@
 package CostManager.View;
 
+import CostManager.Model.Category;
 import CostManager.Model.CostItem;
+import CostManager.Model.CostManagerException;
+import CostManager.Model.Currency;
 import CostManager.ViewModel.IViewModel;
+import com.intellij.ui.JBColor;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.sql.Date;
 import java.util.ArrayList;
 
 
@@ -18,19 +23,14 @@ public class View implements IView {
     private ApplicationUI ui;
 
     public View() {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                View.this.ui = new ApplicationUI();
-                View.this.ui.start();
-            }
+        SwingUtilities.invokeLater(() -> {
+            View.this.ui = new ApplicationUI();
+            View.this.ui.start();
         });
     }
 
     @Override
-    public void setViewModel(IViewModel vm) {
-        this.vm = vm;
-    }
+    public void setViewModel(IViewModel vm) { this.vm = vm; }
 
     @Override
     public void showMessage(String text) { ui.showMessage(text); }
@@ -38,16 +38,16 @@ public class View implements IView {
     @Override
     public void showItems(ArrayList<CostItem> items) { ui.showItems(items); }
 
-    public static class ApplicationUI {
+    public class ApplicationUI {
 
         // Frame component (for each page)
         private JFrame frame;
         private JPanel panel;
-        private MainPanel mainPanel;
-        private CostPanel costPanel;
-        private CategoryPanel categoryPanel;
-        private ReportsPanel reportsPanel;
-        private PieChartPanel pieChartPanel;
+        private final MainPanel mainPanel;
+        private final CostPanel costPanel;
+        private final CategoryPanel categoryPanel;
+        private final ReportsPanel reportsPanel;
+        private final PieChartPanel pieChartPanel;
 
         public ApplicationUI() {
             // Create instances of panels
@@ -75,14 +75,14 @@ public class View implements IView {
 
         public class MainPanel extends JPanel {
             // Components of the MainPanel
-            private JLabel title;
-            private JPanel headerPanel;
-            private JPanel btnsPanel;
-            private JButton CostBtn;
-            private JButton CategoryBtn;
-            private JButton ReportsBtn;
-            private JButton PieChartBtn;
-            private JLabel image;
+            private final JLabel title;
+            private final JPanel headerPanel;
+            private final JPanel btnsPanel;
+            private final JButton CostBtn;
+            private final JButton CategoryBtn;
+            private final JButton ReportsBtn;
+            private final JButton PieChartBtn;
+            private final JLabel image;
 
             public MainPanel() {
                 // Set the window layout manager as BorderLayout
@@ -117,76 +117,64 @@ public class View implements IView {
                 add(btnsPanel, BorderLayout.CENTER);
 
                 // Handling cost button click
-                CostBtn.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        ApplicationUI.this.costPanel.clearInputs();
-                        ApplicationUI.this.changeScreen(ApplicationUI.this.costPanel);
-                    }
+                CostBtn.addActionListener(e -> {
+                    ApplicationUI.this.costPanel.clearInputs();
+                    ApplicationUI.this.changeScreen(ApplicationUI.this.costPanel);
                 });
 
                 // Handling category button click
-                CategoryBtn.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        ApplicationUI.this.costPanel.clearInputs();
-                        ApplicationUI.this.changeScreen(ApplicationUI.this.categoryPanel);
-                    }
+                CategoryBtn.addActionListener(e -> {
+                    ApplicationUI.this.costPanel.clearInputs();
+                    ApplicationUI.this.changeScreen(ApplicationUI.this.categoryPanel);
                 });
 
                 // Handling reports button click
-                ReportsBtn.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        ApplicationUI.this.costPanel.clearInputs();
-                        ApplicationUI.this.changeScreen(ApplicationUI.this.reportsPanel);
-                    }
+                ReportsBtn.addActionListener(e -> {
+                    ApplicationUI.this.costPanel.clearInputs();
+                    ApplicationUI.this.changeScreen(ApplicationUI.this.reportsPanel);
                 });
 
                 // Handling pie chart button click
-                PieChartBtn.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        ApplicationUI.this.costPanel.clearInputs();
-                        ApplicationUI.this.changeScreen(ApplicationUI.this.pieChartPanel);
-                    }
+                PieChartBtn.addActionListener(e -> {
+                    ApplicationUI.this.costPanel.clearInputs();
+                    ApplicationUI.this.changeScreen(ApplicationUI.this.pieChartPanel);
                 });
             }
         }
         public class CostPanel extends JPanel {
             // Components of the CostPanel
-            private JPanel headerPanel;
-            private JPanel centerPanel;
-            private JPanel southPanel;
+            private final JPanel headerPanel;
+            private final JPanel centerPanel;
+            private final JPanel southPanel;
 
-            private JPanel costFormPanel;
-            private JPanel tablePanel;
-            private JPanel btnPanel;
+            private final JPanel costFormPanel;
+            private final JPanel tablePanel;
+            private final JPanel btnPanel;
 
-            private JTable table;
-            private JScrollPane scroll;
+            private final JTable table;
+            private final JScrollPane scroll;
 
-            private JLabel image;
-            private JLabel title;
+            private final JLabel image;
+            private final JLabel title;
 
-            private JLabel dateLabel;
-            private JLabel categoryLabel;
-            private JLabel descriptionLabel;
-            private JLabel currencyLabel;
-            private JLabel totalPriceLabel;
-            private JLabel messageLabel;
-            private JComboBox categoryCB;
-            private JComboBox currencyCB;
+            private final JLabel dateLabel;
+            private final JLabel categoryLabel;
+            private final JLabel descriptionLabel;
+            private final JLabel currencyLabel;
+            private final JLabel totalPriceLabel;
+            private final JLabel messageLabel;
+            private final JComboBox categoryCB;
+            private final JComboBox currencyCB;
 
-            private TextField dateTF;
-            private TextField descriptionTF;
-            private TextField totalPriceTF;
-            private TextField messageTF;
+            private final TextField dateTF;
+            private final TextField descriptionTF;
+            private final TextField totalPriceTF;
+            private final TextField messageTF;
 
-            private JButton addBtn;
-            private JButton updateBtn;
-            private JButton deleteBtn;
-            private JButton backBtn;
+            private final JButton addBtn;
+            private final JButton updateBtn;
+            private final JButton deleteBtn;
+            private final JButton backBtn;
 
             // Constructor, to initialize the components
             public CostPanel() {
@@ -228,7 +216,7 @@ public class View implements IView {
                 };
                 // Create table with costs data
                 table = new JTable(data, columnNames);
-                table.setBackground(Color.white);
+                table.setBackground(JBColor.WHITE);
                 scroll = new JScrollPane(table);
                 table.setPreferredScrollableViewportSize(table.getPreferredSize());
                 table.setFillsViewportHeight(true);
@@ -239,7 +227,7 @@ public class View implements IView {
                 btnPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
 
                 southPanel = new JPanel();
-                southPanel.setBackground(Color.lightGray);
+                southPanel.setBackground(JBColor.LIGHT_GRAY);
                 messageLabel = new JLabel("Message");
                 messageTF = new TextField("", 40);
                 messageTF.setEnabled(false);
@@ -293,10 +281,55 @@ public class View implements IView {
                 add(southPanel, BorderLayout.SOUTH);
 
                 // Back to Dashboard (mainPanel)
-                backBtn.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        ApplicationUI.this.changeScreen(ApplicationUI.this.mainPanel);
+                backBtn.addActionListener(e -> ApplicationUI.this.changeScreen(ApplicationUI.this.mainPanel));
+
+                // Handle add button click
+                addBtn.addActionListener(e -> {
+                    try {
+                        String description = descriptionTF.getText();
+                        if(description == null || description.length() == 0) {
+                            throw new CostManagerException("Description cannot be empty");
+                        }
+
+                        String categoryName = currencyCB.getSelectedItem().toString();
+                        if(categoryName == null || categoryName.length() == 0) {
+                            throw new CostManagerException("Category cannot be empty");
+                        }
+
+                        String date = dateTF.getText();
+                        if(date == null || date.length() == 0) {
+                            throw new CostManagerException("Date cannot be empty");
+                        }
+
+                        double totalPrice = Double.parseDouble(totalPriceTF.getText());
+
+                        String currencyStr = currencyCB.getSelectedItem().toString();
+                        Currency currency = null;
+                        switch (currencyStr) {
+                            case "EURO":
+                                currency = Currency.EURO;
+                                break;
+                            case "USD":
+                                currency = Currency.USD;
+                                break;
+                            case "GBP":
+                                currency = Currency.GBP;
+                                break;
+                            case "ILS":
+                                break;
+                            default:
+                                currency = Currency.ILS;
+                        }
+
+                        Category category = new Category(categoryName);
+                        CostItem item = new CostItem(Date.valueOf(date), category, description, currency, totalPrice);
+                        View.this.vm.addCostItem(item);
+
+                    } catch (NumberFormatException ex) {
+                        View.this.showMessage("Problem with entered total price" +
+                                " " + ex.getMessage());
+                    } catch(CostManagerException ex){
+                        View.this.showMessage("Problem with entered data " + ex.getMessage());
                     }
                 });
 
@@ -317,29 +350,29 @@ public class View implements IView {
         }
         public class CategoryPanel extends JPanel {
             // Components of the CategoryPanel
-            private JPanel headerPanel;
-            private JPanel centerPanel;
-            private JPanel southPanel;
+            private final JPanel headerPanel;
+            private final JPanel centerPanel;
+            private final JPanel southPanel;
 
-            private JPanel costFormPanel;
-            private JPanel tablePanel;
-            private JPanel btnPanel;
+            private final JPanel costFormPanel;
+            private final JPanel tablePanel;
+            private final JPanel btnPanel;
 
-            private JTable table;
-            private JScrollPane scroll;
+            private final JTable table;
+            private final JScrollPane scroll;
 
-            private JLabel image;
-            private JLabel title;
+            private final JLabel image;
+            private final JLabel title;
 
-            private JLabel categoryLabel;
-            private JLabel messageLabel;
-            private TextField messageTF;
-            private TextField categoryTF;
+            private final JLabel categoryLabel;
+            private final JLabel messageLabel;
+            private final TextField messageTF;
+            private final TextField categoryTF;
 
-            private JButton addBtn;
-            private JButton updateBtn;
-            private JButton deleteBtn;
-            private JButton backBtn;
+            private final JButton addBtn;
+            private final JButton updateBtn;
+            private final JButton deleteBtn;
+            private final JButton backBtn;
 
             // Constructor, to initialize the components
             public CategoryPanel() {
@@ -382,7 +415,7 @@ public class View implements IView {
                 btnPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
 
                 southPanel = new JPanel();
-                southPanel.setBackground(Color.lightGray);
+                southPanel.setBackground(JBColor.LIGHT_GRAY);
                 messageLabel = new JLabel("Message");
                 messageTF = new TextField("", 40);
                 messageTF.setEnabled(false);
@@ -440,29 +473,29 @@ public class View implements IView {
         }
         public class ReportsPanel extends JPanel {
             // Components of the ReportsPanel
-            private JPanel headerPanel;
-            private JPanel centerPanel;
-            private JPanel southPanel;
+            private final JPanel headerPanel;
+            private final JPanel centerPanel;
+            private final JPanel southPanel;
 
-            private JPanel costFormPanel;
-            private JPanel listPanel;
-            private JPanel btnPanel;
+            private final JPanel costFormPanel;
+            private final JPanel listPanel;
+            private final JPanel btnPanel;
 
-            private JList list;
-            private JScrollPane scroll;
+            private final JList list;
+            private final JScrollPane scroll;
 
-            private JLabel image;
-            private JLabel title;
+            private final JLabel image;
+            private final JLabel title;
 
-            private JLabel startDateLabel;
-            private JLabel endDateLabel;
-            private JLabel messageLabel;
-            private TextField messageTF;
-            private TextField startDateTF;
-            private TextField endDateTF;
+            private final JLabel startDateLabel;
+            private final JLabel endDateLabel;
+            private final JLabel messageLabel;
+            private final TextField messageTF;
+            private final TextField startDateTF;
+            private final TextField endDateTF;
 
-            private JButton showBtn;
-            private JButton backBtn;
+            private final JButton showBtn;
+            private final JButton backBtn;
 
             // Constructor, to initialize the components
             public ReportsPanel() {
@@ -494,7 +527,7 @@ public class View implements IView {
                 showBtn = new JButton("Show Results");
 
                 southPanel = new JPanel();
-                southPanel.setBackground(Color.lightGray);
+                southPanel.setBackground(JBColor.LIGHT_GRAY);
                 messageLabel = new JLabel("Message");
                 messageTF = new TextField("", 40);
                 messageTF.setEnabled(false);
@@ -530,12 +563,7 @@ public class View implements IView {
                 add(southPanel, BorderLayout.SOUTH);
 
                 // Back to Dashboard (mainPanel)
-                backBtn.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        ApplicationUI.this.changeScreen(ApplicationUI.this.mainPanel);
-                    }
-                });
+                backBtn.addActionListener(e -> ApplicationUI.this.changeScreen(ApplicationUI.this.mainPanel));
 
             }
             // Clear inputs
@@ -547,26 +575,26 @@ public class View implements IView {
         }
         public class PieChartPanel extends JPanel {
             // Components of the PieChartPanel
-            private JPanel headerPanel;
-            private JPanel centerPanel;
-            private JPanel southPanel;
+            private final JPanel headerPanel;
+            private final JPanel centerPanel;
+            private final JPanel southPanel;
 
-            private JPanel costFormPanel;
-            private JPanel panel;
-            private JPanel btnPanel;
+            private final JPanel costFormPanel;
+            private final JPanel panel;
+            private final JPanel btnPanel;
 
-            private JLabel image;
-            private JLabel title;
+            private final JLabel image;
+            private final JLabel title;
 
-            private JLabel startDateLabel;
-            private JLabel endDateLabel;
-            private JLabel messageLabel;
-            private TextField messageTF;
-            private TextField startDateTF;
-            private TextField endDateTF;
+            private final JLabel startDateLabel;
+            private final JLabel endDateLabel;
+            private final JLabel messageLabel;
+            private final TextField messageTF;
+            private final TextField startDateTF;
+            private final TextField endDateTF;
 
-            private JButton showBtn;
-            private JButton backBtn;
+            private final JButton showBtn;
+            private final JButton backBtn;
 
             // Constructor, to initialize the components
             public PieChartPanel() {
@@ -593,7 +621,7 @@ public class View implements IView {
                 showBtn = new JButton("Show Results");
 
                 southPanel = new JPanel();
-                southPanel.setBackground(Color.lightGray);
+                southPanel.setBackground(JBColor.LIGHT_GRAY);
                 messageLabel = new JLabel("Message");
                 messageTF = new TextField("", 40);
                 messageTF.setEnabled(false);
@@ -628,12 +656,7 @@ public class View implements IView {
                 add(southPanel, BorderLayout.SOUTH);
 
                 // Back to Dashboard (mainPanel)
-                backBtn.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        ApplicationUI.this.changeScreen(ApplicationUI.this.mainPanel);
-                    }
-                });
+                backBtn.addActionListener(e -> ApplicationUI.this.changeScreen(ApplicationUI.this.mainPanel));
 
             }
             // Clear inputs
@@ -671,47 +694,45 @@ public class View implements IView {
                         ApplicationUI.this.categoryPanel.setMessageTF(text);
                         break;
                     case "ReportsPanel":
-                        System.out.println("showMessage - need to be set");
+                        System.out.println("showMessage - need to be set ReportsPanel");
                         break;
                     case "PieChartPanel":
-                        System.out.println("showMessage - need to be set");
+                        System.out.println("showMessage - need to be set PieChartPanel");
                         break;
                 }
             }
         }
-
         public void showMessage(String text) {
             if (SwingUtilities.isEventDispatchThread()) {
                 handleMessage(text);
             } else {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        handleMessage(text);
-                    }
-                });
+                SwingUtilities.invokeLater(() -> handleMessage(text));
             }
         }
+
         public void showItems(ArrayList<CostItem> items) {
-            StringBuilder sb = new StringBuilder();
-            for(CostItem item : items) {
-                sb.append(item.toString());
-                sb.append("\n");
-            }
-            String text = sb.toString();
 
-            if (SwingUtilities.isEventDispatchThread()) {
-                //textArea.setText(text);
-            } else {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        //textArea.setText(text);
-                    }
-                });
+//            StringBuilder sb = new StringBuilder();
+//            for(CostItem item : items) {
+//                sb.append(item.toString());
+//                sb.append("\n");
+//            }
+//            String text = sb.toString();
+//
+//            if (SwingUtilities.isEventDispatchThread()) {
+//                //textArea.setText(text);
+//            } else {
+//                SwingUtilities.invokeLater(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        //textArea.setText(text);
+//                    }
+//                });
+//
+//            }
 
-            }
         }
+
         public void start() {
             displayMainMenu();
         }
