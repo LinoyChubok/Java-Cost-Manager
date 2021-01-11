@@ -1,5 +1,6 @@
 package CostManager.View;
 
+import CostManager.Model.CostItem;
 import CostManager.ViewModel.IViewModel;
 
 import javax.swing.*;
@@ -8,17 +9,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 
 
 public class View implements IView {
 
     private IViewModel vm;
     private ApplicationUI ui;
-    
+
     public View() {
-        SwingUtilities.invokeLater(() -> {
-            View.this.ui = new ApplicationUI();
-            View.this.ui.start();
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                View.this.ui = new ApplicationUI();
+                View.this.ui.start();
+            }
         });
     }
 
@@ -26,6 +31,12 @@ public class View implements IView {
     public void setViewModel(IViewModel vm) {
         this.vm = vm;
     }
+
+    @Override
+    public void showMessage(String text) { ui.showMessage(text); }
+
+    @Override
+    public void showItems(ArrayList<CostItem> items) { ui.showItems(items); }
 
     public static class ApplicationUI {
 
@@ -290,14 +301,19 @@ public class View implements IView {
                 });
 
             }
+
             // Clear inputs
-             public void clearInputs() {
+            public void clearInputs() {
                 categoryCB.setSelectedIndex(-1);
                 currencyCB.setSelectedIndex(-1);
                 dateTF.setText("");
                 totalPriceTF.setText("");
                 descriptionTF.setText("");
-             }
+            }
+
+            public void setMessageTF(String text) {
+                messageTF.setText(text);
+            }
         }
         public class CategoryPanel extends JPanel {
             // Components of the CategoryPanel
@@ -417,6 +433,10 @@ public class View implements IView {
                 categoryTF.setText("");
             }
 
+            public void setMessageTF(String text) {
+                messageTF.setText(text);
+            }
+
         }
         public class ReportsPanel extends JPanel {
             // Components of the ReportsPanel
@@ -522,7 +542,7 @@ public class View implements IView {
             public void clearInputs() {
                 startDateTF.setText("");
                 endDateTF.setText("");
-             }
+            }
 
         }
         public class PieChartPanel extends JPanel {
@@ -629,15 +649,69 @@ public class View implements IView {
             frame.getContentPane().add(this.panel);
             frame.setVisible(true);
         }
-
         public void changeScreen(JPanel nextPanel) {
             frame.remove(this.panel);
             frame.repaint();
             this.panel = nextPanel;
             frame.add(this.panel);
             frame.setVisible(true);
-         }
+        }
 
+        private void handleMessage(String text) {
+            String currentPanel = ApplicationUI.this.panel.getClass().getName();
+            int index = currentPanel.lastIndexOf('$');
+            if(index != -1)
+            {
+                index += 1;
+                switch (currentPanel.substring(index)) {
+                    case "CostPanel":
+                        ApplicationUI.this.costPanel.setMessageTF(text);
+                        break;
+                    case "CategoryPanel":
+                        ApplicationUI.this.categoryPanel.setMessageTF(text);
+                        break;
+                    case "ReportsPanel":
+                        System.out.println("showMessage - need to be set");
+                        break;
+                    case "PieChartPanel":
+                        System.out.println("showMessage - need to be set");
+                        break;
+                }
+            }
+        }
+
+        public void showMessage(String text) {
+            if (SwingUtilities.isEventDispatchThread()) {
+                handleMessage(text);
+            } else {
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        handleMessage(text);
+                    }
+                });
+            }
+        }
+        public void showItems(ArrayList<CostItem> items) {
+            StringBuilder sb = new StringBuilder();
+            for(CostItem item : items) {
+                sb.append(item.toString());
+                sb.append("\n");
+            }
+            String text = sb.toString();
+
+            if (SwingUtilities.isEventDispatchThread()) {
+                //textArea.setText(text);
+            } else {
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        //textArea.setText(text);
+                    }
+                });
+
+            }
+        }
         public void start() {
             displayMainMenu();
         }
