@@ -6,9 +6,9 @@ import CostManager.Model.CostManagerException;
 import CostManager.Model.Currency;
 import CostManager.ViewModel.IViewModel;
 import com.intellij.ui.JBColor;
-import javax.swing.table.DefaultTableModel;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -165,13 +165,14 @@ public class View implements IView {
             private final JLabel currencyLabel;
             private final JLabel totalPriceLabel;
             private final JLabel messageLabel;
-            private final JComboBox categoryCB;
-            private final JComboBox currencyCB;
 
-            private final TextField dateTF;
-            private final TextField descriptionTF;
-            private final TextField totalPriceTF;
-            private final TextField messageTF;
+            private JComboBox categoryCB;
+            private JComboBox currencyCB;
+
+            private TextField dateTF;
+            private TextField descriptionTF;
+            private TextField totalPriceTF;
+            private TextField messageTF;
 
             private final JButton addBtn;
             private final JButton updateBtn;
@@ -198,17 +199,27 @@ public class View implements IView {
                 // Set the tablePanel as BorderLayout
                 tablePanel = new JPanel(new BorderLayout());
 
-
                 // Create table
                 tableModel = new DefaultTableModel();
                 table = new JTable(tableModel);
+
                 // Set table properties
-                table.setEnabled(false);
                 table.getTableHeader().setReorderingAllowed(false);
                 table.setBackground(JBColor.WHITE);
                 scroll = new JScrollPane(table);
                 table.setPreferredScrollableViewportSize(table.getPreferredSize());
                 table.setFillsViewportHeight(true);
+
+                table.setFocusable(false);
+                table.getSelectionModel().addListSelectionListener(event -> {
+                    if (table.getSelectedRow() > -1) {
+                        dateTF.setText(table.getValueAt(table.getSelectedRow(), 1).toString());
+                        categoryCB.getModel().setSelectedItem(table.getValueAt(table.getSelectedRow(), 2).toString());
+                        descriptionTF.setText(table.getValueAt(table.getSelectedRow(), 3).toString());
+                        currencyCB.getModel().setSelectedItem(table.getValueAt(table.getSelectedRow(), 4).toString());
+                        totalPriceTF.setText(table.getValueAt(table.getSelectedRow(), 5).toString());
+                    }
+                });
 
                 // Create btnPanel as FlowLayout
                 btnPanel = new JPanel(new FlowLayout());
