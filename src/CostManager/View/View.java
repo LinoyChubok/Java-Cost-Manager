@@ -240,6 +240,11 @@ public class View implements IView {
                 descriptionTF = new TextField();
                 currencyLabel = new JLabel("Currency");
                 currencyCB = new JComboBox();
+                // Add items to currencyCB
+                currencyCB.addItem("ILS");
+                currencyCB.addItem("USD");
+                currencyCB.addItem("EURO");
+                currencyCB.addItem("GPB");
                 totalPriceLabel = new JLabel("Total Price");
                 totalPriceTF = new TextField();
 
