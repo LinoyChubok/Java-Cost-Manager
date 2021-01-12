@@ -508,7 +508,7 @@ public class DerbyDBModel implements IModel {
      *
      */
     @Override
-    public ArrayList < CostItem > getAllCostItemsReport(Date fromDate, Date toDate) throws CostManagerException {
+    public ArrayList < CostItem > getReportSummary(Date fromDate, Date toDate) throws CostManagerException {
         ArrayList < CostItem > items = new ArrayList < >();
 
         // Start the Derby database connection.

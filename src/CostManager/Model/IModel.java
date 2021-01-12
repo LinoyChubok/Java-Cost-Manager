@@ -25,6 +25,10 @@ public interface IModel {
     public abstract void updateCostItem(CostItem item) throws CostManagerException;
     public abstract void deleteCostItem(int id) throws CostManagerException;
     public abstract ArrayList<CostItem> getAllCostItems() throws CostManagerException;
-    public abstract ArrayList<CostItem> getAllCostItemsReport(Date fromDate, Date toDate) throws CostManagerException;
+
+    /**
+     * Report query implementation
+     */
+    public abstract ArrayList<CostItem> getReportSummary(Date fromDate, Date toDate) throws CostManagerException;
 }
 

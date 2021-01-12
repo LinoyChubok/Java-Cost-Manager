@@ -6,6 +6,7 @@ import CostManager.Model.CostManagerException;
 import CostManager.Model.IModel;
 import CostManager.View.IView;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -132,6 +133,21 @@ public class ViewModel implements IViewModel{
                 view.showCostItems(items, categories);
                 if(items.size() != 0)
                     view.showMessage("Cost items loaded successfully");
+                else view.showMessage("No data to display");
+            } catch(CostManagerException e) {
+                view.showMessage(e.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void getReportSummary(Date fromDate, Date toDate) {
+        pool.submit(() -> {
+            try {
+                ArrayList<CostItem> items = model.getReportSummary(fromDate, toDate);
+                view.showReport(items);
+                if(items.size() != 0)
+                    view.showMessage("Report summary loaded successfully");
                 else view.showMessage("No data to display");
             } catch(CostManagerException e) {
                 view.showMessage(e.getMessage());

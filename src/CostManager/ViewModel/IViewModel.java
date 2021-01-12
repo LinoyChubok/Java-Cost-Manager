@@ -3,6 +3,9 @@ package CostManager.ViewModel;
 import CostManager.Model.*;
 import CostManager.View.*;
 
+import java.sql.Date;
+import java.util.ArrayList;
+
 public interface IViewModel {
     public abstract void setView(IView view);
     public abstract void setModel(IModel model);
@@ -16,5 +19,7 @@ public interface IViewModel {
     public abstract void updateCostItem(CostItem item);
     public abstract void deleteCostItem(int id);
     public abstract void getAllCostItems();
+
+    public abstract ArrayList<CostItem> getReportSummary(Date fromDate, Date toDate);
 }
 
