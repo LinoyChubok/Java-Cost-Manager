@@ -236,6 +236,8 @@ public class View implements IView {
                 dateTF = new TextField();
                 categoryLabel = new JLabel("Category");
                 categoryCB = new JComboBox();
+                // Set light weight to currencyCB (to make sure that items not hidden)
+                categoryCB.setLightWeightPopupEnabled(false);
                 descriptionLabel = new JLabel("Description");
                 descriptionTF = new TextField();
                 currencyLabel = new JLabel("Currency");
@@ -245,6 +247,8 @@ public class View implements IView {
                 currencyCB.addItem("USD");
                 currencyCB.addItem("EURO");
                 currencyCB.addItem("GPB");
+                // Set light weight to currencyCB (to make sure that items not hidden)
+                currencyCB.setLightWeightPopupEnabled(false);
                 totalPriceLabel = new JLabel("Total Price");
                 totalPriceTF = new TextField();
 
