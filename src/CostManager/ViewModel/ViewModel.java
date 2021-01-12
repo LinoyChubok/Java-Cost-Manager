@@ -31,6 +31,34 @@ public class ViewModel implements IViewModel{
     }
 
     @Override
+    public void addCategory(Category category) {
+        pool.submit(() -> {
+            try {
+                model.addCategory(category);
+                getAllCategories();
+                view.showMessage("Category was added successfully");
+            } catch(CostManagerException e) {
+                view.showMessage(e.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void getAllCategories() {
+        pool.submit(() -> {
+            try {
+                ArrayList<Category> categories = model.getAllCategories();
+                view.showCategories(categories);
+                if(categories.size() != 0)
+                    view.showMessage("Categories loaded successfully");
+                else view.showMessage("No data to display");
+            } catch(CostManagerException e) {
+                view.showMessage(e.getMessage());
+            }
+        });
+    }
+
+    @Override
     public void addCostItem(CostItem item) {
         pool.submit(() -> {
             try {
@@ -49,7 +77,7 @@ public class ViewModel implements IViewModel{
             try {
                 ArrayList<CostItem> items = model.getAllCostItems();
                 ArrayList<Category> categories = model.getAllCategories();
-                view.showItems(items, categories);
+                view.showCostItems(items, categories);
                 if(items.size() != 0)
                     view.showMessage("Cost items loaded successfully");
                 else view.showMessage("No data to display");

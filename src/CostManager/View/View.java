@@ -10,13 +10,10 @@ import com.intellij.ui.JBColor;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Date;
 import java.util.ArrayList;
-
 
 public class View implements IView {
 
@@ -37,10 +34,12 @@ public class View implements IView {
     public void showMessage(String text) { ui.showMessage(text); }
 
     @Override
-    public void showItems(ArrayList<CostItem> items, ArrayList<Category> categories) { ui.showItems(items, categories); }
+    public void showCostItems(ArrayList<CostItem> items, ArrayList<Category> categories) { ui.showCostItems(items, categories); }
+
+    @Override
+    public void showCategories(ArrayList<Category> categories) { ui.showCategories(categories); }
 
     public class ApplicationUI {
-
         // Frame component (for each page)
         private JFrame frame;
         private JPanel panel;
@@ -77,13 +76,14 @@ public class View implements IView {
         public class MainPanel extends JPanel {
             // Components of the MainPanel
             private final JLabel title;
+            private final JLabel image;
             private final JPanel headerPanel;
             private final JPanel btnsPanel;
+
             private final JButton CostBtn;
             private final JButton CategoryBtn;
             private final JButton ReportsBtn;
             private final JButton PieChartBtn;
-            private final JLabel image;
 
             public MainPanel() {
                 // Set the window layout manager as BorderLayout
@@ -126,6 +126,7 @@ public class View implements IView {
 
                 // Handling category button click
                 CategoryBtn.addActionListener(e -> {
+                    View.this.vm.getAllCategories();
                     ApplicationUI.this.costPanel.clearInputs();
                     ApplicationUI.this.changeScreen(ApplicationUI.this.categoryPanel);
                 });
@@ -143,6 +144,7 @@ public class View implements IView {
                 });
             }
         }
+
         public class CostPanel extends JPanel {
             // Components of the CostPanel
             private final JPanel headerPanel;
@@ -152,19 +154,24 @@ public class View implements IView {
             private final JPanel costFormPanel;
             private final JPanel tablePanel;
             private final JPanel btnPanel;
+
             private DefaultTableModel tableModel;
             private JTable table;
             private JScrollPane scroll;
 
             private final JLabel image;
             private final JLabel title;
-
             private final JLabel dateLabel;
             private final JLabel categoryLabel;
             private final JLabel descriptionLabel;
             private final JLabel currencyLabel;
             private final JLabel totalPriceLabel;
             private final JLabel messageLabel;
+
+            private final JButton addBtn;
+            private final JButton updateBtn;
+            private final JButton deleteBtn;
+            private final JButton backBtn;
 
             private JComboBox categoryCB;
             private JComboBox currencyCB;
@@ -173,11 +180,6 @@ public class View implements IView {
             private TextField descriptionTF;
             private TextField totalPriceTF;
             private TextField messageTF;
-
-            private final JButton addBtn;
-            private final JButton updateBtn;
-            private final JButton deleteBtn;
-            private final JButton backBtn;
 
             // Constructor, to initialize the components
             public CostPanel() {
@@ -209,7 +211,6 @@ public class View implements IView {
                 scroll = new JScrollPane(table);
                 table.setPreferredScrollableViewportSize(table.getPreferredSize());
                 table.setFillsViewportHeight(true);
-
                 table.setFocusable(false);
                 table.getSelectionModel().addListSelectionListener(event -> {
                     if (table.getSelectedRow() > -1) {
@@ -346,7 +347,19 @@ public class View implements IView {
 
             }
 
-            public void showItems(ArrayList<CostItem> items, ArrayList<Category> categories) {
+            public void clearInputs() {
+                categoryCB.setSelectedIndex(-1);
+                currencyCB.setSelectedIndex(-1);
+                dateTF.setText("");
+                totalPriceTF.setText("");
+                descriptionTF.setText("");
+            }
+
+            public void showMessage(String text) {
+                messageTF.setText(text);
+            }
+
+            public void showCostItems(ArrayList<CostItem> items, ArrayList<Category> categories) {
                 // Clear Table
                 tableModel.setRowCount(0);
                 tableModel.setColumnCount(0);
@@ -373,21 +386,8 @@ public class View implements IView {
                 for (CostItem item : items)
                     tableModel.addRow(new Object[]{item.getId(), item.getDate(),item.getCategory().getCategoryName(), item.getDescription(), item.getCurrency(), item.getTotalPrice()});
             }
-
-
-            // Clear inputs
-            public void clearInputs() {
-                categoryCB.setSelectedIndex(-1);
-                currencyCB.setSelectedIndex(-1);
-                dateTF.setText("");
-                totalPriceTF.setText("");
-                descriptionTF.setText("");
-            }
-
-            public void setMessageTF(String text) {
-                messageTF.setText(text);
-            }
         }
+
         public class CategoryPanel extends JPanel {
             // Components of the CategoryPanel
             private final JPanel headerPanel;
@@ -398,21 +398,22 @@ public class View implements IView {
             private final JPanel tablePanel;
             private final JPanel btnPanel;
 
-            private final JTable table;
-            private final JScrollPane scroll;
+            private DefaultTableModel tableModel;
+            private JTable table;
+            private JScrollPane scroll;
 
             private final JLabel image;
             private final JLabel title;
-
             private final JLabel categoryLabel;
             private final JLabel messageLabel;
-            private final TextField messageTF;
-            private final TextField categoryTF;
 
             private final JButton addBtn;
             private final JButton updateBtn;
             private final JButton deleteBtn;
             private final JButton backBtn;
+
+            private TextField messageTF;
+            private TextField categoryTF;
 
             // Constructor, to initialize the components
             public CategoryPanel() {
@@ -434,21 +435,23 @@ public class View implements IView {
                 // Set the tablePanel as BorderLayout
                 tablePanel = new JPanel(new BorderLayout());
                 tablePanel.setBorder(BorderFactory.createEmptyBorder(50, 0, 50, 0));
-                String[] columnNames = {"ID", "CATEGORY"};
-                String[][] data = {
-                        {"1", "Shopping"},
-                        {"2", "Movies"},
-                        {"3", "Food"},
-                        {"4", "TV"},
-                        {"5", "Water"},
-                };
-                // Create table with categories data
-                table = new JTable(data, columnNames);
+
+                // Create table
+                tableModel = new DefaultTableModel();
+                table = new JTable(tableModel);
+                // Set table properties
+                table.getTableHeader().setReorderingAllowed(false);
                 table.setBackground(Color.white);
                 scroll = new JScrollPane(table);
                 table.setPreferredScrollableViewportSize(table.getPreferredSize());
                 table.setFillsViewportHeight(true);
-                tablePanel.add(scroll, BorderLayout.CENTER); // ScrollPane include table
+                tablePanel.add(scroll, BorderLayout.CENTER); // ScrollPanel include table
+                table.setFocusable(false);
+                table.getSelectionModel().addListSelectionListener(event -> {
+                    if (table.getSelectedRow() > -1) {
+                        categoryTF.setText(table.getValueAt(table.getSelectedRow(), 1).toString());
+                    }
+                });
 
                 // Create btnPanel as FlowLayout
                 btnPanel = new JPanel(new FlowLayout());
@@ -493,30 +496,57 @@ public class View implements IView {
                 add(southPanel, BorderLayout.SOUTH);
 
                 // Back to Dashboard (mainPanel)
-                backBtn.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        ApplicationUI.this.changeScreen(ApplicationUI.this.mainPanel);
+                backBtn.addActionListener(e -> ApplicationUI.this.changeScreen(ApplicationUI.this.mainPanel));
+
+                // Handle add button click
+                addBtn.addActionListener(e -> {
+                    try {
+                        String categoryName = categoryTF.getText();
+                        if(categoryName == null || categoryName.length() == 0) {
+                            throw new CostManagerException("categoryName cannot be empty");
+                        }
+                        
+                        Category category = new Category(categoryName);
+
+                        View.this.vm.addCategory(category);
+
+                    } catch(CostManagerException ex){
+                        View.this.showMessage("Problem with entered data " + ex.getMessage());
                     }
                 });
-
             }
-            // Clear inputs
+
             public void clearInputs() {
                 categoryTF.setText("");
             }
 
-            public void setMessageTF(String text) {
+            public void showMessage(String text) {
                 messageTF.setText(text);
             }
 
+            public void showCategories(ArrayList<Category> categories) {
+                // Clear Table
+                tableModel.setRowCount(0);
+                tableModel.setColumnCount(0);
+
+                // Clear inputs
+                clearInputs();
+
+                // Add table columns
+                tableModel.addColumn("ID");
+                tableModel.addColumn("CATEGORY NAME");
+
+                // Add table rows
+                for (Category category : categories)
+                    tableModel.addRow(new Object[]{category.getId(), category.getCategoryName()});
+            }
         }
+
         public class ReportsPanel extends JPanel {
             // Components of the ReportsPanel
             private final JPanel headerPanel;
             private final JPanel centerPanel;
             private final JPanel southPanel;
-
             private final JPanel costFormPanel;
             private final JPanel listPanel;
             private final JPanel btnPanel;
@@ -526,16 +556,16 @@ public class View implements IView {
 
             private final JLabel image;
             private final JLabel title;
-
             private final JLabel startDateLabel;
             private final JLabel endDateLabel;
             private final JLabel messageLabel;
-            private final TextField messageTF;
-            private final TextField startDateTF;
-            private final TextField endDateTF;
 
             private final JButton showBtn;
             private final JButton backBtn;
+
+            private final TextField messageTF;
+            private final TextField startDateTF;
+            private final TextField endDateTF;
 
             // Constructor, to initialize the components
             public ReportsPanel() {
@@ -606,13 +636,14 @@ public class View implements IView {
                 backBtn.addActionListener(e -> ApplicationUI.this.changeScreen(ApplicationUI.this.mainPanel));
 
             }
-            // Clear inputs
+
             public void clearInputs() {
                 startDateTF.setText("");
                 endDateTF.setText("");
             }
 
         }
+
         public class PieChartPanel extends JPanel {
             // Components of the PieChartPanel
             private final JPanel headerPanel;
@@ -720,7 +751,7 @@ public class View implements IView {
             frame.setVisible(true);
         }
 
-        private void handleMessage(String text) {
+        private void navigateMessage(String text) {
             String currentPanel = ApplicationUI.this.panel.getClass().getName();
             int index = currentPanel.lastIndexOf('$');
             if(index != -1)
@@ -728,10 +759,10 @@ public class View implements IView {
                 index += 1;
                 switch (currentPanel.substring(index)) {
                     case "CostPanel":
-                        ApplicationUI.this.costPanel.setMessageTF(text);
+                        ApplicationUI.this.costPanel.showMessage(text);
                         break;
                     case "CategoryPanel":
-                        ApplicationUI.this.categoryPanel.setMessageTF(text);
+                        ApplicationUI.this.categoryPanel.showMessage(text);
                         break;
                     case "ReportsPanel":
                         System.out.println("showMessage - need to be set ReportsPanel");
@@ -742,23 +773,33 @@ public class View implements IView {
                 }
             }
         }
+
         public void showMessage(String text) {
             if (SwingUtilities.isEventDispatchThread()) {
-                handleMessage(text);
+                navigateMessage(text);
             } else {
-                SwingUtilities.invokeLater(() -> handleMessage(text));
+                SwingUtilities.invokeLater(() -> navigateMessage(text));
             }
         }
-
-        public void showItems(ArrayList<CostItem> items, ArrayList<Category> categories) {
+        public void showCostItems(ArrayList<CostItem> items, ArrayList<Category> categories) {
             if (SwingUtilities.isEventDispatchThread()) {
-                ApplicationUI.this.costPanel.showItems(items, categories);
+                ApplicationUI.this.costPanel.showCostItems(items, categories);
             } else {
                 SwingUtilities.invokeLater(() -> {
-                    ApplicationUI.this.costPanel.showItems(items, categories);
+                    ApplicationUI.this.costPanel.showCostItems(items, categories);
                 });
             }
         }
+        public void showCategories(ArrayList<Category> categories) {
+            if (SwingUtilities.isEventDispatchThread()) {
+                ApplicationUI.this.categoryPanel.showCategories(categories);
+            } else {
+                SwingUtilities.invokeLater(() -> {
+                    ApplicationUI.this.categoryPanel.showCategories(categories);
+                });
+            }
+        }
+
 
         public void start() {
             displayMainMenu();
