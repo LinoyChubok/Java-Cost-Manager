@@ -42,4 +42,17 @@ public class ViewModel implements IViewModel{
             }
         });
     }
+
+    @Override
+    public void getAllCostItems() {
+        pool.submit(() -> {
+            try {
+                view.showMessage("Cost items loaded successfully");
+                ArrayList<CostItem> items = model.getAllCostItems();
+                view.showItems(items);
+            } catch(CostManagerException e) {
+                view.showMessage(e.getMessage());
+            }
+        });
+    }
 }

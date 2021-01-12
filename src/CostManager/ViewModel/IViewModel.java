@@ -9,6 +9,6 @@ public interface IViewModel {
     public abstract void setModel(IModel model);
 
     public abstract void addCostItem(CostItem item);
-
+    public abstract void getAllCostItems();
 }
 

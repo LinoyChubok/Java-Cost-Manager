@@ -6,6 +6,7 @@ import CostManager.Model.CostManagerException;
 import CostManager.Model.Currency;
 import CostManager.ViewModel.IViewModel;
 import com.intellij.ui.JBColor;
+import javax.swing.table.DefaultTableModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -151,7 +152,7 @@ public class View implements IView {
             private final JPanel tablePanel;
             private final JPanel btnPanel;
 
-            private final JTable table;
+            private  JTable table;
             private final JScrollPane scroll;
 
             private final JLabel image;
@@ -195,27 +196,11 @@ public class View implements IView {
 
                 // Set the tablePanel as BorderLayout
                 tablePanel = new JPanel(new BorderLayout());
-                String[] columnNames = { "ID", "DATE", "CATEGORY", "DESCRIPTION", "CURRENCY", "TOTALPRICE" };
-                String[][] data = {
-                        { "Kundan Kumar Jha", "4031", "CSE", "Kundan Kumar Jha", "4031", "CSE" },
-                        { "Anand Jha", "6014", "IT", "Anand Jha", "6014", "IT" },
-                        { "Kundan Kumar Jha", "4031", "CSE", "Kundan Kumar Jha", "4031", "CSE" },
-                        { "Anand Jha", "6014", "IT", "Anand Jha", "6014", "IT" },
-                        { "Kundan Kumar Jha", "4031", "CSE", "Kundan Kumar Jha", "4031", "CSE" },
-                        { "Anand Jha", "6014", "IT", "Anand Jha", "6014", "IT" },
-                        { "Kundan Kumar Jha", "4031", "CSE", "Kundan Kumar Jha", "4031", "CSE" },
-                        { "Anand Jha", "6014", "IT", "Anand Jha", "6014", "IT" },
-                        { "Kundan Kumar Jha", "4031", "CSE", "Kundan Kumar Jha", "4031", "CSE" },
-                        { "Anand Jha", "6014", "IT", "Anand Jha", "6014", "IT" },
-                        { "Kundan Kumar Jha", "4031", "CSE", "Kundan Kumar Jha", "4031", "CSE" },
-                        { "Anand Jha", "6014", "IT", "Anand Jha", "6014", "IT" },
-                        { "Kundan Kumar Jha", "4031", "CSE", "Kundan Kumar Jha", "4031", "CSE" },
-                        { "Anand Jha", "6014", "IT", "Anand Jha", "6014", "IT" },
-                        { "Kundan Kumar Jha", "4031", "CSE", "Kundan Kumar Jha", "4031", "CSE" },
-                        { "Anand Jha", "6014", "IT", "Anand Jha", "6014", "IT" }
-                };
-                // Create table with costs data
-                table = new JTable(data, columnNames);
+
+                // Init table values
+                View.this.vm.getAllCostItems();
+
+                // Create table with costs
                 table.setBackground(JBColor.WHITE);
                 scroll = new JScrollPane(table);
                 table.setPreferredScrollableViewportSize(table.getPreferredSize());
@@ -333,6 +318,29 @@ public class View implements IView {
                     }
                 });
 
+            }
+
+            public void showItems(ArrayList<CostItem> items){
+                String[] columnNames = { "ID", "DATE", "CATEGORY", "DESCRIPTION", "CURRENCY", "TOTALPRICE" };
+                String[][] data = {
+                        { "Kundan Kumar Jha", "4031", "CSE", "Kundan Kumar Jha", "4031", "CSE" },
+                        { "Anand Jha", "6014", "IT", "Anand Jha", "6014", "IT" },
+                        { "Kundan Kumar Jha", "4031", "CSE", "Kundan Kumar Jha", "4031", "CSE" },
+                        { "Anand Jha", "6014", "IT", "Anand Jha", "6014", "IT" },
+                        { "Kundan Kumar Jha", "4031", "CSE", "Kundan Kumar Jha", "4031", "CSE" },
+                        { "Anand Jha", "6014", "IT", "Anand Jha", "6014", "IT" },
+                        { "Kundan Kumar Jha", "4031", "CSE", "Kundan Kumar Jha", "4031", "CSE" },
+                        { "Anand Jha", "6014", "IT", "Anand Jha", "6014", "IT" },
+                        { "Kundan Kumar Jha", "4031", "CSE", "Kundan Kumar Jha", "4031", "CSE" },
+                        { "Anand Jha", "6014", "IT", "Anand Jha", "6014", "IT" },
+                        { "Kundan Kumar Jha", "4031", "CSE", "Kundan Kumar Jha", "4031", "CSE" },
+                        { "Anand Jha", "6014", "IT", "Anand Jha", "6014", "IT" },
+                        { "Kundan Kumar Jha", "4031", "CSE", "Kundan Kumar Jha", "4031", "CSE" },
+                        { "Anand Jha", "6014", "IT", "Anand Jha", "6014", "IT" },
+                        { "Kundan Kumar Jha", "4031", "CSE", "Kundan Kumar Jha", "4031", "CSE" },
+                        { "Anand Jha", "6014", "IT", "Anand Jha", "6014", "IT" }
+                };
+                this.table = new JTable(data, columnNames);
             }
 
             // Clear inputs
@@ -711,26 +719,13 @@ public class View implements IView {
         }
 
         public void showItems(ArrayList<CostItem> items) {
-
-//            StringBuilder sb = new StringBuilder();
-//            for(CostItem item : items) {
-//                sb.append(item.toString());
-//                sb.append("\n");
-//            }
-//            String text = sb.toString();
-//
-//            if (SwingUtilities.isEventDispatchThread()) {
-//                //textArea.setText(text);
-//            } else {
-//                SwingUtilities.invokeLater(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        //textArea.setText(text);
-//                    }
-//                });
-//
-//            }
-
+            if (SwingUtilities.isEventDispatchThread()) {
+                ApplicationUI.this.costPanel.showItems(items);
+            } else {
+                SwingUtilities.invokeLater(() -> {
+                    ApplicationUI.this.costPanel.showItems(items);
+                });
+            }
         }
 
         public void start() {
