@@ -40,7 +40,7 @@ public class View implements IView {
     public void showCostItems(ArrayList<CostItem> items, ArrayList<Category> categories) { ui.showCostItems(items, categories); }
 
     @Override
-    public void showReport(ArrayList<CostItem> items) { ui.showReport(items); }
+    public void showReportSummary(ArrayList<CostItem> items) { ui.showReportSummary(items); }
 
     public class ApplicationUI {
         // Frame component (for each page)
@@ -554,7 +554,7 @@ public class View implements IView {
             private final JPanel listPanel;
             private final JPanel btnPanel;
 
-            private final JList list;
+            private JList list;
             private final JScrollPane scroll;
 
             private final JLabel image;
@@ -566,9 +566,9 @@ public class View implements IView {
             private final JButton showBtn;
             private final JButton backBtn;
 
-            private final TextField messageTF;
-            private final TextField startDateTF;
-            private final TextField endDateTF;
+            private TextField messageTF;
+            private TextField startDateTF;
+            private TextField endDateTF;
 
             // Constructor, to initialize the components
             public ReportsPanel() {
@@ -643,6 +643,19 @@ public class View implements IView {
             public void clearInputs() {
                 startDateTF.setText("");
                 endDateTF.setText("");
+            }
+            public void showMessage(String text) {
+                messageTF.setText(text);
+            }
+
+            public void showReportSummary(ArrayList<CostItem> items) {
+              StringBuilder sb = new StringBuilder();
+              for(CostItem item : items) {
+                sb.append(item.toString());
+                sb.append("\n");
+              }
+              String text = sb.toString();
+              list.add(text);
             }
 
         }
@@ -768,7 +781,7 @@ public class View implements IView {
                         ApplicationUI.this.categoryPanel.showMessage(text);
                         break;
                     case "ReportsPanel":
-                        System.out.println("showMessage - need to be set ReportsPanel");
+                        ApplicationUI.this.reportsPanel.showMessage(text);
                         break;
                     case "PieChartPanel":
                         System.out.println("showMessage - need to be set PieChartPanel");
@@ -802,12 +815,12 @@ public class View implements IView {
                 });
             }
         }
-        public void showReport(ArrayList<CostItem> items) {
+        public void showReportSummary(ArrayList<CostItem> items) {
             if (SwingUtilities.isEventDispatchThread()) {
-
+                ApplicationUI.this.reportPanel.showReportSummary(items);
             } else {
                 SwingUtilities.invokeLater(() -> {
-
+                    ApplicationUI.this.reportPanel.showReportSummary(items);
                 });
             }
         }
