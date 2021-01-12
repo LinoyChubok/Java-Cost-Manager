@@ -119,6 +119,7 @@ public class View implements IView {
 
                 // Handling cost button click
                 CostBtn.addActionListener(e -> {
+                    View.this.vm.getAllCostItems();
                     ApplicationUI.this.costPanel.clearInputs();
                     ApplicationUI.this.changeScreen(ApplicationUI.this.costPanel);
                 });
@@ -151,9 +152,9 @@ public class View implements IView {
             private final JPanel costFormPanel;
             private final JPanel tablePanel;
             private final JPanel btnPanel;
-
-            private  JTable table;
-            private final JScrollPane scroll;
+            private DefaultTableModel tableModel;
+            private JTable table;
+            private JScrollPane scroll;
 
             private final JLabel image;
             private final JLabel title;
@@ -197,15 +198,17 @@ public class View implements IView {
                 // Set the tablePanel as BorderLayout
                 tablePanel = new JPanel(new BorderLayout());
 
-                // Init table values
-                View.this.vm.getAllCostItems();
 
-                // Create table with costs
+                // Create table
+                tableModel = new DefaultTableModel();
+                table = new JTable(tableModel);
+                // Set table properties
+                table.setEnabled(false);
+                table.getTableHeader().setReorderingAllowed(false);
                 table.setBackground(JBColor.WHITE);
                 scroll = new JScrollPane(table);
                 table.setPreferredScrollableViewportSize(table.getPreferredSize());
                 table.setFillsViewportHeight(true);
-                tablePanel.add(scroll, BorderLayout.CENTER); // ScrollPane include table
 
                 // Create btnPanel as FlowLayout
                 btnPanel = new JPanel(new FlowLayout());
@@ -247,6 +250,8 @@ public class View implements IView {
                 costFormPanel.add(currencyCB);
                 costFormPanel.add(totalPriceLabel);
                 costFormPanel.add(totalPriceTF);
+
+                tablePanel.add(scroll, BorderLayout.CENTER); // ScrollPane include table
 
                 btnPanel.add(addBtn);
                 btnPanel.add(updateBtn);
@@ -320,28 +325,24 @@ public class View implements IView {
 
             }
 
-            public void showItems(ArrayList<CostItem> items){
-                String[] columnNames = { "ID", "DATE", "CATEGORY", "DESCRIPTION", "CURRENCY", "TOTALPRICE" };
-                String[][] data = {
-                        { "Kundan Kumar Jha", "4031", "CSE", "Kundan Kumar Jha", "4031", "CSE" },
-                        { "Anand Jha", "6014", "IT", "Anand Jha", "6014", "IT" },
-                        { "Kundan Kumar Jha", "4031", "CSE", "Kundan Kumar Jha", "4031", "CSE" },
-                        { "Anand Jha", "6014", "IT", "Anand Jha", "6014", "IT" },
-                        { "Kundan Kumar Jha", "4031", "CSE", "Kundan Kumar Jha", "4031", "CSE" },
-                        { "Anand Jha", "6014", "IT", "Anand Jha", "6014", "IT" },
-                        { "Kundan Kumar Jha", "4031", "CSE", "Kundan Kumar Jha", "4031", "CSE" },
-                        { "Anand Jha", "6014", "IT", "Anand Jha", "6014", "IT" },
-                        { "Kundan Kumar Jha", "4031", "CSE", "Kundan Kumar Jha", "4031", "CSE" },
-                        { "Anand Jha", "6014", "IT", "Anand Jha", "6014", "IT" },
-                        { "Kundan Kumar Jha", "4031", "CSE", "Kundan Kumar Jha", "4031", "CSE" },
-                        { "Anand Jha", "6014", "IT", "Anand Jha", "6014", "IT" },
-                        { "Kundan Kumar Jha", "4031", "CSE", "Kundan Kumar Jha", "4031", "CSE" },
-                        { "Anand Jha", "6014", "IT", "Anand Jha", "6014", "IT" },
-                        { "Kundan Kumar Jha", "4031", "CSE", "Kundan Kumar Jha", "4031", "CSE" },
-                        { "Anand Jha", "6014", "IT", "Anand Jha", "6014", "IT" }
-                };
-                this.table = new JTable(data, columnNames);
+            public void showItems(ArrayList<CostItem> items) {
+                // Clear Table
+                tableModel.setRowCount(0);
+                tableModel.setColumnCount(0);
+
+                // Add table columns
+                tableModel.addColumn("ID");
+                tableModel.addColumn("DATE");
+                tableModel.addColumn("CATEGORY");
+                tableModel.addColumn("DESCRIPTION");
+                tableModel.addColumn("CURRENCY");
+                tableModel.addColumn("TOTALPRICE");
+
+                // Add table rows
+                for (CostItem item : items)
+                    tableModel.addRow(new Object[]{item.getId(), item.getDate(),item.getCategory().getCategoryName(), item.getDescription(), item.getCurrency(), item.getTotalPrice()});
             }
+
 
             // Clear inputs
             public void clearInputs() {
