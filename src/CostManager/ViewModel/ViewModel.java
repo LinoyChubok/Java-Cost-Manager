@@ -57,6 +57,19 @@ public class ViewModel implements IViewModel{
     }
 
     @Override
+    public void deleteCategory(int id) {
+        pool.submit(() -> {
+            try {
+                model.deleteCategory(category);
+                getAllCategories();
+                view.showMessage("Category was removed successfully");
+            } catch(CostManagerException e) {
+                view.showMessage(e.getMessage());
+            }
+        });
+    }
+
+    @Override
     public void getAllCategories() {
         pool.submit(() -> {
             try {

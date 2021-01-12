@@ -9,6 +9,7 @@ public interface IViewModel {
 
     public abstract void addCategory(Category category);
     public abstract void updateCategory(Category category);
+    public abstract void deleteCategory(int id);
     public abstract void getAllCategories();
 
     public abstract void addCostItem(CostItem item);
