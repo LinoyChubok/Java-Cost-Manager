@@ -34,10 +34,13 @@ public class View implements IView {
     public void showMessage(String text) { ui.showMessage(text); }
 
     @Override
+    public void showCategories(ArrayList<Category> categories) { ui.showCategories(categories); }
+
+    @Override
     public void showCostItems(ArrayList<CostItem> items, ArrayList<Category> categories) { ui.showCostItems(items, categories); }
 
     @Override
-    public void showCategories(ArrayList<Category> categories) { ui.showCategories(categories); }
+    public void showReport(ArrayList<CostItem> items) { ui.showReport(items); }
 
     public class ApplicationUI {
         // Frame component (for each page)
@@ -773,12 +776,21 @@ public class View implements IView {
                 }
             }
         }
-
         public void showMessage(String text) {
             if (SwingUtilities.isEventDispatchThread()) {
                 navigateMessage(text);
             } else {
                 SwingUtilities.invokeLater(() -> navigateMessage(text));
+            }
+        }
+
+        public void showCategories(ArrayList<Category> categories) {
+            if (SwingUtilities.isEventDispatchThread()) {
+                ApplicationUI.this.categoryPanel.showCategories(categories);
+            } else {
+                SwingUtilities.invokeLater(() -> {
+                    ApplicationUI.this.categoryPanel.showCategories(categories);
+                });
             }
         }
         public void showCostItems(ArrayList<CostItem> items, ArrayList<Category> categories) {
@@ -790,16 +802,15 @@ public class View implements IView {
                 });
             }
         }
-        public void showCategories(ArrayList<Category> categories) {
+        public void showReport(ArrayList<CostItem> items) {
             if (SwingUtilities.isEventDispatchThread()) {
-                ApplicationUI.this.categoryPanel.showCategories(categories);
+
             } else {
                 SwingUtilities.invokeLater(() -> {
-                    ApplicationUI.this.categoryPanel.showCategories(categories);
+
                 });
             }
         }
-
 
         public void start() {
             displayMainMenu();
