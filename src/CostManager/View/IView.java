@@ -1,5 +1,6 @@
 package CostManager.View;
 
+import CostManager.Model.Category;
 import CostManager.Model.CostItem;
 import CostManager.ViewModel.IViewModel;
 
@@ -11,7 +12,7 @@ public interface IView {
     public abstract void setViewModel(IViewModel vm);
 
     public abstract void showMessage(String text);
-    public abstract void showItems(ArrayList<CostItem> items);
+    public abstract void showItems(ArrayList<CostItem> items, ArrayList<Category> categories);
 
     //public abstract void showPieChart(Map map);
 

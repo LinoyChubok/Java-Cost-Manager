@@ -1,5 +1,6 @@
 package CostManager.ViewModel;
 
+import CostManager.Model.Category;
 import CostManager.Model.CostItem;
 import CostManager.Model.CostManagerException;
 import CostManager.Model.IModel;
@@ -34,8 +35,7 @@ public class ViewModel implements IViewModel{
         pool.submit(() -> {
             try {
                 model.addCostItem(item);
-                ArrayList<CostItem> items = model.getAllCostItems();
-                view.showItems(items);
+                getAllCostItems();
                 view.showMessage("Cost item was added successfully");
             } catch(CostManagerException e) {
                 view.showMessage(e.getMessage());
@@ -48,7 +48,8 @@ public class ViewModel implements IViewModel{
         pool.submit(() -> {
             try {
                 ArrayList<CostItem> items = model.getAllCostItems();
-                view.showItems(items);
+                ArrayList<Category> categories = model.getAllCategories();
+                view.showItems(items, categories);
                 if(items.size() != 0)
                     view.showMessage("Cost items loaded successfully");
                 else view.showMessage("No data to display");

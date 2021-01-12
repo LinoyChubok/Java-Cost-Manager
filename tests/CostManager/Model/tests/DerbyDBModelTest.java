@@ -26,7 +26,7 @@ class DerbyDBModelTest {
 
     @Test
     void deleteCategory() throws CostManagerException {
-        Category category = new Category(1, "Food");
+        Category category = new Category(2, "Food");
 
         db.addCategory(category);
         db.deleteCategory(1);

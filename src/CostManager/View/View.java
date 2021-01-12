@@ -37,7 +37,7 @@ public class View implements IView {
     public void showMessage(String text) { ui.showMessage(text); }
 
     @Override
-    public void showItems(ArrayList<CostItem> items) { ui.showItems(items); }
+    public void showItems(ArrayList<CostItem> items, ArrayList<Category> categories) { ui.showItems(items, categories); }
 
     public class ApplicationUI {
 
@@ -333,10 +333,7 @@ public class View implements IView {
                         }
 
                         Category category = new Category(categoryName);
-                        System.out.println(category);
-
                         CostItem item = new CostItem(Date.valueOf(date), category, description, currency, totalPrice);
-                        System.out.println(item);
 
                         View.this.vm.addCostItem(item);
 
@@ -349,10 +346,20 @@ public class View implements IView {
 
             }
 
-            public void showItems(ArrayList<CostItem> items) {
+            public void showItems(ArrayList<CostItem> items, ArrayList<Category> categories) {
                 // Clear Table
                 tableModel.setRowCount(0);
                 tableModel.setColumnCount(0);
+
+                // Clear Categories Combobox
+                categoryCB.removeAllItems();
+
+                // Add Categories
+                for (Category category : categories)
+                    categoryCB.addItem(category.getCategoryName());
+
+                //Clear inputs
+                clearInputs();
 
                 // Add table columns
                 tableModel.addColumn("ID");
@@ -743,12 +750,12 @@ public class View implements IView {
             }
         }
 
-        public void showItems(ArrayList<CostItem> items) {
+        public void showItems(ArrayList<CostItem> items, ArrayList<Category> categories) {
             if (SwingUtilities.isEventDispatchThread()) {
-                ApplicationUI.this.costPanel.showItems(items);
+                ApplicationUI.this.costPanel.showItems(items, categories);
             } else {
                 SwingUtilities.invokeLater(() -> {
-                    ApplicationUI.this.costPanel.showItems(items);
+                    ApplicationUI.this.costPanel.showItems(items, categories);
                 });
             }
         }
