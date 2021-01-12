@@ -13,6 +13,7 @@ public interface IViewModel {
     public abstract void getAllCategories();
 
     public abstract void addCostItem(CostItem item);
+    public abstract void updateCostItem(CostItem item);
     public abstract void getAllCostItems();
 }
 
