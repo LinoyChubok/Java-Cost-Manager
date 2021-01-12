@@ -44,6 +44,19 @@ public class ViewModel implements IViewModel{
     }
 
     @Override
+    public void updateCategory(Category category) {
+        pool.submit(() -> {
+            try {
+                model.updateCategory(category);
+                getAllCategories();
+                view.showMessage("Category was updated successfully");
+            } catch(CostManagerException e) {
+                view.showMessage(e.getMessage());
+            }
+        });
+    }
+
+    @Override
     public void getAllCategories() {
         pool.submit(() -> {
             try {
