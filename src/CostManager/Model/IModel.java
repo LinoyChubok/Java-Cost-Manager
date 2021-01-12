@@ -29,6 +29,6 @@ public interface IModel {
     /**
      * Report query implementation
      */
-    public abstract void getReportSummary(Date fromDate, Date toDate) throws CostManagerException;
+    public abstract ArrayList<CostItem> getReportSummary(Date fromDate, Date toDate) throws CostManagerException;
 }
 

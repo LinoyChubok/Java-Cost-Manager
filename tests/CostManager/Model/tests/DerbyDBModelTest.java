@@ -94,7 +94,7 @@ class DerbyDBModelTest {
        db.addCostItem(itemB);
        db.addCostItem(itemC);
        db.addCostItem(itemD);
-       ArrayList<CostItem> actual = db.getAllCostItemsReport(Date.valueOf("2020-12-22"),Date.valueOf("2020-12-24"));
+       ArrayList<CostItem> actual = db.getReportSummary(Date.valueOf("2020-12-22"),Date.valueOf("2020-12-24"));
 
        ArrayList<CostItem> expected = new ArrayList<>();
        expected.add(itemA);

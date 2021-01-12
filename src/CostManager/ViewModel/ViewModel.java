@@ -145,7 +145,7 @@ public class ViewModel implements IViewModel{
         pool.submit(() -> {
             try {
                 ArrayList<CostItem> items = model.getReportSummary(fromDate, toDate);
-                view.showReport(items);
+                view.showReportSummary(items);
                 if(items.size() != 0)
                     view.showMessage("Report summary loaded successfully");
                 else view.showMessage("No data to display");

@@ -551,10 +551,9 @@ public class View implements IView {
             private final JPanel centerPanel;
             private final JPanel southPanel;
             private final JPanel costFormPanel;
-            private final JPanel listPanel;
+            private final JPanel reportPanel;
             private final JPanel btnPanel;
 
-            private JList list;
             private final JScrollPane scroll;
 
             private final JLabel image;
@@ -569,6 +568,8 @@ public class View implements IView {
             private TextField messageTF;
             private TextField startDateTF;
             private TextField endDateTF;
+
+            private TextArea reportTA;
 
             // Constructor, to initialize the components
             public ReportsPanel() {
@@ -587,12 +588,12 @@ public class View implements IView {
                 costFormPanel = new JPanel(new GridLayout(2, 2, 10, 10));
                 costFormPanel.setBorder(BorderFactory.createEmptyBorder(20, 200, 20, 200));
 
-                // Set the listPanel as BorderLayout
-                listPanel = new JPanel(new BorderLayout());
-                list = new JList();
-                list.setBackground(Color.white);
-                scroll = new JScrollPane(list);
-                listPanel.add(scroll, BorderLayout.CENTER); // ScrollPane include list
+                // Set the reportPanel as BorderLayout
+                reportPanel = new JPanel(new BorderLayout());
+                reportTA = new TextArea();
+                reportTA.setBackground(Color.white);
+                scroll = new JScrollPane(reportTA);
+                reportPanel.add(scroll, BorderLayout.CENTER); // ScrollPane include list
 
                 // Create btnPanel as FlowLayout
                 btnPanel = new JPanel(new FlowLayout());
@@ -623,7 +624,7 @@ public class View implements IView {
                 btnPanel.add(showBtn);
 
                 centerPanel.add(costFormPanel, BorderLayout.NORTH);
-                centerPanel.add(listPanel, BorderLayout.CENTER);
+                centerPanel.add(reportPanel, BorderLayout.CENTER);
                 centerPanel.add(btnPanel, BorderLayout.SOUTH);
 
                 southPanel.add(messageLabel);
@@ -644,6 +645,7 @@ public class View implements IView {
                 startDateTF.setText("");
                 endDateTF.setText("");
             }
+
             public void showMessage(String text) {
                 messageTF.setText(text);
             }
@@ -655,7 +657,7 @@ public class View implements IView {
                 sb.append("\n");
               }
               String text = sb.toString();
-              list.add(text);
+              reportTA.setText(text);
             }
 
         }
@@ -817,10 +819,10 @@ public class View implements IView {
         }
         public void showReportSummary(ArrayList<CostItem> items) {
             if (SwingUtilities.isEventDispatchThread()) {
-                ApplicationUI.this.reportPanel.showReportSummary(items);
+                ApplicationUI.this.reportsPanel.showReportSummary(items);
             } else {
                 SwingUtilities.invokeLater(() -> {
-                    ApplicationUI.this.reportPanel.showReportSummary(items);
+                    ApplicationUI.this.reportsPanel.showReportSummary(items);
                 });
             }
         }

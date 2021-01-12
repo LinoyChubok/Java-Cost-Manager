@@ -20,6 +20,6 @@ public interface IViewModel {
     public abstract void deleteCostItem(int id);
     public abstract void getAllCostItems();
 
-    public abstract ArrayList<CostItem> getReportSummary(Date fromDate, Date toDate);
+    public abstract void getReportSummary(Date fromDate, Date toDate);
 }
 
