@@ -14,6 +14,7 @@ public interface IViewModel {
 
     public abstract void addCostItem(CostItem item);
     public abstract void updateCostItem(CostItem item);
+    public abstract void deleteCostItem(int id);
     public abstract void getAllCostItems();
 }
 

@@ -62,7 +62,7 @@ public class ViewModel implements IViewModel{
             try {
                 model.deleteCategory(id);
                 getAllCategories();
-                view.showMessage("Category was removed successfully");
+                view.showMessage("Category was deleted successfully");
             } catch(CostManagerException e) {
                 view.showMessage(e.getMessage());
             }
@@ -104,6 +104,19 @@ public class ViewModel implements IViewModel{
                 model.updateCostItem(item);
                 getAllCostItems();
                 view.showMessage("Cost item was updated successfully");
+            } catch(CostManagerException e) {
+                view.showMessage(e.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void deleteCostItem(int id) {
+        pool.submit(() -> {
+            try {
+                model.deleteCostItem(id);
+                getAllCostItems();
+                view.showMessage("Cost item was deleted successfully");
             } catch(CostManagerException e) {
                 view.showMessage(e.getMessage());
             }
