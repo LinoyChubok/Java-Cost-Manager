@@ -34,9 +34,9 @@ public class ViewModel implements IViewModel{
         pool.submit(() -> {
             try {
                 model.addCostItem(item);
-                view.showMessage("Cost item was added successfully");
                 ArrayList<CostItem> items = model.getAllCostItems();
                 view.showItems(items);
+                view.showMessage("Cost item was added successfully");
             } catch(CostManagerException e) {
                 view.showMessage(e.getMessage());
             }
@@ -47,9 +47,11 @@ public class ViewModel implements IViewModel{
     public void getAllCostItems() {
         pool.submit(() -> {
             try {
-                view.showMessage("Cost items loaded successfully");
                 ArrayList<CostItem> items = model.getAllCostItems();
                 view.showItems(items);
+                if(items.size() != 0)
+                    view.showMessage("Cost items loaded successfully");
+                else view.showMessage("No data to display");
             } catch(CostManagerException e) {
                 view.showMessage(e.getMessage());
             }

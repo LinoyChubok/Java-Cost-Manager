@@ -298,17 +298,17 @@ public class View implements IView {
                     try {
                         String description = descriptionTF.getText();
                         if(description == null || description.length() == 0) {
-                            throw new CostManagerException("Description cannot be empty");
+                            throw new CostManagerException("description cannot be empty");
                         }
 
-                        String categoryName = currencyCB.getSelectedItem().toString();
+                        String categoryName = categoryCB.getSelectedItem().toString();
                         if(categoryName == null || categoryName.length() == 0) {
-                            throw new CostManagerException("Category cannot be empty");
+                            throw new CostManagerException("category cannot be empty");
                         }
 
                         String date = dateTF.getText();
                         if(date == null || date.length() == 0) {
-                            throw new CostManagerException("Date cannot be empty");
+                            throw new CostManagerException("date cannot be empty");
                         }
 
                         double totalPrice = Double.parseDouble(totalPriceTF.getText());
@@ -326,18 +326,22 @@ public class View implements IView {
                                 currency = Currency.GBP;
                                 break;
                             case "ILS":
+                                currency = Currency.ILS;
                                 break;
                             default:
                                 currency = Currency.ILS;
                         }
 
                         Category category = new Category(categoryName);
+                        System.out.println(category);
+
                         CostItem item = new CostItem(Date.valueOf(date), category, description, currency, totalPrice);
+                        System.out.println(item);
+
                         View.this.vm.addCostItem(item);
 
                     } catch (NumberFormatException ex) {
-                        View.this.showMessage("Problem with entered total price" +
-                                " " + ex.getMessage());
+                        View.this.showMessage("Problem with entered total price " + ex.getMessage());
                     } catch(CostManagerException ex){
                         View.this.showMessage("Problem with entered data " + ex.getMessage());
                     }
