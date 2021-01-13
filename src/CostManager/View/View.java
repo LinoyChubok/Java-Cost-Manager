@@ -549,7 +549,7 @@ public class View implements IView {
                 deleteBtn.addActionListener(e -> {
                     try{
                         int id = Integer.parseInt(idTF.getText());
-                        View.this.vm.deleteCostItem(id);
+                        View.this.vm.deleteCategory(id);
                     } catch (NumberFormatException ex){
                         View.this.showMessage("Problem with entered total price " + ex.getMessage());
                     }
