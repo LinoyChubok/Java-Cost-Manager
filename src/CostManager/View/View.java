@@ -792,7 +792,7 @@ public class View implements IView {
             private final TextField messageTF;
             private final TextField startDateTF;
             private final TextField endDateTF;
-            private final TextField currencyTF;
+            private JComboBox currencyCB;
 
             private final JButton showBtn;
             private final JButton backBtn;
@@ -833,7 +833,14 @@ public class View implements IView {
                 endDateLabel = new JLabel("End Date (YYYY-MM-DD)");
                 endDateTF = new TextField();
                 currencyLabel = new JLabel("Currency");
-                currencyTF = new TextField();
+                currencyCB = new JComboBox();
+                // Add items to currencyCB
+                currencyCB.addItem("ILS");
+                currencyCB.addItem("USD");
+                currencyCB.addItem("EURO");
+                currencyCB.addItem("GPB");
+                // Set light weight to currencyCB (to make sure that items not hidden)
+                currencyCB.setLightWeightPopupEnabled(false);
 
                 // Add each component to his specific panel
                 headerPanel.add(image);
@@ -844,7 +851,7 @@ public class View implements IView {
                 costFormPanel.add(endDateLabel);
                 costFormPanel.add(endDateTF);
                 costFormPanel.add(currencyLabel);
-                costFormPanel.add(currencyTF);
+                costFormPanel.add(currencyCB);
 
                 btnPanel.add(showBtn);
 
