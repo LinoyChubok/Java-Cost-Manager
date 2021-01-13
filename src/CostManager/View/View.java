@@ -598,6 +598,25 @@ public class View implements IView {
                     }
                 });
 
+                // Handle update button click
+                updateBtn.addActionListener(e -> {
+                    try {
+                        int id = Integer.parseInt(idTF.getText());
+
+                        String categoryName = categoryTF.getText();
+                        if(categoryName == null || categoryName.length() == 0) {
+                            throw new CostManagerException("categoryName cannot be empty");
+                        }
+
+                        Category category = new Category(id, categoryName);
+
+                        View.this.vm.updateCategory(category);
+
+                    } catch(CostManagerException ex){
+                        View.this.showMessage("Problem with entered data " + ex.getMessage());
+                    }
+                });
+
                 // Handle delete button click
                 deleteBtn.addActionListener(e -> {
                     try{
