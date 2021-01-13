@@ -628,4 +628,16 @@ public class DerbyDBModel implements IModel {
             throw new CostManagerException("Error releasing ResultSet.", e);
         }
     }
+
+    @Override
+    public void shutdownDB() throws CostManagerException {
+        try {
+            DriverManager.getConnection(PROTOCOL+";shutdown=true");
+        } catch (SQLTimeoutException e) {
+            throw new CostManagerException("A timeout has been exceeded.", e);
+        } catch (SQLException e) {
+            if (!((e.getErrorCode() == 50000) && ("XJ015".equals(e.getSQLState()))))
+                throw new CostManagerException("Database access error or the url is null.", e);
+        }
+    }
 }

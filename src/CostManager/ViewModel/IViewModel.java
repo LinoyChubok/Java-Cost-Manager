@@ -21,5 +21,8 @@ public interface IViewModel {
     public abstract void getAllCostItems();
 
     public abstract void getReportSummary(Date fromDate, Date toDate);
+
+    public abstract void shutdownDB();
+
 }
 

@@ -9,6 +9,7 @@ public interface IModel {
      * Database implementation
      */
     public abstract void createTables() throws CostManagerException;
+    public abstract void shutdownDB() throws CostManagerException;
 
     /**
      * Categories queries implementation

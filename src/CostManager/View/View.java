@@ -71,6 +71,7 @@ public class View implements IView {
                 public void windowClosing(WindowEvent e) {
                     super.windowClosing(e);
                     frame = null;
+                    vm.shutdownDB();
                     System.exit(0);
                 }
             });

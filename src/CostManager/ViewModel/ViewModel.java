@@ -154,4 +154,15 @@ public class ViewModel implements IViewModel{
             }
         });
     }
+
+    @Override
+    public void shutdownDB() {
+        pool.submit(() -> {
+            try {
+                model.shutdownDB();
+            } catch(CostManagerException e) {
+                System.out.println(e.getMessage());
+            }
+        });
+    }
 }
