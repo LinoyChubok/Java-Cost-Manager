@@ -518,7 +518,7 @@ public class View implements IView {
                 table = new JTable(tableModel);
                 // Set table properties
                 table.getTableHeader().setReorderingAllowed(false);
-                table.setBackground(Color.white);
+                table.setBackground(JBColor.WHITE);
                 scroll = new JScrollPane(table);
                 table.setPreferredScrollableViewportSize(table.getPreferredSize());
                 table.setFillsViewportHeight(true);
