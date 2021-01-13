@@ -546,6 +546,7 @@ public class View implements IView {
             }
 
             public void clearInputs() {
+                idTF.setText("");
                 categoryTF.setText("");
             }
 
