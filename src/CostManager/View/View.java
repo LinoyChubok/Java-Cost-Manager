@@ -259,7 +259,7 @@ public class View implements IView {
                 currencyCB.addItem("GPB");
                 // Set light weight to currencyCB (to make sure that items not hidden)
                 currencyCB.setLightWeightPopupEnabled(false);
-                totalPriceLabel = new JLabel("Total Price");
+                totalPriceLabel = new JLabel("Price");
                 totalPriceTF = new TextField();
 
                 addBtn = new JButton("Add");
@@ -455,7 +455,7 @@ public class View implements IView {
                 tableModel.addColumn("CATEGORY");
                 tableModel.addColumn("DESCRIPTION");
                 tableModel.addColumn("CURRENCY");
-                tableModel.addColumn("TOTALPRICE");
+                tableModel.addColumn("PRICE");
 
                 // Add table rows
                 for (CostItem item : items)
