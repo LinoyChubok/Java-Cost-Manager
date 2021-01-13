@@ -15,7 +15,6 @@ public interface IView {
     public abstract void showCategories(ArrayList<Category> categories);
     public abstract void showCostItems(ArrayList<CostItem> items, ArrayList<Category> categories);
     public abstract void showReportSummary(ArrayList<CostItem> items);
-
-    //public abstract void showPieChart(Map map);
+    public abstract void showPieChartSummary();
 
 }

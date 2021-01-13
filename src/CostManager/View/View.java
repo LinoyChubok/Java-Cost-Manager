@@ -42,6 +42,11 @@ public class View implements IView {
     @Override
     public void showReportSummary(ArrayList<CostItem> items) { ui.showReportSummary(items); }
 
+    @Override
+    public void showPieChartSummary() {
+        ui.showPieChartSummary();
+    }
+
     public class ApplicationUI {
         // Frame component (for each page)
         private JFrame frame;
@@ -131,19 +136,19 @@ public class View implements IView {
                 // Handling category button click
                 CategoryBtn.addActionListener(e -> {
                     View.this.vm.getAllCategories();
-                    ApplicationUI.this.costPanel.clearInputs();
+                    ApplicationUI.this.categoryPanel.clearInputs();
                     ApplicationUI.this.changeScreen(ApplicationUI.this.categoryPanel);
                 });
 
                 // Handling reports button click
                 ReportsBtn.addActionListener(e -> {
-                    ApplicationUI.this.costPanel.clearInputs();
+                    ApplicationUI.this.reportsPanel.clearInputs();
                     ApplicationUI.this.changeScreen(ApplicationUI.this.reportsPanel);
                 });
 
                 // Handling pie chart button click
                 PieChartBtn.addActionListener(e -> {
-                    ApplicationUI.this.costPanel.clearInputs();
+                    ApplicationUI.this.pieChartPanel.clearInputs();
                     ApplicationUI.this.changeScreen(ApplicationUI.this.pieChartPanel);
                 });
             }
@@ -894,6 +899,46 @@ public class View implements IView {
 
                 // Back to Dashboard (mainPanel)
                 backBtn.addActionListener(e -> ApplicationUI.this.changeScreen(ApplicationUI.this.mainPanel));
+
+                // Handle show button click
+                showBtn.addActionListener(e -> {
+                    try {
+                        String startDate = startDateTF.getText();
+                        if(startDate == null || startDate.length() == 0) {
+                            throw new CostManagerException("startDate cannot be empty");
+                        }
+
+                        String endDate = endDateTF.getText();
+                        if(endDate == null || endDate.length() == 0) {
+                            throw new CostManagerException("endDate cannot be empty");
+                        }
+
+                        String currencyStr = currencyCB.getSelectedItem().toString();
+                        Currency currency = null;
+                        switch (currencyStr) {
+                            case "EURO":
+                                currency = Currency.EURO;
+                                break;
+                            case "USD":
+                                currency = Currency.USD;
+                                break;
+                            case "GBP":
+                                currency = Currency.GBP;
+                                break;
+                            case "ILS":
+                                currency = Currency.ILS;
+                                break;
+                            default:
+                                currency = Currency.ILS;
+                        }
+
+                        // TODO: CLEAR PIE CHART HERE
+                        View.this.vm.getPieChartSummary(CostItem.validDate(Date.valueOf(startDate)), CostItem.validDate(Date.valueOf(endDate)), currency);
+
+                    } catch(CostManagerException | IllegalArgumentException ex){
+                        View.this.showMessage("Problem with entered data " + ex.getMessage());
+                    }
+                });
             }
             // Clear inputs
             public void clearInputs() {
@@ -902,6 +947,11 @@ public class View implements IView {
                 currencyCB.setSelectedIndex(-1);
             }
 
+            public void showMessage(String text) {
+                messageTF.setText(text);
+            }
+
+            public void showPieChartSummary() { }
         }
 
         public void displayMainMenu() {
@@ -934,7 +984,7 @@ public class View implements IView {
                         ApplicationUI.this.reportsPanel.showMessage(text);
                         break;
                     case "PieChartPanel":
-                        System.out.println("showMessage - need to be set PieChartPanel");
+                        ApplicationUI.this.pieChartPanel.showMessage(text);
                         break;
                 }
             }
@@ -974,7 +1024,15 @@ public class View implements IView {
                 });
             }
         }
-
+        public void showPieChartSummary() {
+            if (SwingUtilities.isEventDispatchThread()) {
+                ApplicationUI.this.pieChartPanel.showPieChartSummary();
+            } else {
+                SwingUtilities.invokeLater(() -> {
+                    ApplicationUI.this.pieChartPanel.showPieChartSummary();
+                });
+            }
+        }
         public void start() {
             displayMainMenu();
         }

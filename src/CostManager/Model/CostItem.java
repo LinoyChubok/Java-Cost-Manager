@@ -110,7 +110,7 @@ public class CostItem {
         return "CostItem: {" +
                 "id = " + id +
                 ", date = " + date +
-                ", category = " + category +
+                ", category = " + category.getCategoryName() +
                 ", description = " + description +
                 ", currency = " + currency +
                 ", totalPrice = " + totalPrice + '}';

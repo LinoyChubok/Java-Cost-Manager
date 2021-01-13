@@ -1,9 +1,6 @@
 package CostManager.ViewModel;
 
-import CostManager.Model.Category;
-import CostManager.Model.CostItem;
-import CostManager.Model.CostManagerException;
-import CostManager.Model.IModel;
+import CostManager.Model.*;
 import CostManager.View.IView;
 
 import java.sql.Date;
@@ -36,7 +33,8 @@ public class ViewModel implements IViewModel{
         pool.submit(() -> {
             try {
                 model.addCategory(category);
-                getAllCategories();
+                ArrayList<Category> categories = model.getAllCategories();
+                view.showCategories(categories);
                 view.showMessage("Category was added successfully");
             } catch(CostManagerException e) {
                 view.showMessage(e.getMessage());
@@ -49,7 +47,8 @@ public class ViewModel implements IViewModel{
         pool.submit(() -> {
             try {
                 model.updateCategory(category);
-                getAllCategories();
+                ArrayList<Category> categories = model.getAllCategories();
+                view.showCategories(categories);
                 view.showMessage("Category was updated successfully");
             } catch(CostManagerException e) {
                 view.showMessage(e.getMessage());
@@ -62,7 +61,8 @@ public class ViewModel implements IViewModel{
         pool.submit(() -> {
             try {
                 model.deleteCategory(id);
-                getAllCategories();
+                ArrayList<Category> categories = model.getAllCategories();
+                view.showCategories(categories);
                 view.showMessage("Category was deleted successfully");
             } catch(CostManagerException e) {
                 view.showMessage(e.getMessage());
@@ -90,7 +90,9 @@ public class ViewModel implements IViewModel{
         pool.submit(() -> {
             try {
                 model.addCostItem(item);
-                getAllCostItems();
+                ArrayList<CostItem> items = model.getAllCostItems();
+                ArrayList<Category> categories = model.getAllCategories();
+                view.showCostItems(items, categories);
                 view.showMessage("Cost item was added successfully");
             } catch(CostManagerException e) {
                 view.showMessage(e.getMessage());
@@ -103,7 +105,9 @@ public class ViewModel implements IViewModel{
         pool.submit(() -> {
             try {
                 model.updateCostItem(item);
-                getAllCostItems();
+                ArrayList<CostItem> items = model.getAllCostItems();
+                ArrayList<Category> categories = model.getAllCategories();
+                view.showCostItems(items, categories);
                 view.showMessage("Cost item was updated successfully");
             } catch(CostManagerException e) {
                 view.showMessage(e.getMessage());
@@ -116,7 +120,9 @@ public class ViewModel implements IViewModel{
         pool.submit(() -> {
             try {
                 model.deleteCostItem(id);
-                getAllCostItems();
+                ArrayList<CostItem> items = model.getAllCostItems();
+                ArrayList<Category> categories = model.getAllCategories();
+                view.showCostItems(items, categories);
                 view.showMessage("Cost item was deleted successfully");
             } catch(CostManagerException e) {
                 view.showMessage(e.getMessage());
@@ -149,6 +155,20 @@ public class ViewModel implements IViewModel{
                 if(items.size() != 0)
                     view.showMessage("Report summary loaded successfully");
                 else view.showMessage("No data to display");
+            } catch(CostManagerException e) {
+                view.showMessage(e.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void getPieChartSummary(Date fromDate, Date toDate, Currency currency) {
+        pool.submit(() -> {
+            try {
+                // TODO: RETURN VALUE FROM THE MODEL FUNCTION
+                model.getPieChartSummary(fromDate, toDate, currency);
+                // TODO: PASS THE VALUE TO VIEW FUNCTION
+                view.showPieChartSummary();
             } catch(CostManagerException e) {
                 view.showMessage(e.getMessage());
             }
