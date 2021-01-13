@@ -65,6 +65,7 @@ class DerbyDBModelTest {
         assertEquals(expected, actual);
     }
 
+
     @Test
     void getAllCostItems() throws CostManagerException {
         Category category = new Category(1,"Food");
@@ -80,9 +81,8 @@ class DerbyDBModelTest {
         assertEquals(expected, actual);
     }
 
-    //Between two dates
    @Test
-   void testGetAllCostItems() throws CostManagerException {
+   void getReportSummary() throws CostManagerException {
        Category category = new Category(1,"Food");
        CostItem itemA = new CostItem(1, Date.valueOf("2020-12-22"), new Category( "Food"), "Pizza Slice", Currency.ILS, 27.6);
        CostItem itemB = new CostItem(2, Date.valueOf("2020-12-23"), new Category( "Food"), "Pizza Slice", Currency.ILS, 27.6);

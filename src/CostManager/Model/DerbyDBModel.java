@@ -172,7 +172,6 @@ public class DerbyDBModel implements IModel {
 
         Connection connection;
         Statement statement;
-        ResultSet rs;
 
         try {
             Class.forName(DRIVER);
@@ -364,7 +363,6 @@ public class DerbyDBModel implements IModel {
 
         Connection connection;
         Statement statement;
-        ResultSet rs;
 
         try {
             Class.forName(DRIVER);
@@ -372,7 +370,12 @@ public class DerbyDBModel implements IModel {
             statement = connection.createStatement();
 
             try {
-                statement.execute("UPDATE CostItems SET date = '" + item.getDate() + "', category = '" + item.getCategory().getCategoryName() + "', description = '" + item.getDescription() + "', currency = '" + item.getCurrency().name() + "', totalPrice = '" + "' WHERE id = " + item.getId());
+                statement.execute("UPDATE CostItems SET date = '" + item.getDate() +
+                        "', category = '" + item.getCategory().getCategoryName() +
+                        "', description = '" + item.getDescription() +
+                        "', currency = '" + item.getCurrency().name() +
+                        "', totalPrice = " + item.getTotalPrice() +
+                        " WHERE id = " + item.getId());
             } catch(SQLException e) {
                 throw new CostManagerException("Error with updating a new cost item", e);
             }
