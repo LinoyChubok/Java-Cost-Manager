@@ -164,6 +164,7 @@ public class View implements IView {
 
             private final JLabel image;
             private final JLabel title;
+            private final JLabel idLabel;
             private final JLabel dateLabel;
             private final JLabel categoryLabel;
             private final JLabel descriptionLabel;
@@ -180,6 +181,7 @@ public class View implements IView {
             private JComboBox currencyCB;
 
             private TextField dateTF;
+            private TextField idTF;
             private TextField descriptionTF;
             private TextField totalPriceTF;
             private TextField messageTF;
@@ -198,7 +200,7 @@ public class View implements IView {
                 centerPanel = new JPanel(new BorderLayout());
 
                 // Create costFormPanel as GridLayout
-                costFormPanel = new JPanel(new GridLayout(5,2,10,10));
+                costFormPanel = new JPanel(new GridLayout(6,2,10,10));
                 costFormPanel.setBorder(BorderFactory.createEmptyBorder(20, 200, 20, 200));
 
                 // Set the tablePanel as BorderLayout
@@ -217,6 +219,7 @@ public class View implements IView {
                 table.setFocusable(false);
                 table.getSelectionModel().addListSelectionListener(event -> {
                     if (table.getSelectedRow() > -1) {
+                        idTF.setText(table.getValueAt(table.getSelectedRow(), 0).toString());
                         dateTF.setText(table.getValueAt(table.getSelectedRow(), 1).toString());
                         categoryCB.getModel().setSelectedItem(table.getValueAt(table.getSelectedRow(), 2).toString());
                         descriptionTF.setText(table.getValueAt(table.getSelectedRow(), 3).toString());
@@ -238,6 +241,9 @@ public class View implements IView {
 
                 dateLabel = new JLabel("Date (YYYY-MM-DD)");
                 dateTF = new TextField();
+                idLabel = new JLabel("ID");
+                idTF = new TextField();
+                idTF.setEnabled(false);
                 categoryLabel = new JLabel("Category");
                 categoryCB = new JComboBox();
                 // Set light weight to currencyCB (to make sure that items not hidden)
@@ -264,6 +270,8 @@ public class View implements IView {
                 headerPanel.add(image);
                 headerPanel.add(title);
 
+                costFormPanel.add(idLabel);
+                costFormPanel.add(idTF);
                 costFormPanel.add(dateLabel);
                 costFormPanel.add(dateTF);
                 costFormPanel.add(categoryLabel);
@@ -275,7 +283,7 @@ public class View implements IView {
                 costFormPanel.add(totalPriceLabel);
                 costFormPanel.add(totalPriceTF);
 
-                tablePanel.add(scroll, BorderLayout.CENTER); // ScrollPane include table
+                tablePanel.add(scroll, BorderLayout.CENTER); // ScrollPanel include table
 
                 btnPanel.add(addBtn);
                 btnPanel.add(updateBtn);
@@ -348,11 +356,21 @@ public class View implements IView {
                     }
                 });
 
+                deleteBtn.addActionListener(e -> {
+                    try{
+                        int id = Integer.parseInt(idTF.getText());
+                        View.this.vm.deleteCostItem(id);
+                    } catch (NumberFormatException ex){
+                        View.this.showMessage("Problem with entered total price " + ex.getMessage());
+                    }
+                });
+
             }
 
             public void clearInputs() {
                 categoryCB.setSelectedIndex(-1);
                 currencyCB.setSelectedIndex(-1);
+                idTF.setText("");
                 dateTF.setText("");
                 totalPriceTF.setText("");
                 descriptionTF.setText("");
@@ -407,6 +425,7 @@ public class View implements IView {
 
             private final JLabel image;
             private final JLabel title;
+            private final JLabel idLabel;
             private final JLabel categoryLabel;
             private final JLabel messageLabel;
 
@@ -415,8 +434,9 @@ public class View implements IView {
             private final JButton deleteBtn;
             private final JButton backBtn;
 
-            private TextField messageTF;
+            private TextField idTF;
             private TextField categoryTF;
+            private TextField messageTF;
 
             // Constructor, to initialize the components
             public CategoryPanel() {
@@ -432,7 +452,7 @@ public class View implements IView {
                 centerPanel = new JPanel(new BorderLayout());
 
                 // Create costFormPanel as GridLayout
-                costFormPanel = new JPanel(new GridLayout(1, 2, 10, 10));
+                costFormPanel = new JPanel(new GridLayout(2, 2, 10, 10));
                 costFormPanel.setBorder(BorderFactory.createEmptyBorder(20, 200, 20, 200));
 
                 // Set the tablePanel as BorderLayout
@@ -467,6 +487,9 @@ public class View implements IView {
                 messageTF.setEnabled(false);
                 backBtn = new JButton("Back to Dashboard");
 
+                idLabel = new JLabel("ID");
+                idTF = new TextField();
+                idTF.setEnabled(false);
                 categoryLabel = new JLabel("Category Name");
                 categoryTF = new TextField();
 
@@ -478,6 +501,8 @@ public class View implements IView {
                 headerPanel.add(image);
                 headerPanel.add(title);
 
+                costFormPanel.add(idLabel);
+                costFormPanel.add(idTF);
                 costFormPanel.add(categoryLabel);
                 costFormPanel.add(categoryTF);
 
