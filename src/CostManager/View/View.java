@@ -787,10 +787,12 @@ public class View implements IView {
 
             private final JLabel startDateLabel;
             private final JLabel endDateLabel;
+            private final JLabel currencyLabel;
             private final JLabel messageLabel;
             private final TextField messageTF;
             private final TextField startDateTF;
             private final TextField endDateTF;
+            private final TextField currencyTF;
 
             private final JButton showBtn;
             private final JButton backBtn;
@@ -808,7 +810,7 @@ public class View implements IView {
                 // Set the centerPanel as BorderLayout
                 centerPanel = new JPanel(new BorderLayout());
 
-                costFormPanel = new JPanel(new GridLayout(2, 2, 10, 10));
+                costFormPanel = new JPanel(new GridLayout(3, 2, 10, 10));
                 costFormPanel.setBorder(BorderFactory.createEmptyBorder(20, 200, 20, 200));
 
                 // Set the panel as BorderLayout
@@ -830,6 +832,8 @@ public class View implements IView {
                 startDateTF = new TextField();
                 endDateLabel = new JLabel("End Date (YYYY-MM-DD)");
                 endDateTF = new TextField();
+                currencyLabel = new JLabel("Currency");
+                currencyTF = new TextField();
 
                 // Add each component to his specific panel
                 headerPanel.add(image);
@@ -839,6 +843,8 @@ public class View implements IView {
                 costFormPanel.add(startDateTF);
                 costFormPanel.add(endDateLabel);
                 costFormPanel.add(endDateTF);
+                costFormPanel.add(currencyLabel);
+                costFormPanel.add(currencyTF);
 
                 btnPanel.add(showBtn);
 
