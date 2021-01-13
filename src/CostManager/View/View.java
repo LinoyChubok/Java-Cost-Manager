@@ -356,6 +356,59 @@ public class View implements IView {
                     }
                 });
 
+                // Handle update button click
+                updateBtn.addActionListener(e -> {
+                    try {
+                        int id = Integer.parseInt(idTF.getText());
+
+                        String description = descriptionTF.getText();
+                        if(description == null || description.length() == 0) {
+                            throw new CostManagerException("description cannot be empty");
+                        }
+
+                        String categoryName = categoryCB.getSelectedItem().toString();
+                        if(categoryName == null || categoryName.length() == 0) {
+                            throw new CostManagerException("category cannot be empty");
+                        }
+
+                        String date = dateTF.getText();
+                        if(date == null || date.length() == 0) {
+                            throw new CostManagerException("date cannot be empty");
+                        }
+
+                        double totalPrice = Double.parseDouble(totalPriceTF.getText());
+
+                        String currencyStr = currencyCB.getSelectedItem().toString();
+                        Currency currency = null;
+                        switch (currencyStr) {
+                            case "EURO":
+                                currency = Currency.EURO;
+                                break;
+                            case "USD":
+                                currency = Currency.USD;
+                                break;
+                            case "GBP":
+                                currency = Currency.GBP;
+                                break;
+                            case "ILS":
+                                currency = Currency.ILS;
+                                break;
+                            default:
+                                currency = Currency.ILS;
+                        }
+
+                        Category category = new Category(categoryName);
+                        CostItem item = new CostItem(id, Date.valueOf(date), category, description, currency, totalPrice);
+
+                        View.this.vm.updateCostItem(item);
+
+                    } catch (NumberFormatException ex) {
+                        View.this.showMessage("Problem with entered total price " + ex.getMessage());
+                    } catch(CostManagerException ex){
+                        View.this.showMessage("Problem with entered data " + ex.getMessage());
+                    }
+                });
+
                 // Handle delete button click
                 deleteBtn.addActionListener(e -> {
                     try{
