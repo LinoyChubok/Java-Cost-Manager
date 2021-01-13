@@ -579,4 +579,53 @@ public class DerbyDBModel implements IModel {
 
         return items;
     }
+
+    @Override
+    public void getPieChartSummary(Date fromDate, Date toDate, Currency currency) throws CostManagerException {
+        // Start the Derby database connection.
+        String connectionUrl = PROTOCOL + DB_NAME + ";create=true";
+
+        Connection connection;
+        Statement statement;
+        ResultSet rs;
+
+        try {
+            Class.forName(DRIVER);
+            connection = DriverManager.getConnection(connectionUrl);
+            statement = connection.createStatement();
+
+            try {
+                rs = statement.executeQuery("SELECT category, SUM(totalPrice) AS totalPriceCategory FROM CostItems WHERE date BETWEEN DATE('" + fromDate.toLocalDate() + "') and DATE('" + toDate.toLocalDate() + "') AND currency= '" + currency.name() + "' GROUP BY category");
+                while (rs.next()) {
+                    System.out.println(rs.getString("category") +" "+rs.getDouble("totalPriceCategory"));
+                }
+            } catch(SQLException e) {
+                throw new CostManagerException("Error with get pie chat summary", e);
+            }
+
+        } catch(SQLException e) {
+            throw new CostManagerException("Could not open Derby DB at " + connectionUrl, e);
+        } catch(ClassNotFoundException e) {
+            throw new CostManagerException("Could not find Derby driver " + DRIVER, e);
+        }
+
+        // Closes the Derby database connection.
+        try {
+            statement.close();
+        } catch(SQLException e) {
+            throw new CostManagerException("Error releasing Statement.", e);
+        }
+
+        try {
+            connection.close();
+        } catch(SQLException e) {
+            throw new CostManagerException("Error closing database connection.", e);
+        }
+
+        try {
+            rs.close();
+        } catch(SQLException e) {
+            throw new CostManagerException("Error releasing ResultSet.", e);
+        }
+    }
 }

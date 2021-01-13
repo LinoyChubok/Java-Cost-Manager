@@ -30,5 +30,9 @@ public interface IModel {
      * Report query implementation
      */
     public abstract ArrayList<CostItem> getReportSummary(Date fromDate, Date toDate) throws CostManagerException;
-}
 
+    /**
+     * Pie chart query implementation
+     */
+    public abstract void getPieChartSummary(Date fromDate, Date toDate, Currency currency) throws CostManagerException;
+}
