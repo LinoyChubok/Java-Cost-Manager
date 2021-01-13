@@ -31,4 +31,3 @@ public interface IModel {
      */
     public abstract ArrayList<CostItem> getReportSummary(Date fromDate, Date toDate) throws CostManagerException;
 }
-
