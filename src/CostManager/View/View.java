@@ -356,6 +356,7 @@ public class View implements IView {
                     }
                 });
 
+                // Handle delete button click
                 deleteBtn.addActionListener(e -> {
                     try{
                         int id = Integer.parseInt(idTF.getText());
@@ -541,6 +542,16 @@ public class View implements IView {
 
                     } catch(CostManagerException ex){
                         View.this.showMessage("Problem with entered data " + ex.getMessage());
+                    }
+                });
+
+                // Handle delete button click
+                deleteBtn.addActionListener(e -> {
+                    try{
+                        int id = Integer.parseInt(idTF.getText());
+                        View.this.vm.deleteCostItem(id);
+                    } catch (NumberFormatException ex){
+                        View.this.showMessage("Problem with entered total price " + ex.getMessage());
                     }
                 });
             }
