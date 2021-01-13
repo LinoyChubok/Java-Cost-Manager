@@ -472,6 +472,7 @@ public class View implements IView {
                 table.setFocusable(false);
                 table.getSelectionModel().addListSelectionListener(event -> {
                     if (table.getSelectedRow() > -1) {
+                        idTF.setText(table.getValueAt(table.getSelectedRow(), 0).toString());
                         categoryTF.setText(table.getValueAt(table.getSelectedRow(), 1).toString());
                     }
                 });
