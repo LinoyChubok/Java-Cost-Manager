@@ -351,7 +351,7 @@ public class View implements IView {
 
                     } catch (NumberFormatException ex) {
                         View.this.showMessage("Problem with entered total price " + ex.getMessage());
-                    } catch(CostManagerException ex){
+                    } catch(CostManagerException | IllegalArgumentException ex){
                         View.this.showMessage("Problem with entered data " + ex.getMessage());
                     }
                 });
@@ -404,7 +404,7 @@ public class View implements IView {
 
                     } catch (NumberFormatException ex) {
                         View.this.showMessage("Problem with entered total price " + ex.getMessage());
-                    } catch(CostManagerException ex){
+                    } catch(CostManagerException | IllegalArgumentException ex){
                         View.this.showMessage("Problem with entered data " + ex.getMessage());
                     }
                 });
@@ -428,6 +428,7 @@ public class View implements IView {
                 dateTF.setText("");
                 totalPriceTF.setText("");
                 descriptionTF.setText("");
+                messageTF.setText("");
             }
 
             public void showMessage(String text) {
@@ -631,6 +632,7 @@ public class View implements IView {
             public void clearInputs() {
                 idTF.setText("");
                 categoryTF.setText("");
+                messageTF.setText("");
             }
 
             public void showMessage(String text) {
@@ -749,11 +751,33 @@ public class View implements IView {
                 // Back to Dashboard (mainPanel)
                 backBtn.addActionListener(e -> ApplicationUI.this.changeScreen(ApplicationUI.this.mainPanel));
 
+                // Handle show button click
+                showBtn.addActionListener(e -> {
+                    try {
+                        String startDate = startDateTF.getText();
+                        if(startDate == null || startDate.length() == 0) {
+                            throw new CostManagerException("startDate cannot be empty");
+                        }
+
+                        String endDate = endDateTF.getText();
+                        if(endDate == null || endDate.length() == 0) {
+                            throw new CostManagerException("endDate cannot be empty");
+                        }
+
+                        reportTA.setText("");
+                        View.this.vm.getReportSummary(CostItem.validDate(Date.valueOf(startDate)), CostItem.validDate(Date.valueOf(endDate)));
+
+                    } catch(CostManagerException | IllegalArgumentException ex){
+                        View.this.showMessage("Problem with entered data " + ex.getMessage());
+                    }
+                });
             }
 
             public void clearInputs() {
                 startDateTF.setText("");
                 endDateTF.setText("");
+                reportTA.setText("");
+                messageTF.setText("");
             }
 
             public void showMessage(String text) {
@@ -869,12 +893,12 @@ public class View implements IView {
 
                 // Back to Dashboard (mainPanel)
                 backBtn.addActionListener(e -> ApplicationUI.this.changeScreen(ApplicationUI.this.mainPanel));
-
             }
             // Clear inputs
             public void clearInputs() {
                 startDateTF.setText("");
                 endDateTF.setText("");
+                currencyCB.setSelectedIndex(-1);
             }
 
         }
