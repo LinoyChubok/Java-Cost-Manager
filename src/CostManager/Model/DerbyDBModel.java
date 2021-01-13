@@ -172,14 +172,24 @@ public class DerbyDBModel implements IModel {
 
         Connection connection;
         Statement statement;
+        ResultSet rs;
 
         try {
             Class.forName(DRIVER);
             connection = DriverManager.getConnection(connectionUrl);
             statement = connection.createStatement();
 
+            String categoryName = category.getCategoryName();
             try {
-                statement.execute("UPDATE Categories SET name = '" + category.getCategoryName() + "' WHERE id = " + category.getId());
+                // Check if specific category object exists in the database (duplicated value)
+                int categoryId = -1;
+                rs = statement.executeQuery("SELECT * FROM Categories WHERE name ='" + categoryName + "'");
+                if (rs.next()) {
+                    categoryId = rs.getInt("id");
+                }
+                // Check if category not found update the values
+                if (categoryId == -1) statement.execute("UPDATE Categories SET name = '" + category.getCategoryName() + "' WHERE id = " + category.getId());
+                else throw new CostManagerException("Error duplicated category");
             } catch(SQLException e) {
                 throw new CostManagerException("Error with updating a new category", e);
             }
@@ -201,6 +211,12 @@ public class DerbyDBModel implements IModel {
             connection.close();
         } catch(SQLException e) {
             throw new CostManagerException("Error closing database connection.", e);
+        }
+
+        try {
+            rs.close();
+        } catch(SQLException e) {
+            throw new CostManagerException("Error releasing ResultSet.", e);
         }
     }
 

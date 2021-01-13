@@ -65,7 +65,6 @@ class DerbyDBModelTest {
         assertEquals(expected, actual);
     }
 
-
     @Test
     void getAllCostItems() throws CostManagerException {
         Category category = new Category(1,"Food");
