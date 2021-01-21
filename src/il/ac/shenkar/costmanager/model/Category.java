@@ -1,4 +1,4 @@
-package CostManager.Model;
+package il.ac.shenkar.costmanager.model;
 
 import java.util.Objects;
 
@@ -42,9 +42,8 @@ public class Category {
     public void setCategoryName(String categoryName) { this.categoryName = categoryName; }
 
     /**
-     * toString Method
-     *
-     * @return          String representation of Category object
+     * This method returns the string representation of the class.
+     * @return String representation of Category object.
      *
      */
     @Override
@@ -55,9 +54,18 @@ public class Category {
     }
 
     /**
-     * equals Method
+     * This is native method that returns the integer hash code value of the object.
+     * @return int hash code value of the object.
      *
-     * @return          Check if the Category object equals to another object
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, categoryName);
+    }
+
+    /**
+     * This method check if all values between two Category objects are equal.
+     * @return bool If values are equals return true, else return false.
      *
      */
     @Override

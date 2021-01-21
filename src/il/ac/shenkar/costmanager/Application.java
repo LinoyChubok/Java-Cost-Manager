@@ -1,8 +1,8 @@
-package CostManager;
+package il.ac.shenkar.costmanager;
 
-import CostManager.Model.*;
-import CostManager.View.*;
-import CostManager.ViewModel.*;
+import il.ac.shenkar.costmanager.model.*;
+import il.ac.shenkar.costmanager.view.*;
+import il.ac.shenkar.costmanager.viewmodel.*;
 
 public class Application {
     public static void main(String []args){

@@ -1,6 +1,6 @@
-package CostManager.Model.tests;
+package il.ac.shenkar.costmanager.model.tests;
 
-import CostManager.Model.Category;
+import il.ac.shenkar.costmanager.model.Category;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

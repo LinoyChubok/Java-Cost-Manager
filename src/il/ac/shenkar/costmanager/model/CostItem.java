@@ -1,4 +1,4 @@
-package CostManager.Model;
+package il.ac.shenkar.costmanager.model;
 
 import java.sql.Date;
 import java.text.ParseException;
@@ -55,6 +55,7 @@ public class CostItem {
 
     /**
      * CostItem Getters
+     *
      */
     public int getId() { return id; }
     public Date getDate() { return date; }
@@ -69,6 +70,7 @@ public class CostItem {
 
     /**
      * CostItem Setters
+     *
      */
     public void setDate(Date date) throws CostManagerException {
         this.date = validDate(date);
@@ -85,6 +87,9 @@ public class CostItem {
 
     /**
      * Static functions
+     *
+     * validDate - Check the validation of date (if date is exist on the calendar).
+     *
      */
     public static Date validDate(Date date) throws CostManagerException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-d");
@@ -95,14 +100,14 @@ public class CostItem {
         } catch (ParseException e) {
             throw new CostManagerException("Invalid date!");
         }
+
         return date;
     }
 
 
     /**
-     * toString Method
-     *
-     * @return          String representation of CostItem object
+     * This method returns the string representation of the class.
+     * @return String representation of CostItem object.
      *
      */
     @Override
@@ -117,9 +122,18 @@ public class CostItem {
     }
 
     /**
-     * equals Method
+     * This is native method that returns the integer hash code value of the object.
+     * @return int hash code value of the object.
      *
-     * @return          Check if the CostItem object equals to another object
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, date, category, description, currency, totalPrice);
+    }
+
+    /**
+     * This method check if all values between two CostItem objects are equal.
+     * @return bool If values are equals return true, else return false.
      *
      */
     @Override

@@ -1,39 +1,53 @@
-package CostManager.ViewModel;
+package il.ac.shenkar.costmanager.viewmodel;
 
-import CostManager.Model.*;
-import CostManager.View.IView;
+import il.ac.shenkar.costmanager.model.*;
+import il.ac.shenkar.costmanager.view.IView;
 
 import java.sql.Date;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ViewModel implements IViewModel{
+public class ViewModel implements IViewModel {
 
-    private IModel model = null;
-    private IView view = null;
-    private ExecutorService pool;
+    private IModel model;
+    private IView view;
+    private final ExecutorService pool;
 
     public ViewModel() {
+        model = null;
+        view = null;
         pool = Executors.newFixedThreadPool(10);
     }
 
+    /**
+     * Set the view.
+     * @param view Variable that holding the view.
+     */
     @Override
     public void setView(IView view) {
         this.view = view;
     }
 
+    /**
+     * Set the model.
+     * @param model Variable that holding the model.
+     */
     @Override
     public void setModel(IModel model) {
         this.model = model;
     }
 
+    /**
+     * Add new category to the database.
+     * @param category Defined at Category class. (constructor without id)
+     */
     @Override
     public void addCategory(Category category) {
         pool.submit(() -> {
             try {
                 model.addCategory(category);
-                ArrayList<Category> categories = model.getAllCategories();
+                List<Category> categories = model.getAllCategories();
                 view.showCategories(categories);
                 view.showMessage("Category was added successfully");
             } catch(CostManagerException e) {
@@ -42,12 +56,16 @@ public class ViewModel implements IViewModel{
         });
     }
 
+    /**
+     * Update specific category from the database.
+     * @param category Defined at Category class.  (constructor with id)
+     */
     @Override
     public void updateCategory(Category category) {
         pool.submit(() -> {
             try {
                 model.updateCategory(category);
-                ArrayList<Category> categories = model.getAllCategories();
+                List<Category> categories = model.getAllCategories();
                 view.showCategories(categories);
                 view.showMessage("Category was updated successfully");
             } catch(CostManagerException e) {
@@ -56,12 +74,16 @@ public class ViewModel implements IViewModel{
         });
     }
 
+    /**
+     * Delete specific category from the database.
+     * @param id Category id (int).
+     */
     @Override
     public void deleteCategory(int id) {
         pool.submit(() -> {
             try {
                 model.deleteCategory(id);
-                ArrayList<Category> categories = model.getAllCategories();
+                List<Category> categories = model.getAllCategories();
                 view.showCategories(categories);
                 view.showMessage("Category was deleted successfully");
             } catch(CostManagerException e) {
@@ -70,11 +92,15 @@ public class ViewModel implements IViewModel{
         });
     }
 
+    /**
+     * Get list of categories from the database.
+     *
+     */
     @Override
     public void getAllCategories() {
         pool.submit(() -> {
             try {
-                ArrayList<Category> categories = model.getAllCategories();
+                List<Category> categories = model.getAllCategories();
                 view.showCategories(categories);
                 if(categories.size() != 0)
                     view.showMessage("Categories loaded successfully");
@@ -85,14 +111,17 @@ public class ViewModel implements IViewModel{
         });
     }
 
+    /**
+     * Add new cost item to the database.
+     * @param item Defined at CostItem class. (constructor without id)
+     */
     @Override
     public void addCostItem(CostItem item) {
         pool.submit(() -> {
             try {
                 model.addCostItem(item);
-                ArrayList<CostItem> items = model.getAllCostItems();
-                ArrayList<Category> categories = model.getAllCategories();
-                view.showCostItems(items, categories);
+                List<CostItem> items = model.getAllCostItems();
+                view.showCostItems(items);
                 view.showMessage("Cost item was added successfully");
             } catch(CostManagerException e) {
                 view.showMessage(e.getMessage());
@@ -100,14 +129,17 @@ public class ViewModel implements IViewModel{
         });
     }
 
+    /**
+     * Update specific cost item from the database.
+     * @param item Defined at CostItem class. (constructor with id)
+     */
     @Override
     public void updateCostItem(CostItem item) {
         pool.submit(() -> {
             try {
                 model.updateCostItem(item);
-                ArrayList<CostItem> items = model.getAllCostItems();
-                ArrayList<Category> categories = model.getAllCategories();
-                view.showCostItems(items, categories);
+                List<CostItem> items = model.getAllCostItems();
+                view.showCostItems(items);
                 view.showMessage("Cost item was updated successfully");
             } catch(CostManagerException e) {
                 view.showMessage(e.getMessage());
@@ -115,14 +147,17 @@ public class ViewModel implements IViewModel{
         });
     }
 
+    /**
+     * Delete specific cost item from the database.
+     * @param id CostItem id (int).
+     */
     @Override
     public void deleteCostItem(int id) {
         pool.submit(() -> {
             try {
                 model.deleteCostItem(id);
-                ArrayList<CostItem> items = model.getAllCostItems();
-                ArrayList<Category> categories = model.getAllCategories();
-                view.showCostItems(items, categories);
+                List<CostItem> items = model.getAllCostItems();
+                view.showCostItems(items);
                 view.showMessage("Cost item was deleted successfully");
             } catch(CostManagerException e) {
                 view.showMessage(e.getMessage());
@@ -130,13 +165,16 @@ public class ViewModel implements IViewModel{
         });
     }
 
+    /**
+     * Get list of cost items from the database.
+     *
+     */
     @Override
     public void getAllCostItems() {
         pool.submit(() -> {
             try {
-                ArrayList<CostItem> items = model.getAllCostItems();
-                ArrayList<Category> categories = model.getAllCategories();
-                view.showCostItems(items, categories);
+                List<CostItem> items = model.getAllCostItems();
+                view.showCostItems(items);
                 if(items.size() != 0)
                     view.showMessage("Cost items loaded successfully");
                 else view.showMessage("No data to display");
@@ -146,11 +184,16 @@ public class ViewModel implements IViewModel{
         });
     }
 
+    /**
+     * Get list of cost items between dates from the database.
+     * @param fromDate The starting date of the report summary.
+     * @param toDate   The ending date of the report summary.
+     */
     @Override
     public void getReportSummary(Date fromDate, Date toDate) {
         pool.submit(() -> {
             try {
-                ArrayList<CostItem> items = model.getReportSummary(fromDate, toDate);
+                List<CostItem> items = model.getReportSummary(fromDate, toDate);
                 view.showReportSummary(items);
                 if(items.size() != 0)
                     view.showMessage("Report summary loaded successfully");
@@ -161,6 +204,13 @@ public class ViewModel implements IViewModel{
         });
     }
 
+    /**
+     * Get summary of cost items between dates from the database summed by category,
+     * with rates according to the currency param.
+     * @param fromDate The starting date of the pie chart summary.
+     * @param toDate   The ending date of the pie chart summary.
+     * @param currency The currency type (used for rates).
+     */
     @Override
     public void getPieChartSummary(Date fromDate, Date toDate, Currency currency) {
         pool.submit(() -> {
@@ -175,6 +225,10 @@ public class ViewModel implements IViewModel{
         });
     }
 
+    /**
+     * This method ensures the database connection shuts down safely, any cleans up will be here.
+     *
+     */
     @Override
     public void shutdownDB() {
         pool.submit(() -> {

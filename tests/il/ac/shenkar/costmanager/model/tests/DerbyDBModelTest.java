@@ -1,12 +1,13 @@
-package CostManager.Model.tests;
+package il.ac.shenkar.costmanager.model.tests;
 
-import CostManager.Model.*;
+import il.ac.shenkar.costmanager.model.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -30,9 +31,8 @@ class DerbyDBModelTest {
 
         db.addCategory(category);
         db.deleteCategory(1);
-        ArrayList<Category> actual = db.getAllCategories();
-
-        ArrayList<Category> expected = new ArrayList<>();
+        List<Category> actual = db.getAllCategories();
+        List<Category> expected = new ArrayList<>();
 
         assertEquals(expected, actual);
     }
@@ -42,9 +42,9 @@ class DerbyDBModelTest {
         Category categoryFood = new Category(1, "Food");
 
         db.addCategory(categoryFood);
-        ArrayList<Category> actual = db.getAllCategories();
+        List<Category> actual = db.getAllCategories();
 
-        ArrayList<Category> expected = new ArrayList<>();
+        List<Category> expected = new ArrayList<>();
         expected.add(categoryFood);
 
         assertEquals(expected, actual);
@@ -58,9 +58,9 @@ class DerbyDBModelTest {
         db.addCategory(category);
         db.addCostItem(item);
         db.deleteCostItem(1);
-        ArrayList<CostItem> actual = db.getAllCostItems();
+        List<CostItem> actual = db.getAllCostItems();
 
-        ArrayList<CostItem> expected = new ArrayList<>();
+        List<CostItem> expected = new ArrayList<>();
 
         assertEquals(expected, actual);
     }
@@ -72,9 +72,9 @@ class DerbyDBModelTest {
 
         db.addCategory(category);
         db.addCostItem(item);
-        ArrayList<CostItem> actual = db.getAllCostItems();
+        List<CostItem> actual = db.getAllCostItems();
 
-        ArrayList<CostItem> expected = new ArrayList<>();
+        List<CostItem> expected = new ArrayList<>();
         expected.add(item);
 
         assertEquals(expected, actual);
@@ -93,9 +93,9 @@ class DerbyDBModelTest {
        db.addCostItem(itemB);
        db.addCostItem(itemC);
        db.addCostItem(itemD);
-       ArrayList<CostItem> actual = db.getReportSummary(Date.valueOf("2020-12-22"),Date.valueOf("2020-12-24"));
+       List<CostItem> actual = db.getReportSummary(Date.valueOf("2020-12-22"),Date.valueOf("2020-12-24"));
 
-       ArrayList<CostItem> expected = new ArrayList<>();
+       List<CostItem> expected = new ArrayList<>();
        expected.add(itemA);
        expected.add(itemB);
        expected.add(itemC);

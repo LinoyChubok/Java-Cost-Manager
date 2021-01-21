@@ -1,10 +1,10 @@
-package CostManager.View;
+package il.ac.shenkar.costmanager.view;
 
-import CostManager.Model.Category;
-import CostManager.Model.CostItem;
-import CostManager.Model.CostManagerException;
-import CostManager.Model.Currency;
-import CostManager.ViewModel.IViewModel;
+import il.ac.shenkar.costmanager.model.Category;
+import il.ac.shenkar.costmanager.model.CostItem;
+import il.ac.shenkar.costmanager.model.CostManagerException;
+import il.ac.shenkar.costmanager.model.Currency;
+import il.ac.shenkar.costmanager.viewmodel.IViewModel;
 import com.intellij.ui.JBColor;
 
 import javax.swing.*;
@@ -13,13 +13,18 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Date;
-import java.util.ArrayList;
+
+import  java.util.List;
 
 public class View implements IView {
 
     private IViewModel vm;
     private ApplicationUI ui;
 
+    /**
+     * View class for implementing the IView interface.
+     *
+     */
     public View() {
         SwingUtilities.invokeLater(() -> {
             View.this.ui = new ApplicationUI();
@@ -27,26 +32,54 @@ public class View implements IView {
         });
     }
 
+    /**
+     * Setting the view model.
+     * @param vm Variable that holding the view model.
+     */
     @Override
     public void setViewModel(IViewModel vm) { this.vm = vm; }
 
+    /**
+     * Handle the display of any message at our view.
+     * @param text The text message, string representation.
+     */
     @Override
     public void showMessage(String text) { ui.showMessage(text); }
 
+    /**
+     * Handle the display of showing categories.
+     * @param categories List of categories.
+     */
     @Override
-    public void showCategories(ArrayList<Category> categories) { ui.showCategories(categories); }
+    public void showCategories(List<Category> categories) { ui.showCategories(categories); }
 
+    /**
+     * Handle the display of showing cost items.
+     *
+     */
     @Override
-    public void showCostItems(ArrayList<CostItem> items, ArrayList<Category> categories) { ui.showCostItems(items, categories); }
+    public void showCostItems(List<CostItem> items) { ui.showCostItems(items); }
 
+    /**
+     * Handle the display of showing the report of cost items.
+     * @param items List of cost items.
+     */
     @Override
-    public void showReportSummary(ArrayList<CostItem> items) { ui.showReportSummary(items); }
+    public void showReportSummary(List<CostItem> items) { ui.showReportSummary(items); }
 
+    /**
+     * Handle the display of showing the pie chart.
+     *
+     */
     @Override
     public void showPieChartSummary() {
         ui.showPieChartSummary();
     }
 
+    /**
+     * Inner class that implements the functionality of our UI that provided by the view class.
+     *
+     */
     public class ApplicationUI {
         // Frame component (for each page)
         private JFrame frame;
@@ -57,6 +90,7 @@ public class View implements IView {
         private final ReportsPanel reportsPanel;
         private final PieChartPanel pieChartPanel;
 
+        // Constructor, to initialize the components
         public ApplicationUI() {
             // Create instances of panels
             mainPanel = new MainPanel();
@@ -67,10 +101,13 @@ public class View implements IView {
 
             // Create instance of JFrame with name "frame"
             frame = new JFrame("CostManager");
-            // Set the frame as BorderLayout
+
+            // Set frame props
             frame.setLayout(new BorderLayout());
             frame.setSize(800,650);
-            frame.setResizable(false);
+            frame.setResizable(true);
+
+            // On closing make sure db closed
             frame.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosing(WindowEvent e) {
@@ -94,6 +131,7 @@ public class View implements IView {
             private final JButton ReportsBtn;
             private final JButton PieChartBtn;
 
+            // Constructor, to initialize the components
             public MainPanel() {
                 // Set the window layout manager as BorderLayout
                 setLayout(new BorderLayout());
@@ -102,6 +140,7 @@ public class View implements IView {
                 image = new JLabel(new ImageIcon(getClass().getResource("/resources/images/logo.png")));
                 title = new JLabel("<html><h1><strong><font color=white>Cost Manager - Track Your Costs!</font></strong></h1></html>");
 
+                // Create header panel
                 headerPanel = new JPanel();
                 headerPanel.setBackground(new Color(38, 112, 226));
 
@@ -109,10 +148,21 @@ public class View implements IView {
                 btnsPanel = new JPanel(new GridLayout(2, 2, 20, 20));
                 btnsPanel.setBorder(BorderFactory.createEmptyBorder(120, 120, 120, 120));
 
+                // Create buttons for the main panel (each of them direct to another panel)
                 CostBtn = new JButton("Costs");
                 CategoryBtn = new JButton("Categories");
                 ReportsBtn = new JButton("Reports");
                 PieChartBtn = new JButton("Pie Chart Diagram");
+
+                // Set font size and remove focus from buttons
+                CostBtn.setFont(new Font("Arial", Font.BOLD, 17));
+                CostBtn.setFocusable(false);
+                CategoryBtn.setFont(new Font("Arial", Font.BOLD, 17));
+                CategoryBtn.setFocusable(false);
+                ReportsBtn.setFont(new Font("Arial", Font.BOLD, 17));
+                ReportsBtn.setFocusable(false);
+                PieChartBtn.setFont(new Font("Arial", Font.BOLD, 17));
+                PieChartBtn.setFocusable(false);
 
                 // Add each component to his specific panel
                 headerPanel.add(image);
@@ -128,32 +178,33 @@ public class View implements IView {
 
                 // Handling cost button click
                 CostBtn.addActionListener(e -> {
-                    View.this.vm.getAllCostItems();
-                    ApplicationUI.this.costPanel.clearInputs();
                     ApplicationUI.this.changeScreen(ApplicationUI.this.costPanel);
+                    ApplicationUI.this.costPanel.clearInputs();
+                    View.this.vm.getAllCategories();
+                    View.this.vm.getAllCostItems();
                 });
 
                 // Handling category button click
                 CategoryBtn.addActionListener(e -> {
-                    View.this.vm.getAllCategories();
-                    ApplicationUI.this.categoryPanel.clearInputs();
                     ApplicationUI.this.changeScreen(ApplicationUI.this.categoryPanel);
+                    ApplicationUI.this.categoryPanel.clearInputs();
+                    View.this.vm.getAllCategories();
                 });
 
                 // Handling reports button click
                 ReportsBtn.addActionListener(e -> {
-                    ApplicationUI.this.reportsPanel.clearInputs();
                     ApplicationUI.this.changeScreen(ApplicationUI.this.reportsPanel);
+                    ApplicationUI.this.reportsPanel.clearInputs();
                 });
 
                 // Handling pie chart button click
                 PieChartBtn.addActionListener(e -> {
-                    ApplicationUI.this.pieChartPanel.clearInputs();
                     ApplicationUI.this.changeScreen(ApplicationUI.this.pieChartPanel);
+                    ApplicationUI.this.pieChartPanel.clearInputs();
                 });
+
             }
         }
-
         public class CostPanel extends JPanel {
             // Components of the CostPanel
             private final JPanel headerPanel;
@@ -194,8 +245,10 @@ public class View implements IView {
 
             // Constructor, to initialize the components
             public CostPanel() {
+
                 // Set the window layout manager as BorderLayout
                 setLayout(new BorderLayout());
+
                 // Create the components of CostPanel
                 headerPanel = new JPanel();
                 headerPanel.setBackground(new Color(38, 112, 226));
@@ -223,6 +276,8 @@ public class View implements IView {
                 table.setPreferredScrollableViewportSize(table.getPreferredSize());
                 table.setFillsViewportHeight(true);
                 table.setFocusable(false);
+
+                // Clicking the row will move the row data into the text fields and to the combo's
                 table.getSelectionModel().addListSelectionListener(event -> {
                     if (table.getSelectedRow() > -1) {
                         idTF.setText(table.getValueAt(table.getSelectedRow(), 0).toString());
@@ -238,36 +293,50 @@ public class View implements IView {
                 btnPanel = new JPanel(new FlowLayout());
                 btnPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
 
+                // Create southPanel
                 southPanel = new JPanel();
                 southPanel.setBackground(JBColor.LIGHT_GRAY);
+
+                // Add components for southPanel
                 messageLabel = new JLabel("Message");
                 messageTF = new TextField("", 40);
                 messageTF.setEnabled(false);
                 backBtn = new JButton("Back to Dashboard");
 
+                // Add components for Date
                 dateLabel = new JLabel("Date (YYYY-MM-DD)");
                 dateTF = new TextField();
+
+                // Add components for ID
                 idLabel = new JLabel("ID");
                 idTF = new TextField();
                 idTF.setEnabled(false);
+
+                // Add components for Category
                 categoryLabel = new JLabel("Category");
                 categoryCB = new JComboBox();
-                // Set light weight to currencyCB (to make sure that items not hidden)
                 categoryCB.setLightWeightPopupEnabled(false);
+
+                // Add components for Description
                 descriptionLabel = new JLabel("Description");
                 descriptionTF = new TextField();
+
+                // Add components for Currency
                 currencyLabel = new JLabel("Currency");
                 currencyCB = new JComboBox();
+
                 // Add items to currencyCB
                 currencyCB.addItem("ILS");
                 currencyCB.addItem("USD");
                 currencyCB.addItem("EURO");
                 currencyCB.addItem("GPB");
+
                 // Set light weight to currencyCB (to make sure that items not hidden)
                 currencyCB.setLightWeightPopupEnabled(false);
                 totalPriceLabel = new JLabel("Price");
                 totalPriceTF = new TextField();
 
+                // Add buttons for CRUD operations
                 addBtn = new JButton("Add");
                 updateBtn = new JButton("Update");
                 deleteBtn = new JButton("Delete");
@@ -276,6 +345,7 @@ public class View implements IView {
                 headerPanel.add(image);
                 headerPanel.add(title);
 
+                // Add each component to his specific panel
                 costFormPanel.add(idLabel);
                 costFormPanel.add(idTF);
                 costFormPanel.add(dateLabel);
@@ -289,16 +359,20 @@ public class View implements IView {
                 costFormPanel.add(totalPriceLabel);
                 costFormPanel.add(totalPriceTF);
 
+                // Add scroll bar to table panel
                 tablePanel.add(scroll, BorderLayout.CENTER); // ScrollPanel include table
 
+                // Add buttons for crud operations
                 btnPanel.add(addBtn);
                 btnPanel.add(updateBtn);
                 btnPanel.add(deleteBtn);
 
+                // Add all panels to center panel (responsive)
                 centerPanel.add(costFormPanel, BorderLayout.NORTH);
                 centerPanel.add(tablePanel, BorderLayout.CENTER);
                 centerPanel.add(btnPanel, BorderLayout.SOUTH);
 
+                // Add components to south panel
                 southPanel.add(messageLabel);
                 southPanel.add(messageTF);
                 southPanel.add(backBtn);
@@ -427,6 +501,7 @@ public class View implements IView {
 
             }
 
+            // This function will clear the whole inputs inside the panel
             public void clearInputs() {
                 categoryCB.setSelectedIndex(-1);
                 currencyCB.setSelectedIndex(-1);
@@ -437,23 +512,18 @@ public class View implements IView {
                 messageTF.setText("");
             }
 
+            // This function will handle the showing of the messages in the buttom of the panel
             public void showMessage(String text) {
                 messageTF.setText(text);
             }
 
-            public void showCostItems(ArrayList<CostItem> items, ArrayList<Category> categories) {
+            // This function will handle the showing of the cost items inside the table
+            public void showCostItems(List<CostItem> items) {
                 // Clear Table
                 tableModel.setRowCount(0);
                 tableModel.setColumnCount(0);
 
-                // Clear Categories Combobox
-                categoryCB.removeAllItems();
-
-                // Add Categories
-                for (Category category : categories)
-                    categoryCB.addItem(category.getCategoryName());
-
-                //Clear inputs
+                // Clear inputs
                 clearInputs();
 
                 // Add table columns
@@ -468,8 +538,17 @@ public class View implements IView {
                 for (CostItem item : items)
                     tableModel.addRow(new Object[]{item.getId(), item.getDate(),item.getCategory().getCategoryName(), item.getDescription(), item.getCurrency(), item.getTotalPrice()});
             }
-        }
 
+            // This function will handle the showing of the categories inside the combos
+            public void showCategories(List<Category> categories) {
+                // Clear Categories Combobox
+                categoryCB.removeAllItems();
+
+                // Add Categories
+                for (Category category : categories)
+                    categoryCB.addItem(category.getCategoryName());
+            }
+        }
         public class CategoryPanel extends JPanel {
             // Components of the CategoryPanel
             private final JPanel headerPanel;
@@ -503,6 +582,7 @@ public class View implements IView {
             public CategoryPanel() {
                 // Set the window layout manager as BorderLayout
                 setLayout(new BorderLayout());
+
                 // Create the components of CategoryPanel
                 headerPanel = new JPanel();
                 headerPanel.setBackground(new Color(38, 112, 226));
@@ -523,6 +603,7 @@ public class View implements IView {
                 // Create table
                 tableModel = new DefaultTableModel();
                 table = new JTable(tableModel);
+
                 // Set table properties
                 table.getTableHeader().setReorderingAllowed(false);
                 table.setBackground(JBColor.WHITE);
@@ -531,6 +612,8 @@ public class View implements IView {
                 table.setFillsViewportHeight(true);
                 tablePanel.add(scroll, BorderLayout.CENTER); // ScrollPanel include table
                 table.setFocusable(false);
+
+                // Clicking the remove will move the data into the text fields and combos
                 table.getSelectionModel().addListSelectionListener(event -> {
                     if (table.getSelectedRow() > -1) {
                         idTF.setText(table.getValueAt(table.getSelectedRow(), 0).toString());
@@ -542,19 +625,26 @@ public class View implements IView {
                 btnPanel = new JPanel(new FlowLayout());
                 btnPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
 
+                // Create southPanel
                 southPanel = new JPanel();
                 southPanel.setBackground(JBColor.LIGHT_GRAY);
+
+                // Create components to south panel
                 messageLabel = new JLabel("Message");
                 messageTF = new TextField("", 40);
                 messageTF.setEnabled(false);
                 backBtn = new JButton("Back to Dashboard");
 
+                // Create components for ID
                 idLabel = new JLabel("ID");
                 idTF = new TextField();
                 idTF.setEnabled(false);
+
+                // Create components for Category Name
                 categoryLabel = new JLabel("Category Name");
                 categoryTF = new TextField();
 
+                // init crud buttons
                 addBtn = new JButton("Add");
                 updateBtn = new JButton("Update");
                 deleteBtn = new JButton("Delete");
@@ -563,19 +653,23 @@ public class View implements IView {
                 headerPanel.add(image);
                 headerPanel.add(title);
 
+                // Add each component to his specific panel
                 costFormPanel.add(idLabel);
                 costFormPanel.add(idTF);
                 costFormPanel.add(categoryLabel);
                 costFormPanel.add(categoryTF);
 
+                // Add crud buttons to the panel
                 btnPanel.add(addBtn);
                 btnPanel.add(updateBtn);
                 btnPanel.add(deleteBtn);
 
+                // Add panels to center panel (responsive)
                 centerPanel.add(costFormPanel, BorderLayout.NORTH);
                 centerPanel.add(tablePanel, BorderLayout.CENTER);
                 centerPanel.add(btnPanel, BorderLayout.SOUTH);
 
+                // Add each component to his specific panel
                 southPanel.add(messageLabel);
                 southPanel.add(messageTF);
                 southPanel.add(backBtn);
@@ -635,17 +729,20 @@ public class View implements IView {
                 });
             }
 
+            // This function will clear all the inputs inside the panel
             public void clearInputs() {
                 idTF.setText("");
                 categoryTF.setText("");
                 messageTF.setText("");
             }
 
+            // This function will handle the showing of any message
             public void showMessage(String text) {
                 messageTF.setText(text);
             }
 
-            public void showCategories(ArrayList<Category> categories) {
+            // This function will handle the showing of any categories inisde the table
+            public void showCategories(List<Category> categories) {
                 // Clear Table
                 tableModel.setRowCount(0);
                 tableModel.setColumnCount(0);
@@ -662,7 +759,6 @@ public class View implements IView {
                     tableModel.addRow(new Object[]{category.getId(), category.getCategoryName()});
             }
         }
-
         public class ReportsPanel extends JPanel {
             // Components of the ReportsPanel
             private final JPanel headerPanel;
@@ -693,6 +789,7 @@ public class View implements IView {
             public ReportsPanel() {
                 // Set the window layout manager as BorderLayout
                 setLayout(new BorderLayout());
+
                 // Create the components of ReportsPanel
                 headerPanel = new JPanel();
                 headerPanel.setBackground(new Color(38, 112, 226));
@@ -718,15 +815,21 @@ public class View implements IView {
                 btnPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
                 showBtn = new JButton("Show Results");
 
+                // Create southPanel
                 southPanel = new JPanel();
                 southPanel.setBackground(JBColor.LIGHT_GRAY);
+
+                // Create components for southPanel
                 messageLabel = new JLabel("Message");
                 messageTF = new TextField("", 40);
                 messageTF.setEnabled(false);
                 backBtn = new JButton("Back to Dashboard");
 
+                // Create components for start date
                 startDateLabel = new JLabel("Start Date (YYYY-MM-DD)");
                 startDateTF = new TextField();
+
+                // Create components for end date
                 endDateLabel = new JLabel("End Date (YYYY-MM-DD)");
                 endDateTF = new TextField();
 
@@ -734,17 +837,21 @@ public class View implements IView {
                 headerPanel.add(image);
                 headerPanel.add(title);
 
+                // Add each component to his specific panel
                 costFormPanel.add(startDateLabel);
                 costFormPanel.add(startDateTF);
                 costFormPanel.add(endDateLabel);
                 costFormPanel.add(endDateTF);
 
+                // Add button to the panel, this button will show the report
                 btnPanel.add(showBtn);
 
+                // Add each component to his specific panel
                 centerPanel.add(costFormPanel, BorderLayout.NORTH);
                 centerPanel.add(reportPanel, BorderLayout.CENTER);
                 centerPanel.add(btnPanel, BorderLayout.SOUTH);
 
+                // Add each component to his specific panel
                 southPanel.add(messageLabel);
                 southPanel.add(messageTF);
                 southPanel.add(backBtn);
@@ -779,6 +886,7 @@ public class View implements IView {
                 });
             }
 
+            // This function will clear the inputs inside the whole panel
             public void clearInputs() {
                 startDateTF.setText("");
                 endDateTF.setText("");
@@ -786,11 +894,13 @@ public class View implements IView {
                 messageTF.setText("");
             }
 
+            // This function will handle the showing of any message
             public void showMessage(String text) {
                 messageTF.setText(text);
             }
 
-            public void showReportSummary(ArrayList<CostItem> items) {
+            // This function will handle the showing of the cost items report
+            public void showReportSummary(List<CostItem> items) {
               StringBuilder sb = new StringBuilder();
               for(CostItem item : items) {
                 sb.append(item.toString());
@@ -801,7 +911,6 @@ public class View implements IView {
             }
 
         }
-
         public class PieChartPanel extends JPanel {
             // Components of the PieChartPanel
             private final JPanel headerPanel;
@@ -831,6 +940,7 @@ public class View implements IView {
             public PieChartPanel() {
                 // Set the window layout manager as BorderLayout
                 setLayout(new BorderLayout());
+
                 // Create the components of PieChartPanel
                 headerPanel = new JPanel();
                 headerPanel.setBackground(new Color(38, 112, 226));
@@ -840,6 +950,7 @@ public class View implements IView {
                 // Set the centerPanel as BorderLayout
                 centerPanel = new JPanel(new BorderLayout());
 
+                // Create costFormPanel
                 costFormPanel = new JPanel(new GridLayout(3, 2, 10, 10));
                 costFormPanel.setBorder(BorderFactory.createEmptyBorder(20, 200, 20, 200));
 
@@ -851,24 +962,34 @@ public class View implements IView {
                 btnPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
                 showBtn = new JButton("Show Results");
 
+                // Create south Panel
                 southPanel = new JPanel();
                 southPanel.setBackground(JBColor.LIGHT_GRAY);
+
+                // Create components for south Panel
                 messageLabel = new JLabel("Message");
                 messageTF = new TextField("", 40);
                 messageTF.setEnabled(false);
                 backBtn = new JButton("Back to Dashboard");
 
+                // Create components for start date
                 startDateLabel = new JLabel("Start Date (YYYY-MM-DD)");
                 startDateTF = new TextField();
+
+                // Create components for end date
                 endDateLabel = new JLabel("End Date (YYYY-MM-DD)");
                 endDateTF = new TextField();
+
+                // Create components for Currency (will be used for the rates)
                 currencyLabel = new JLabel("Currency");
                 currencyCB = new JComboBox();
+
                 // Add items to currencyCB
                 currencyCB.addItem("ILS");
                 currencyCB.addItem("USD");
                 currencyCB.addItem("EURO");
                 currencyCB.addItem("GPB");
+
                 // Set light weight to currencyCB (to make sure that items not hidden)
                 currencyCB.setLightWeightPopupEnabled(false);
 
@@ -876,6 +997,7 @@ public class View implements IView {
                 headerPanel.add(image);
                 headerPanel.add(title);
 
+                // Add each component to his specific panel
                 costFormPanel.add(startDateLabel);
                 costFormPanel.add(startDateTF);
                 costFormPanel.add(endDateLabel);
@@ -883,15 +1005,19 @@ public class View implements IView {
                 costFormPanel.add(currencyLabel);
                 costFormPanel.add(currencyCB);
 
+                // Add show button
                 btnPanel.add(showBtn);
 
+                // Add each component to his specific panel
                 centerPanel.add(costFormPanel, BorderLayout.NORTH);
                 centerPanel.add(panel, BorderLayout.CENTER);
                 centerPanel.add(btnPanel, BorderLayout.SOUTH);
 
+                // Add each component to his specific panel
                 southPanel.add(messageLabel);
                 southPanel.add(messageTF);
                 southPanel.add(backBtn);
+
                 // Add panels to PieChartPanel using BorderLayout
                 add(headerPanel, BorderLayout.NORTH);
                 add(centerPanel, BorderLayout.CENTER);
@@ -940,25 +1066,31 @@ public class View implements IView {
                     }
                 });
             }
-            // Clear inputs
+
+            // This function will clear the inputs inside the panel
             public void clearInputs() {
                 startDateTF.setText("");
                 endDateTF.setText("");
                 currencyCB.setSelectedIndex(-1);
             }
 
+            // This function will display message at the text field
             public void showMessage(String text) {
                 messageTF.setText(text);
             }
 
+            // This function will display the pie chart summary
             public void showPieChartSummary() { }
         }
 
-        public void displayMainMenu() {
+        // Display the main panel
+        public void displayMainPanel() {
             this.panel = mainPanel;
             frame.getContentPane().add(this.panel);
             frame.setVisible(true);
         }
+
+        // Handle the change of panels
         public void changeScreen(JPanel nextPanel) {
             frame.remove(this.panel);
             frame.repaint();
@@ -967,6 +1099,7 @@ public class View implements IView {
             frame.setVisible(true);
         }
 
+        // Navigate the text message to the correct panel
         private void navigateMessage(String text) {
             String currentPanel = ApplicationUI.this.panel.getClass().getName();
             int index = currentPanel.lastIndexOf('$');
@@ -997,25 +1130,46 @@ public class View implements IView {
             }
         }
 
-        public void showCategories(ArrayList<Category> categories) {
+        //Handle the display of showing categories.
+        private void navigateCategories(List<Category> categories) {
+            String currentPanel = ApplicationUI.this.panel.getClass().getName();
+            int index = currentPanel.lastIndexOf('$');
+            if(index != -1)
+            {
+                index += 1;
+                switch (currentPanel.substring(index)) {
+                    case "CostPanel":
+                        ApplicationUI.this.costPanel.showCategories(categories);
+                        break;
+                    case "CategoryPanel":
+                        ApplicationUI.this.categoryPanel.showCategories(categories);
+                        break;
+                }
+            }
+        }
+        public void showCategories(List<Category> categories) {
             if (SwingUtilities.isEventDispatchThread()) {
-                ApplicationUI.this.categoryPanel.showCategories(categories);
+                navigateCategories(categories);
             } else {
                 SwingUtilities.invokeLater(() -> {
-                    ApplicationUI.this.categoryPanel.showCategories(categories);
+                    navigateCategories(categories);
                 });
             }
         }
-        public void showCostItems(ArrayList<CostItem> items, ArrayList<Category> categories) {
+
+        // Handle the display of showing cost items.
+        public void showCostItems(List<CostItem> items) {
             if (SwingUtilities.isEventDispatchThread()) {
-                ApplicationUI.this.costPanel.showCostItems(items, categories);
+                ApplicationUI.this.costPanel.showCostItems(items);
             } else {
                 SwingUtilities.invokeLater(() -> {
-                    ApplicationUI.this.costPanel.showCostItems(items, categories);
+                    ApplicationUI.this.costPanel.showCostItems(items);
                 });
             }
         }
-        public void showReportSummary(ArrayList<CostItem> items) {
+
+        // Handle the display of showing the report of cost items (between dates).
+        public void showReportSummary(List<CostItem> items) {
             if (SwingUtilities.isEventDispatchThread()) {
                 ApplicationUI.this.reportsPanel.showReportSummary(items);
             } else {
@@ -1024,6 +1178,8 @@ public class View implements IView {
                 });
             }
         }
+
+        // Handle the display of showing the pie chart.
         public void showPieChartSummary() {
             if (SwingUtilities.isEventDispatchThread()) {
                 ApplicationUI.this.pieChartPanel.showPieChartSummary();
@@ -1033,8 +1189,10 @@ public class View implements IView {
                 });
             }
         }
+
+        // Start (display the main panel)
         public void start() {
-            displayMainMenu();
+            displayMainPanel();
         }
     }
 }

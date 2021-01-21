@@ -1,9 +1,9 @@
-package CostManager.Model.tests;
+package il.ac.shenkar.costmanager.model.tests;
 
-import CostManager.Model.Category;
-import CostManager.Model.CostItem;
-import CostManager.Model.CostManagerException;
-import CostManager.Model.Currency;
+import il.ac.shenkar.costmanager.model.Category;
+import il.ac.shenkar.costmanager.model.CostItem;
+import il.ac.shenkar.costmanager.model.CostManagerException;
+import il.ac.shenkar.costmanager.model.Currency;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,7 +1,8 @@
-package CostManager.Model;
+package il.ac.shenkar.costmanager.model;
 
 import java.sql.* ;
 import java.util.ArrayList;
+import java.util.List;
 
 public class DerbyDBModel implements IModel {
 
@@ -10,18 +11,18 @@ public class DerbyDBModel implements IModel {
     private static final String DB_NAME = "CostManagerDB";
 
     /**
-     * DerbyDBModel will implement IModel (different implementations for each database)
-     * The constructor will call createTables method.
-     *
+     * DerbyDBModel will implement IModel interface,
+     * different implementations for each database type.
+     * @throws CostManagerException For any connection issue.
      */
     public DerbyDBModel() throws CostManagerException {
         createTables();
     }
 
     /**
-     * This method will create CostItems table and also Categories table,
-     * if they do not exist on our database.
-     *
+     * This method will create CostItems table and Categories
+     * table if they do not exist on our database.
+     * @throws CostManagerException For any connection issue.
      */
     @Override
     public void createTables() throws CostManagerException {
@@ -105,7 +106,8 @@ public class DerbyDBModel implements IModel {
     /**
      * Inserts a new Category object into the database,
      * if the category do not exist on our database.
-     *
+     * @param category Defined at Category class.  (constructor without id)
+     * @throws CostManagerException For any connection issue, or duplicate categories.
      */
     @Override
     public void addCategory(Category category) throws CostManagerException {
@@ -161,9 +163,11 @@ public class DerbyDBModel implements IModel {
             throw new CostManagerException("Error releasing ResultSet.", e);
         }
     }
+
     /**
      * Update a category item that exit in the database.
-     *
+     * @param category Defined at Category class.  (constructor with id)
+     * @throws CostManagerException For any connection issue.
      */
     @Override
     public void updateCategory(Category category) throws CostManagerException {
@@ -222,7 +226,8 @@ public class DerbyDBModel implements IModel {
 
     /**
      * Delete a category according to specific id from the database.
-     *
+     * @param id Category id (int).
+     * @throws CostManagerException For any connection issue.
      */
     @Override
     public void deleteCategory(int id) throws CostManagerException {
@@ -265,11 +270,12 @@ public class DerbyDBModel implements IModel {
 
     /**
      * Get all the categories from the database.
-     *
+     * @return List of categories.
+     * @throws CostManagerException For any connection issue.
      */
     @Override
-    public ArrayList < Category > getAllCategories() throws CostManagerException {
-        ArrayList < Category > categories = new ArrayList < >();
+    public List < Category > getAllCategories() throws CostManagerException {
+        List< Category > categories = new ArrayList < >();
 
         // Start the Derby database connection.
         String connectionUrl = PROTOCOL + DB_NAME + ";create=true";
@@ -323,7 +329,8 @@ public class DerbyDBModel implements IModel {
 
     /**
      * Inserts a new CostItem object into the database.
-     *
+     * @param item Defined at CostItem class. (constructor without id)
+     * @throws CostManagerException For any connection issue.
      */
     @Override
     public void addCostItem(CostItem item) throws CostManagerException {
@@ -368,9 +375,11 @@ public class DerbyDBModel implements IModel {
             throw new CostManagerException("Error closing database connection.", e);
         }
     }
+
     /**
      * Update a cost item that exit in the database.
-     *
+     * @param item Defined at CostItem class. (constructor with id)
+     * @throws CostManagerException For any connection issue.
      */
     @Override
     public void updateCostItem(CostItem item) throws CostManagerException {
@@ -418,7 +427,8 @@ public class DerbyDBModel implements IModel {
 
     /**
      * Delete a cost item according to specific id from the database.
-     *
+     * @param id CostItem id (int).
+     * @throws CostManagerException For any connection issue.
      */
     @Override
     public void deleteCostItem(int id) throws CostManagerException {
@@ -461,11 +471,12 @@ public class DerbyDBModel implements IModel {
 
     /**
      * Get all the cost items from the database.
-     *
+     * @return List of cost items.
+     * @throws CostManagerException For any connection issue.
      */
     @Override
-    public ArrayList < CostItem > getAllCostItems() throws CostManagerException {
-        ArrayList < CostItem > items = new ArrayList < >();
+    public List < CostItem > getAllCostItems() throws CostManagerException {
+        List < CostItem > items = new ArrayList < >();
 
         // Start the Derby database connection.
         String connectionUrl = PROTOCOL + DB_NAME + ";create=true";
@@ -524,11 +535,13 @@ public class DerbyDBModel implements IModel {
 
     /**
      * Get all the cost items between two dates from the database.
-     *
+     * @param fromDate The starting date of the report summary.
+     * @param toDate   The ending date of the report summary.
+     * @throws CostManagerException For any connection issue.
      */
     @Override
-    public ArrayList < CostItem > getReportSummary(Date fromDate, Date toDate) throws CostManagerException {
-        ArrayList < CostItem > items = new ArrayList < >();
+    public List < CostItem > getReportSummary(Date fromDate, Date toDate) throws CostManagerException {
+        List < CostItem > items = new ArrayList < >();
 
         // Start the Derby database connection.
         String connectionUrl = PROTOCOL + DB_NAME + ";create=true";
@@ -580,6 +593,14 @@ public class DerbyDBModel implements IModel {
         return items;
     }
 
+    /**
+     * Get all the cost items between two dates from the database summed by category,
+     * with rates according to the currency param.
+     * @param fromDate The starting date of the pie chart summary.
+     * @param toDate   The ending date of the pie chart summary.
+     * @param currency The currency type (used for rates).
+     * @throws CostManagerException For any connection issue.
+     */
     @Override
     public void getPieChartSummary(Date fromDate, Date toDate, Currency currency) throws CostManagerException {
         // Start the Derby database connection.
@@ -629,6 +650,10 @@ public class DerbyDBModel implements IModel {
         }
     }
 
+    /**
+     * Shut down database, any cleans up on exit will be implemented here.
+     *
+     */
     @Override
     public void shutdownDB() throws CostManagerException {
         try {
