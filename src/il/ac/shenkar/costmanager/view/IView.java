@@ -5,6 +5,7 @@ import il.ac.shenkar.costmanager.model.CostItem;
 import il.ac.shenkar.costmanager.viewmodel.IViewModel;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IView {
 
@@ -42,5 +43,5 @@ public interface IView {
      * Handle the display of showing the pie chart.
      *
      */
-    public abstract void showPieChartSummary();
+    public abstract void showPieChartSummary(Map<Category, Double> pieChartSummary);
 }

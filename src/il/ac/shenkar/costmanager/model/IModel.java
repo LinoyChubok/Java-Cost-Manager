@@ -2,6 +2,7 @@ package il.ac.shenkar.costmanager.model;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Map;
 
 public interface IModel {
 
@@ -53,5 +54,5 @@ public interface IModel {
      * getPieChartSummary - get summary of cost items between dates from the database summed by category,
      *                      with rates according to the currency param.
      */
-    public abstract void getPieChartSummary(Date fromDate, Date toDate, Currency currency) throws CostManagerException;
+    public abstract Map<Category, Double> getPieChartSummary(Date fromDate, Date toDate, Currency currency) throws CostManagerException;
 }

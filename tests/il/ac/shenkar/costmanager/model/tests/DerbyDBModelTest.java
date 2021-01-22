@@ -82,24 +82,20 @@ class DerbyDBModelTest {
 
    @Test
    void getReportSummary() throws CostManagerException {
-       Category category = new Category(1,"Food");
-       CostItem itemA = new CostItem(1, Date.valueOf("2020-12-22"), new Category( "Food"), "Pizza Slice", Currency.ILS, 27.6);
-       CostItem itemB = new CostItem(2, Date.valueOf("2020-12-23"), new Category( "Food"), "Pizza Slice", Currency.ILS, 27.6);
-       CostItem itemC = new CostItem(3, Date.valueOf("2020-12-24"), new Category( "Food"), "Pizza Slice", Currency.ILS, 27.6);
-       CostItem itemD = new CostItem(4, Date.valueOf("2020-12-26"), new Category( "Food"), "Pizza Slice", Currency.ILS, 27.6);
 
-       db.addCategory(category);
-       db.addCostItem(itemA);
-       db.addCostItem(itemB);
-       db.addCostItem(itemC);
-       db.addCostItem(itemD);
        List<CostItem> actual = db.getReportSummary(Date.valueOf("2020-12-22"),Date.valueOf("2020-12-24"));
 
        List<CostItem> expected = new ArrayList<>();
-       expected.add(itemA);
-       expected.add(itemB);
-       expected.add(itemC);
+
 
        assertEquals(expected, actual);
    }
+
+    @Test
+    void checkyaron() throws CostManagerException {
+//        db.getPieChartSummary(Date.valueOf("2021-10-01"),Date.valueOf("2021-10-08"), Currency.ILS);
+
+
+
+    }
 }

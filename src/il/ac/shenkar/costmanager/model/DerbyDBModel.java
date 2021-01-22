@@ -1,8 +1,10 @@
 package il.ac.shenkar.costmanager.model;
 
-import java.sql.* ;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class DerbyDBModel implements IModel {
 
@@ -602,7 +604,8 @@ public class DerbyDBModel implements IModel {
      * @throws CostManagerException For any connection issue.
      */
     @Override
-    public void getPieChartSummary(Date fromDate, Date toDate, Currency currency) throws CostManagerException {
+    public Map< Category, Double > getPieChartSummary(Date fromDate, Date toDate, Currency currency) throws CostManagerException {
+        Map<Category, Double> pieChartSummary;
         // Start the Derby database connection.
         String connectionUrl = PROTOCOL + DB_NAME + ";create=true";
 
@@ -616,10 +619,16 @@ public class DerbyDBModel implements IModel {
             statement = connection.createStatement();
 
             try {
-                rs = statement.executeQuery("SELECT category, SUM(totalPrice) AS totalPriceCategory FROM CostItems WHERE date BETWEEN DATE('" + fromDate.toLocalDate() + "') and DATE('" + toDate.toLocalDate() + "') AND currency= '" + currency.name() + "' GROUP BY category");
+                List< PieChartSummary > items = new ArrayList < >();
+                rs = statement.executeQuery("SELECT category, SUM(totalPrice) AS sumPrice, currency FROM CostItems WHERE date BETWEEN DATE('" + fromDate.toLocalDate() + "') and DATE('" + toDate.toLocalDate() + "') GROUP BY category, currency");
                 while (rs.next()) {
-                    System.out.println(rs.getString("category") +" "+rs.getDouble("totalPriceCategory"));
+                    PieChartSummary item = new PieChartSummary(new Category(rs.getString("category")), rs.getDouble("sumPrice"));
+                    items.add(item);
                 }
+
+                // Aggregate after adjusting the rates according the currency
+                pieChartSummary = items.stream().collect(Collectors.groupingBy(category -> category.getCategory(), Collectors.summingDouble(PieChartSummary::getTotalPrice)));
+
             } catch(SQLException e) {
                 throw new CostManagerException("Error with get pie chat summary", e);
             }
@@ -648,6 +657,8 @@ public class DerbyDBModel implements IModel {
         } catch(SQLException e) {
             throw new CostManagerException("Error releasing ResultSet.", e);
         }
+
+        return pieChartSummary;
     }
 
     /**

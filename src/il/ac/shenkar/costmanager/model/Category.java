@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class Category {
 
-    private final int id;
+    private int id;
     private String categoryName;
 
     /**
@@ -15,7 +15,7 @@ public class Category {
      *
      */
     public Category(int id, String categoryName) {
-        this.id = id;
+        setId(id);
         setCategoryName(categoryName);
     }
 
@@ -26,7 +26,7 @@ public class Category {
      *
      */
     public Category(String categoryName) {
-        this.id = -1;
+        setId(-1);
         setCategoryName(categoryName);
     }
 
@@ -39,6 +39,7 @@ public class Category {
     /**
      * Category Setters
      */
+    public void setId(int id) { this.id = id; }
     public void setCategoryName(String categoryName) { this.categoryName = categoryName; }
 
     /**

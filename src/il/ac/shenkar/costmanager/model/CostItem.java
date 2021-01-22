@@ -7,7 +7,7 @@ import java.util.Objects;
 
 public class CostItem {
 
-    private final int id;
+    private int id;
     private Date date;
     private Category category;
     private String description;
@@ -26,7 +26,7 @@ public class CostItem {
      *
      */
     public CostItem(int id, Date date, Category category, String description, Currency currency, double totalPrice) throws CostManagerException{
-        this.id = id;
+        setId(id);
         setDate(date);
         setCategory(category);
         setDescription(description);
@@ -45,7 +45,7 @@ public class CostItem {
      *
      */
     public CostItem(Date date, Category category, String description, Currency currency, double totalPrice) throws CostManagerException{
-        this.id = -1;
+        setId(-1);
         setDate(date);
         setCategory(category);
         setDescription(description);
@@ -72,6 +72,7 @@ public class CostItem {
      * CostItem Setters
      *
      */
+    public void setId(int id) { this.id = id; }
     public void setDate(Date date) throws CostManagerException {
         this.date = validDate(date);
     }

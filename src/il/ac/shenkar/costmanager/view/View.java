@@ -5,6 +5,7 @@ import il.ac.shenkar.costmanager.model.CostItem;
 import il.ac.shenkar.costmanager.model.CostManagerException;
 import il.ac.shenkar.costmanager.model.Currency;
 import il.ac.shenkar.costmanager.viewmodel.IViewModel;
+
 import com.intellij.ui.JBColor;
 
 import javax.swing.*;
@@ -14,7 +15,12 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Date;
 
-import  java.util.List;
+import java.util.List;
+import java.util.Map;
+
+import org.jfree.chart.*;
+import org.jfree.chart.plot.PiePlot3D;
+import org.jfree.data.general.DefaultPieDataset;
 
 public class View implements IView {
 
@@ -72,8 +78,8 @@ public class View implements IView {
      *
      */
     @Override
-    public void showPieChartSummary() {
-        ui.showPieChartSummary();
+    public void showPieChartSummary(Map<Category, Double> pieChartSummary) {
+        ui.showPieChartSummary(pieChartSummary);
     }
 
     /**
@@ -104,7 +110,7 @@ public class View implements IView {
 
             // Set frame props
             frame.setLayout(new BorderLayout());
-            frame.setSize(800,650);
+            frame.setSize(800,750);
             frame.setResizable(true);
 
             // On closing make sure db closed
@@ -541,7 +547,7 @@ public class View implements IView {
 
             // This function will handle the showing of the categories inside the combos
             public void showCategories(List<Category> categories) {
-                // Clear Categories Combobox
+                // Clear Categories Combo box
                 categoryCB.removeAllItems();
 
                 // Add Categories
@@ -826,11 +832,11 @@ public class View implements IView {
                 backBtn = new JButton("Back to Dashboard");
 
                 // Create components for start date
-                startDateLabel = new JLabel("Start Date (YYYY-MM-DD)");
+                startDateLabel = new JLabel("From Date (YYYY-MM-DD)");
                 startDateTF = new TextField();
 
                 // Create components for end date
-                endDateLabel = new JLabel("End Date (YYYY-MM-DD)");
+                endDateLabel = new JLabel("To Date (YYYY-MM-DD)");
                 endDateTF = new TextField();
 
                 // Add each component to his specific panel
@@ -876,8 +882,6 @@ public class View implements IView {
                         if(endDate == null || endDate.length() == 0) {
                             throw new CostManagerException("endDate cannot be empty");
                         }
-
-                        reportTA.setText("");
                         View.this.vm.getReportSummary(CostItem.validDate(Date.valueOf(startDate)), CostItem.validDate(Date.valueOf(endDate)));
 
                     } catch(CostManagerException | IllegalArgumentException ex){
@@ -901,6 +905,7 @@ public class View implements IView {
 
             // This function will handle the showing of the cost items report
             public void showReportSummary(List<CostItem> items) {
+              reportTA.setText("");
               StringBuilder sb = new StringBuilder();
               for(CostItem item : items) {
                 sb.append(item.toString());
@@ -918,8 +923,11 @@ public class View implements IView {
             private final JPanel southPanel;
 
             private final JPanel costFormPanel;
-            private final JPanel panel;
             private final JPanel btnPanel;
+
+            private ChartPanel panel;
+            private DefaultPieDataset dataset;
+            JFreeChart chart;
 
             private final JLabel image;
             private final JLabel title;
@@ -954,8 +962,10 @@ public class View implements IView {
                 costFormPanel = new JPanel(new GridLayout(3, 2, 10, 10));
                 costFormPanel.setBorder(BorderFactory.createEmptyBorder(20, 200, 20, 200));
 
-                // Set the panel as BorderLayout
-                panel = new JPanel(new BorderLayout());
+                // Create Chart Panel
+                dataset = new DefaultPieDataset();
+                chart = ChartFactory.createPieChart3D("Pie Chart Diagram For Total Costs \nSplits To Categories ", dataset, true, true, false);
+                panel = new ChartPanel(chart);
 
                 // Create btnPanel as FlowLayout
                 btnPanel = new JPanel(new FlowLayout());
@@ -973,15 +983,15 @@ public class View implements IView {
                 backBtn = new JButton("Back to Dashboard");
 
                 // Create components for start date
-                startDateLabel = new JLabel("Start Date (YYYY-MM-DD)");
+                startDateLabel = new JLabel("From Date (YYYY-MM-DD)");
                 startDateTF = new TextField();
 
                 // Create components for end date
-                endDateLabel = new JLabel("End Date (YYYY-MM-DD)");
+                endDateLabel = new JLabel("To Date (YYYY-MM-DD)");
                 endDateTF = new TextField();
 
                 // Create components for Currency (will be used for the rates)
-                currencyLabel = new JLabel("Currency");
+                currencyLabel = new JLabel("Currency Conversion");
                 currencyCB = new JComboBox();
 
                 // Add items to currencyCB
@@ -1057,8 +1067,6 @@ public class View implements IView {
                             default:
                                 currency = Currency.ILS;
                         }
-
-                        // TODO: CLEAR PIE CHART HERE
                         View.this.vm.getPieChartSummary(CostItem.validDate(Date.valueOf(startDate)), CostItem.validDate(Date.valueOf(endDate)), currency);
 
                     } catch(CostManagerException | IllegalArgumentException ex){
@@ -1069,9 +1077,16 @@ public class View implements IView {
 
             // This function will clear the inputs inside the panel
             public void clearInputs() {
+                // Clear text fields
                 startDateTF.setText("");
                 endDateTF.setText("");
+                messageTF.setText("");
+
+                // Clear combos
                 currencyCB.setSelectedIndex(-1);
+
+                // clear chart
+                dataset.clear();
             }
 
             // This function will display message at the text field
@@ -1080,7 +1095,10 @@ public class View implements IView {
             }
 
             // This function will display the pie chart summary
-            public void showPieChartSummary() { }
+            public void showPieChartSummary(Map<Category, Double> pieChartSummary) {
+                dataset.clear();
+                pieChartSummary.forEach((k,v)->dataset.setValue(k.getCategoryName(), v));
+            }
         }
 
         // Display the main panel
@@ -1180,12 +1198,13 @@ public class View implements IView {
         }
 
         // Handle the display of showing the pie chart.
-        public void showPieChartSummary() {
+        public void showPieChartSummary(Map<Category, Double> pieChartSummary) {
             if (SwingUtilities.isEventDispatchThread()) {
-                ApplicationUI.this.pieChartPanel.showPieChartSummary();
+                ApplicationUI.this.pieChartPanel.showPieChartSummary(pieChartSummary);
             } else {
                 SwingUtilities.invokeLater(() -> {
-                    ApplicationUI.this.pieChartPanel.showPieChartSummary();
+                    ApplicationUI.this.pieChartPanel.showPieChartSummary(pieChartSummary);
+
                 });
             }
         }

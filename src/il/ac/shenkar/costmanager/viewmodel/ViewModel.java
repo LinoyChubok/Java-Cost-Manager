@@ -5,6 +5,7 @@ import il.ac.shenkar.costmanager.view.IView;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -215,10 +216,11 @@ public class ViewModel implements IViewModel {
     public void getPieChartSummary(Date fromDate, Date toDate, Currency currency) {
         pool.submit(() -> {
             try {
-                // TODO: RETURN VALUE FROM THE MODEL FUNCTION
-                model.getPieChartSummary(fromDate, toDate, currency);
-                // TODO: PASS THE VALUE TO VIEW FUNCTION
-                view.showPieChartSummary();
+                Map<Category, Double> pieChartSummary = model.getPieChartSummary(fromDate, toDate, currency);
+                view.showPieChartSummary(pieChartSummary);
+                if(pieChartSummary.size() != 0)
+                    view.showMessage("Pie Chart loaded successfully");
+                else view.showMessage("No data to display");
             } catch(CostManagerException e) {
                 view.showMessage(e.getMessage());
             }
