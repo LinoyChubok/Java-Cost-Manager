@@ -493,14 +493,14 @@ public class DerbyDBModel implements IModel {
             statement = connection.createStatement();
 
             try {
-                rs = statement.executeQuery("SELECT * FROM CostItems");
+                rs = statement.executeQuery("SELECT * FROM CostItems ORDER BY date");
                 while (rs.next()) {
                     CostItem item = new CostItem (rs.getInt("id"),
-                            rs.getDate("date"),
+                            rs.getDate("date").toString(),
                             new Category(rs.getString("category")),
                             rs.getString("description"),
-                            Currency.valueOf(rs.getString("currency")),
-                            rs.getDouble("totalPrice"));
+                            (rs.getString("currency")),
+                            Double.toString(rs.getDouble("totalPrice")));
                     items.add(item);
                 }
             } catch(SQLException | CostManagerException e) {
@@ -558,9 +558,9 @@ public class DerbyDBModel implements IModel {
             statement = connection.createStatement();
 
             try {
-                rs = statement.executeQuery("SELECT * FROM CostItems WHERE date BETWEEN DATE('" + fromDate.toLocalDate() + "') and DATE('" + toDate.toLocalDate() + "')");
+                rs = statement.executeQuery("SELECT * FROM CostItems WHERE date BETWEEN DATE('" + fromDate.toLocalDate() + "') and DATE('" + toDate.toLocalDate() + "') ORDER BY date");
                 while (rs.next()) {
-                    CostItem item = new CostItem(rs.getInt("id"), rs.getDate("date"), new Category(rs.getString("category")), rs.getString("description"), Currency.valueOf(rs.getString("currency")), rs.getDouble("totalPrice"));
+                    CostItem item = new CostItem(rs.getInt("id"), rs.getDate("date").toString(), new Category(rs.getString("category")), rs.getString("description"), (rs.getString("currency")), Double.toString(rs.getDouble("totalPrice")));
                     items.add(item);
                 }
             } catch(SQLException e) {
@@ -619,18 +619,24 @@ public class DerbyDBModel implements IModel {
             statement = connection.createStatement();
 
             try {
+                // API call according to the currency type
+                currency.setExchangeRate();
+
                 List< PieChartSummary > items = new ArrayList < >();
+
                 rs = statement.executeQuery("SELECT category, SUM(totalPrice) AS sumPrice, currency FROM CostItems WHERE date BETWEEN DATE('" + fromDate.toLocalDate() + "') and DATE('" + toDate.toLocalDate() + "') GROUP BY category, currency");
+
                 while (rs.next()) {
-                    PieChartSummary item = new PieChartSummary(new Category(rs.getString("category")), rs.getDouble("sumPrice"));
+                    double convertedPrice = currency.convert(rs.getDouble("sumPrice"),  Currency.valueOf(rs.getString("currency")));
+                    PieChartSummary item = new PieChartSummary(new Category(rs.getString("category")), convertedPrice);
                     items.add(item);
                 }
 
-                // Aggregate after adjusting the rates according the currency
-                pieChartSummary = items.stream().collect(Collectors.groupingBy(category -> category.getCategory(), Collectors.summingDouble(PieChartSummary::getTotalPrice)));
+                // Aggregate after converting the rates according to the currency
+                pieChartSummary = items.stream().collect(Collectors.groupingBy(PieChartSummary::getCategory, Collectors.summingDouble(PieChartSummary::getTotalPrice)));
 
             } catch(SQLException e) {
-                throw new CostManagerException("Error with get pie chat summary", e);
+                throw new CostManagerException("Error with getting pie chart summary data", e);
             }
 
         } catch(SQLException e) {

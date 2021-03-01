@@ -20,7 +20,7 @@ class CostItemTest {
     @BeforeEach
     void setUp() throws CostManagerException {
         category = new Category("Food");
-        item = new CostItem(Date.valueOf("2020-12-22"), category, "Pizza Slice", Currency.ILS, 27.6);
+        item = new CostItem("2020-12-22", category, "Pizza Slice", "ILS", "27.6");
     }
 
     @AfterEach
@@ -44,7 +44,7 @@ class CostItemTest {
     }
 
     @Test
-    void getCategory() {
+    void getCategory() throws CostManagerException {
         Category expected = new Category("Food");
         Category actual = item.getCategory();
         assertEquals(expected, actual);
@@ -74,13 +74,13 @@ class CostItemTest {
     @Test
     void setDate() throws CostManagerException {
         Date expected = Date.valueOf("2020-07-06");
-        item.setDate(Date.valueOf("2020-07-06"));
+        item.setDate("2020-07-06");
         Date actual = item.getDate();
         assertEquals(expected, actual);
     }
 
     @Test
-    void setCategory() {
+    void setCategory() throws CostManagerException{
         Category expected = new Category("Cinema");
         item.setCategory(new Category("Cinema"));
         Category actual = item.getCategory();
@@ -88,7 +88,7 @@ class CostItemTest {
     }
 
     @Test
-    void setDescription() {
+    void setDescription() throws CostManagerException {
         String expected = "Nachos";
         item.setDescription("Nachos");
         String actual = item.getDescription();
@@ -96,9 +96,9 @@ class CostItemTest {
     }
 
     @Test
-    void setCurrency() {
+    void setCurrency() throws CostManagerException {
         Currency expected = Currency.USD;
-        item.setCurrency(Currency.USD);
+        item.setCurrency("USD");
         Currency actual = item.getCurrency();
         assertEquals(expected, actual);
     }
@@ -106,7 +106,7 @@ class CostItemTest {
     @Test
     void setTotalPrice() throws CostManagerException {
         double expected = 15.90;
-        item.setTotalPrice(15.90);
+        item.setTotalPrice("15.90");
         double actual = item.getTotalPrice();
         assertEquals(expected, actual);
     }
@@ -116,7 +116,7 @@ class CostItemTest {
         String expected =  "CostItem: {" +
                 "id = " + "-1" +
                 ", date = " + "2020-12-22" +
-                ", category = " + "Category: {id = -1, category name = Food}" +
+                ", category = " + "Food" +
                 ", description = " + "Pizza Slice" +
                 ", currency = " + "ILS" +
                 ", totalPrice = " + "27.6" + '}';

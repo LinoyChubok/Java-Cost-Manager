@@ -1,26 +1,24 @@
 package il.ac.shenkar.costmanager.view;
 
+import com.intellij.ui.JBColor;
 import il.ac.shenkar.costmanager.model.Category;
 import il.ac.shenkar.costmanager.model.CostItem;
 import il.ac.shenkar.costmanager.model.CostManagerException;
 import il.ac.shenkar.costmanager.model.Currency;
 import il.ac.shenkar.costmanager.viewmodel.IViewModel;
-
-import com.intellij.ui.JBColor;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.general.DefaultPieDataset;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.sql.Date;
-
 import java.util.List;
 import java.util.Map;
-
-import org.jfree.chart.*;
-import org.jfree.chart.plot.PiePlot3D;
-import org.jfree.data.general.DefaultPieDataset;
+import java.util.Objects;
 
 public class View implements IView {
 
@@ -238,6 +236,7 @@ public class View implements IView {
             private final JButton addBtn;
             private final JButton updateBtn;
             private final JButton deleteBtn;
+            private final JButton clearBtn;
             private final JButton backBtn;
 
             private JComboBox categoryCB;
@@ -334,7 +333,7 @@ public class View implements IView {
                 // Add items to currencyCB
                 currencyCB.addItem("ILS");
                 currencyCB.addItem("USD");
-                currencyCB.addItem("EURO");
+                currencyCB.addItem("EUR");
                 currencyCB.addItem("GPB");
 
                 // Set light weight to currencyCB (to make sure that items not hidden)
@@ -346,6 +345,7 @@ public class View implements IView {
                 addBtn = new JButton("Add");
                 updateBtn = new JButton("Update");
                 deleteBtn = new JButton("Delete");
+                clearBtn = new JButton("Clear");
 
                 // Add each component to his specific panel
                 headerPanel.add(image);
@@ -372,6 +372,7 @@ public class View implements IView {
                 btnPanel.add(addBtn);
                 btnPanel.add(updateBtn);
                 btnPanel.add(deleteBtn);
+                btnPanel.add(clearBtn);
 
                 // Add all panels to center panel (responsive)
                 centerPanel.add(costFormPanel, BorderLayout.NORTH);
@@ -395,50 +396,24 @@ public class View implements IView {
                 addBtn.addActionListener(e -> {
                     try {
                         String description = descriptionTF.getText();
-                        if(description == null || description.length() == 0) {
-                            throw new CostManagerException("description cannot be empty");
-                        }
 
-                        String categoryName = categoryCB.getSelectedItem().toString();
-                        if(categoryName == null || categoryName.length() == 0) {
-                            throw new CostManagerException("category cannot be empty");
-                        }
+                        String categoryName = Objects.requireNonNull(categoryCB.getSelectedItem()).toString();
 
                         String date = dateTF.getText();
-                        if(date == null || date.length() == 0) {
-                            throw new CostManagerException("date cannot be empty");
-                        }
 
-                        double totalPrice = Double.parseDouble(totalPriceTF.getText());
+                        String totalPrice = totalPriceTF.getText();
 
-                        String currencyStr = currencyCB.getSelectedItem().toString();
-                        Currency currency = null;
-                        switch (currencyStr) {
-                            case "EURO":
-                                currency = Currency.EURO;
-                                break;
-                            case "USD":
-                                currency = Currency.USD;
-                                break;
-                            case "GBP":
-                                currency = Currency.GBP;
-                                break;
-                            case "ILS":
-                                currency = Currency.ILS;
-                                break;
-                            default:
-                                currency = Currency.ILS;
-                        }
+                        String currency = Objects.requireNonNull(currencyCB.getSelectedItem()).toString();
 
                         Category category = new Category(categoryName);
-                        CostItem item = new CostItem(Date.valueOf(date), category, description, currency, totalPrice);
+                        CostItem item = new CostItem(date, category, description, currency, totalPrice);
 
                         View.this.vm.addCostItem(item);
 
-                    } catch (NumberFormatException ex) {
-                        View.this.showMessage("Problem with entered total price " + ex.getMessage());
-                    } catch(CostManagerException | IllegalArgumentException ex){
-                        View.this.showMessage("Problem with entered data " + ex.getMessage());
+                    } catch (NullPointerException ex) {
+                        View.this.showMessage("Problem with entered data: Combo boxes cannot be empty!");
+                    } catch(CostManagerException ex){
+                        View.this.showMessage("Problem with entered data: " + ex.getMessage());
                     }
                 });
 
@@ -448,50 +423,26 @@ public class View implements IView {
                         int id = Integer.parseInt(idTF.getText());
 
                         String description = descriptionTF.getText();
-                        if(description == null || description.length() == 0) {
-                            throw new CostManagerException("description cannot be empty");
-                        }
 
-                        String categoryName = categoryCB.getSelectedItem().toString();
-                        if(categoryName == null || categoryName.length() == 0) {
-                            throw new CostManagerException("category cannot be empty");
-                        }
+                        String categoryName = Objects.requireNonNull(categoryCB.getSelectedItem()).toString();
 
                         String date = dateTF.getText();
-                        if(date == null || date.length() == 0) {
-                            throw new CostManagerException("date cannot be empty");
-                        }
 
-                        double totalPrice = Double.parseDouble(totalPriceTF.getText());
+                        String totalPrice = totalPriceTF.getText();
 
-                        String currencyStr = currencyCB.getSelectedItem().toString();
-                        Currency currency = null;
-                        switch (currencyStr) {
-                            case "EURO":
-                                currency = Currency.EURO;
-                                break;
-                            case "USD":
-                                currency = Currency.USD;
-                                break;
-                            case "GBP":
-                                currency = Currency.GBP;
-                                break;
-                            case "ILS":
-                                currency = Currency.ILS;
-                                break;
-                            default:
-                                currency = Currency.ILS;
-                        }
+                        String currency = Objects.requireNonNull(currencyCB.getSelectedItem()).toString();
 
                         Category category = new Category(categoryName);
-                        CostItem item = new CostItem(id, Date.valueOf(date), category, description, currency, totalPrice);
+                        CostItem item = new CostItem(id, date, category, description, currency, totalPrice);
 
                         View.this.vm.updateCostItem(item);
 
                     } catch (NumberFormatException ex) {
-                        View.this.showMessage("Problem with entered total price " + ex.getMessage());
-                    } catch(CostManagerException | IllegalArgumentException ex){
-                        View.this.showMessage("Problem with entered data " + ex.getMessage());
+                        View.this.showMessage("Problem with entered id!");
+                    } catch (NullPointerException ex) {
+                        View.this.showMessage("Problem with entered data: Combo boxes cannot be empty!");
+                    } catch(CostManagerException ex){
+                        View.this.showMessage("Problem with entered data: " + ex.getMessage());
                     }
                 });
 
@@ -501,10 +452,12 @@ public class View implements IView {
                         int id = Integer.parseInt(idTF.getText());
                         View.this.vm.deleteCostItem(id);
                     } catch (NumberFormatException ex){
-                        View.this.showMessage("Problem with entered total price " + ex.getMessage());
+                        View.this.showMessage("Problem with entered id!");
                     }
                 });
 
+                // Handle clear button click
+                clearBtn.addActionListener(e -> clearInputs());
             }
 
             // This function will clear the whole inputs inside the panel
@@ -578,6 +531,7 @@ public class View implements IView {
             private final JButton addBtn;
             private final JButton updateBtn;
             private final JButton deleteBtn;
+            private final JButton clearBtn;
             private final JButton backBtn;
 
             private TextField idTF;
@@ -654,6 +608,7 @@ public class View implements IView {
                 addBtn = new JButton("Add");
                 updateBtn = new JButton("Update");
                 deleteBtn = new JButton("Delete");
+                clearBtn = new JButton("Clear");
 
                 // Add each component to his specific panel
                 headerPanel.add(image);
@@ -669,6 +624,7 @@ public class View implements IView {
                 btnPanel.add(addBtn);
                 btnPanel.add(updateBtn);
                 btnPanel.add(deleteBtn);
+                btnPanel.add(clearBtn);
 
                 // Add panels to center panel (responsive)
                 centerPanel.add(costFormPanel, BorderLayout.NORTH);
@@ -692,16 +648,13 @@ public class View implements IView {
                 addBtn.addActionListener(e -> {
                     try {
                         String categoryName = categoryTF.getText();
-                        if(categoryName == null || categoryName.length() == 0) {
-                            throw new CostManagerException("categoryName cannot be empty");
-                        }
-                        
+
                         Category category = new Category(categoryName);
 
                         View.this.vm.addCategory(category);
 
                     } catch(CostManagerException ex){
-                        View.this.showMessage("Problem with entered data " + ex.getMessage());
+                        View.this.showMessage("Problem with entered data: " + ex.getMessage());
                     }
                 });
 
@@ -711,16 +664,15 @@ public class View implements IView {
                         int id = Integer.parseInt(idTF.getText());
 
                         String categoryName = categoryTF.getText();
-                        if(categoryName == null || categoryName.length() == 0) {
-                            throw new CostManagerException("categoryName cannot be empty");
-                        }
 
                         Category category = new Category(id, categoryName);
 
                         View.this.vm.updateCategory(category);
 
+                    } catch (NumberFormatException ex){
+                        View.this.showMessage("Problem with entered id!");
                     } catch(CostManagerException ex){
-                        View.this.showMessage("Problem with entered data " + ex.getMessage());
+                        View.this.showMessage("Problem with entered data:" + ex.getMessage());
                     }
                 });
 
@@ -730,9 +682,12 @@ public class View implements IView {
                         int id = Integer.parseInt(idTF.getText());
                         View.this.vm.deleteCategory(id);
                     } catch (NumberFormatException ex){
-                        View.this.showMessage("Problem with entered total price " + ex.getMessage());
+                        View.this.showMessage("Problem with entered id!");
                     }
                 });
+
+                // Handle clear button click
+                clearBtn.addActionListener(e -> clearInputs());
             }
 
             // This function will clear all the inputs inside the panel
@@ -747,7 +702,7 @@ public class View implements IView {
                 messageTF.setText(text);
             }
 
-            // This function will handle the showing of any categories inisde the table
+            // This function will handle the showing of any categories inside the table
             public void showCategories(List<Category> categories) {
                 // Clear Table
                 tableModel.setRowCount(0);
@@ -783,6 +738,7 @@ public class View implements IView {
             private final JLabel messageLabel;
 
             private final JButton showBtn;
+            private final JButton clearBtn;
             private final JButton backBtn;
 
             private TextField messageTF;
@@ -820,6 +776,7 @@ public class View implements IView {
                 btnPanel = new JPanel(new FlowLayout());
                 btnPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
                 showBtn = new JButton("Show Results");
+                clearBtn = new JButton("Clear");
 
                 // Create southPanel
                 southPanel = new JPanel();
@@ -851,6 +808,7 @@ public class View implements IView {
 
                 // Add button to the panel, this button will show the report
                 btnPanel.add(showBtn);
+                btnPanel.add(clearBtn);
 
                 // Add each component to his specific panel
                 centerPanel.add(costFormPanel, BorderLayout.NORTH);
@@ -874,20 +832,18 @@ public class View implements IView {
                 showBtn.addActionListener(e -> {
                     try {
                         String startDate = startDateTF.getText();
-                        if(startDate == null || startDate.length() == 0) {
-                            throw new CostManagerException("startDate cannot be empty");
-                        }
 
                         String endDate = endDateTF.getText();
-                        if(endDate == null || endDate.length() == 0) {
-                            throw new CostManagerException("endDate cannot be empty");
-                        }
-                        View.this.vm.getReportSummary(CostItem.validDate(Date.valueOf(startDate)), CostItem.validDate(Date.valueOf(endDate)));
 
-                    } catch(CostManagerException | IllegalArgumentException ex){
+                        View.this.vm.getReportSummary(CostItem.validDate(startDate), CostItem.validDate(endDate));
+
+                    } catch(CostManagerException ex){
                         View.this.showMessage("Problem with entered data " + ex.getMessage());
                     }
                 });
+
+                // Handle clear button click
+                clearBtn.addActionListener(e -> clearInputs());
             }
 
             // This function will clear the inputs inside the whole panel
@@ -905,14 +861,14 @@ public class View implements IView {
 
             // This function will handle the showing of the cost items report
             public void showReportSummary(List<CostItem> items) {
-              reportTA.setText("");
-              StringBuilder sb = new StringBuilder();
-              for(CostItem item : items) {
-                sb.append(item.toString());
-                sb.append("\n");
-              }
-              String text = sb.toString();
-              reportTA.setText(text);
+                reportTA.setText("");
+                StringBuilder sb = new StringBuilder();
+                for(CostItem item : items) {
+                    sb.append(item.toString());
+                    sb.append("\n");
+                }
+                String text = sb.toString();
+                reportTA.setText(text);
             }
 
         }
@@ -927,7 +883,7 @@ public class View implements IView {
 
             private ChartPanel panel;
             private DefaultPieDataset dataset;
-            JFreeChart chart;
+            private JFreeChart chart;
 
             private final JLabel image;
             private final JLabel title;
@@ -942,6 +898,7 @@ public class View implements IView {
             private JComboBox currencyCB;
 
             private final JButton showBtn;
+            private final JButton clearBtn;
             private final JButton backBtn;
 
             // Constructor, to initialize the components
@@ -964,13 +921,14 @@ public class View implements IView {
 
                 // Create Chart Panel
                 dataset = new DefaultPieDataset();
-                chart = ChartFactory.createPieChart3D("Pie Chart Diagram For Total Costs \nSplits To Categories ", dataset, true, true, false);
+                chart = ChartFactory.createPieChart3D("Pie Chart Diagram\nTotal Costs Splits To Categories", dataset, true, true, false);
                 panel = new ChartPanel(chart);
 
                 // Create btnPanel as FlowLayout
                 btnPanel = new JPanel(new FlowLayout());
                 btnPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
                 showBtn = new JButton("Show Results");
+                clearBtn = new JButton("Clear");
 
                 // Create south Panel
                 southPanel = new JPanel();
@@ -997,7 +955,7 @@ public class View implements IView {
                 // Add items to currencyCB
                 currencyCB.addItem("ILS");
                 currencyCB.addItem("USD");
-                currencyCB.addItem("EURO");
+                currencyCB.addItem("EUR");
                 currencyCB.addItem("GPB");
 
                 // Set light weight to currencyCB (to make sure that items not hidden)
@@ -1017,6 +975,7 @@ public class View implements IView {
 
                 // Add show button
                 btnPanel.add(showBtn);
+                btnPanel.add(clearBtn);
 
                 // Add each component to his specific panel
                 centerPanel.add(costFormPanel, BorderLayout.NORTH);
@@ -1040,20 +999,14 @@ public class View implements IView {
                 showBtn.addActionListener(e -> {
                     try {
                         String startDate = startDateTF.getText();
-                        if(startDate == null || startDate.length() == 0) {
-                            throw new CostManagerException("startDate cannot be empty");
-                        }
 
                         String endDate = endDateTF.getText();
-                        if(endDate == null || endDate.length() == 0) {
-                            throw new CostManagerException("endDate cannot be empty");
-                        }
 
-                        String currencyStr = currencyCB.getSelectedItem().toString();
-                        Currency currency = null;
+                        String currencyStr = Objects.requireNonNull(currencyCB.getSelectedItem()).toString();
+                        Currency currency;
                         switch (currencyStr) {
-                            case "EURO":
-                                currency = Currency.EURO;
+                            case "EUR":
+                                currency = Currency.EUR;
                                 break;
                             case "USD":
                                 currency = Currency.USD;
@@ -1065,14 +1018,20 @@ public class View implements IView {
                                 currency = Currency.ILS;
                                 break;
                             default:
-                                currency = Currency.ILS;
+                                throw new CostManagerException("Invalid currency");
                         }
-                        View.this.vm.getPieChartSummary(CostItem.validDate(Date.valueOf(startDate)), CostItem.validDate(Date.valueOf(endDate)), currency);
+                        dataset.clear();
+                        View.this.vm.getPieChartSummary(CostItem.validDate(startDate), CostItem.validDate(endDate), currency);
 
-                    } catch(CostManagerException | IllegalArgumentException ex){
+                    } catch (NullPointerException ex) {
+                        View.this.showMessage("Problem with entered data: Combo boxes cannot be empty!");
+                    }  catch(CostManagerException ex){
                         View.this.showMessage("Problem with entered data " + ex.getMessage());
                     }
                 });
+
+                // Handle clear button click
+                clearBtn.addActionListener(e -> clearInputs());
             }
 
             // This function will clear the inputs inside the panel

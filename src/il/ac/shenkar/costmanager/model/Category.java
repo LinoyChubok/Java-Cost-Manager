@@ -14,7 +14,7 @@ public class Category {
      @param categoryName    Represents the category name that the cost items will be belong to.
      *
      */
-    public Category(int id, String categoryName) {
+    public Category(int id, String categoryName) throws CostManagerException {
         setId(id);
         setCategoryName(categoryName);
     }
@@ -25,22 +25,33 @@ public class Category {
      @param categoryName    Represents the category name that the cost items will be belong to.
      *
      */
-    public Category(String categoryName) {
-        setId(-1);
+    public Category(String categoryName) throws CostManagerException {
+        setId( - 1);
         setCategoryName(categoryName);
     }
 
     /**
      * Category Getters
      */
-    public int getId() { return id; }
-    public String getCategoryName() { return categoryName; }
+    public int getId() {
+        return id;
+    }
+    public String getCategoryName() {
+        return categoryName;
+    }
 
     /**
      * Category Setters
      */
-    public void setId(int id) { this.id = id; }
-    public void setCategoryName(String categoryName) { this.categoryName = categoryName; }
+    public void setId(int id) {
+        this.id = id;
+    }
+    public void setCategoryName(String categoryName) throws CostManagerException {
+        if (categoryName == null || categoryName.length() == 0) {
+            throw new CostManagerException("Category name cannot be empty!");
+        }
+        this.categoryName = categoryName;
+    }
 
     /**
      * This method returns the string representation of the class.
@@ -49,9 +60,7 @@ public class Category {
      */
     @Override
     public String toString() {
-        return "Category: {" +
-                "id = " + id +
-                ", category name = " + categoryName + '}';
+        return "Category: {" + "id = " + id + ", category name = " + categoryName + '}';
     }
 
     /**
@@ -71,11 +80,9 @@ public class Category {
      */
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
+        if (this == obj) return true;
 
-        if (obj == null || getClass() != obj.getClass())
-            return false;
+        if (obj == null || getClass() != obj.getClass()) return false;
 
         Category category = (Category) obj;
 

@@ -22,6 +22,16 @@ public class ViewModel implements IViewModel {
     }
 
     /**
+     * Check if the view and the model are valid before any action
+     */
+    private boolean validViewModel()
+    {
+        if(model != null && view != null)
+            return true;
+        else return false;
+    }
+
+    /**
      * Set the view.
      * @param view Variable that holding the view.
      */
@@ -46,13 +56,16 @@ public class ViewModel implements IViewModel {
     @Override
     public void addCategory(Category category) {
         pool.submit(() -> {
-            try {
-                model.addCategory(category);
-                List<Category> categories = model.getAllCategories();
-                view.showCategories(categories);
-                view.showMessage("Category was added successfully");
-            } catch(CostManagerException e) {
-                view.showMessage(e.getMessage());
+            if(validViewModel())
+            {
+                try {
+                    model.addCategory(category);
+                    List<Category> categories = model.getAllCategories();
+                    view.showCategories(categories);
+                    view.showMessage("Category was added successfully");
+                } catch(CostManagerException e) {
+                    view.showMessage(e.getMessage());
+                }
             }
         });
     }
@@ -64,13 +77,15 @@ public class ViewModel implements IViewModel {
     @Override
     public void updateCategory(Category category) {
         pool.submit(() -> {
-            try {
-                model.updateCategory(category);
-                List<Category> categories = model.getAllCategories();
-                view.showCategories(categories);
-                view.showMessage("Category was updated successfully");
-            } catch(CostManagerException e) {
-                view.showMessage(e.getMessage());
+            if(validViewModel()) {
+                try {
+                    model.updateCategory(category);
+                    List<Category> categories = model.getAllCategories();
+                    view.showCategories(categories);
+                    view.showMessage("Category was updated successfully");
+                } catch (CostManagerException e) {
+                    view.showMessage(e.getMessage());
+                }
             }
         });
     }
@@ -82,13 +97,15 @@ public class ViewModel implements IViewModel {
     @Override
     public void deleteCategory(int id) {
         pool.submit(() -> {
-            try {
-                model.deleteCategory(id);
-                List<Category> categories = model.getAllCategories();
-                view.showCategories(categories);
-                view.showMessage("Category was deleted successfully");
-            } catch(CostManagerException e) {
-                view.showMessage(e.getMessage());
+            if(validViewModel()) {
+                try {
+                    model.deleteCategory(id);
+                    List<Category> categories = model.getAllCategories();
+                    view.showCategories(categories);
+                    view.showMessage("Category was deleted successfully");
+                } catch (CostManagerException e) {
+                    view.showMessage(e.getMessage());
+                }
             }
         });
     }
@@ -100,14 +117,16 @@ public class ViewModel implements IViewModel {
     @Override
     public void getAllCategories() {
         pool.submit(() -> {
-            try {
-                List<Category> categories = model.getAllCategories();
-                view.showCategories(categories);
-                if(categories.size() != 0)
-                    view.showMessage("Categories loaded successfully");
-                else view.showMessage("No data to display");
-            } catch(CostManagerException e) {
-                view.showMessage(e.getMessage());
+            if(validViewModel()) {
+                try {
+                    List<Category> categories = model.getAllCategories();
+                    view.showCategories(categories);
+                    if (categories.size() != 0)
+                        view.showMessage("Categories loaded successfully");
+                    else view.showMessage("No data to display");
+                } catch (CostManagerException e) {
+                    view.showMessage(e.getMessage());
+                }
             }
         });
     }
@@ -119,13 +138,15 @@ public class ViewModel implements IViewModel {
     @Override
     public void addCostItem(CostItem item) {
         pool.submit(() -> {
-            try {
-                model.addCostItem(item);
-                List<CostItem> items = model.getAllCostItems();
-                view.showCostItems(items);
-                view.showMessage("Cost item was added successfully");
-            } catch(CostManagerException e) {
-                view.showMessage(e.getMessage());
+            if(validViewModel()) {
+                try {
+                    model.addCostItem(item);
+                    List<CostItem> items = model.getAllCostItems();
+                    view.showCostItems(items);
+                    view.showMessage("Cost item was added successfully");
+                } catch (CostManagerException e) {
+                    view.showMessage(e.getMessage());
+                }
             }
         });
     }
@@ -137,13 +158,15 @@ public class ViewModel implements IViewModel {
     @Override
     public void updateCostItem(CostItem item) {
         pool.submit(() -> {
-            try {
-                model.updateCostItem(item);
-                List<CostItem> items = model.getAllCostItems();
-                view.showCostItems(items);
-                view.showMessage("Cost item was updated successfully");
-            } catch(CostManagerException e) {
-                view.showMessage(e.getMessage());
+            if(validViewModel()) {
+                try {
+                    model.updateCostItem(item);
+                    List<CostItem> items = model.getAllCostItems();
+                    view.showCostItems(items);
+                    view.showMessage("Cost item was updated successfully");
+                } catch (CostManagerException e) {
+                    view.showMessage(e.getMessage());
+                }
             }
         });
     }
@@ -155,13 +178,15 @@ public class ViewModel implements IViewModel {
     @Override
     public void deleteCostItem(int id) {
         pool.submit(() -> {
-            try {
-                model.deleteCostItem(id);
-                List<CostItem> items = model.getAllCostItems();
-                view.showCostItems(items);
-                view.showMessage("Cost item was deleted successfully");
-            } catch(CostManagerException e) {
-                view.showMessage(e.getMessage());
+            if(validViewModel()) {
+                try {
+                    model.deleteCostItem(id);
+                    List<CostItem> items = model.getAllCostItems();
+                    view.showCostItems(items);
+                    view.showMessage("Cost item was deleted successfully");
+                } catch (CostManagerException e) {
+                    view.showMessage(e.getMessage());
+                }
             }
         });
     }
@@ -173,14 +198,16 @@ public class ViewModel implements IViewModel {
     @Override
     public void getAllCostItems() {
         pool.submit(() -> {
-            try {
-                List<CostItem> items = model.getAllCostItems();
-                view.showCostItems(items);
-                if(items.size() != 0)
-                    view.showMessage("Cost items loaded successfully");
-                else view.showMessage("No data to display");
-            } catch(CostManagerException e) {
-                view.showMessage(e.getMessage());
+            if(validViewModel()) {
+                try {
+                    List<CostItem> items = model.getAllCostItems();
+                    view.showCostItems(items);
+                    if (items.size() != 0)
+                        view.showMessage("Cost items loaded successfully");
+                    else view.showMessage("No data to display");
+                } catch (CostManagerException e) {
+                    view.showMessage(e.getMessage());
+                }
             }
         });
     }
@@ -193,14 +220,16 @@ public class ViewModel implements IViewModel {
     @Override
     public void getReportSummary(Date fromDate, Date toDate) {
         pool.submit(() -> {
-            try {
-                List<CostItem> items = model.getReportSummary(fromDate, toDate);
-                view.showReportSummary(items);
-                if(items.size() != 0)
-                    view.showMessage("Report summary loaded successfully");
-                else view.showMessage("No data to display");
-            } catch(CostManagerException e) {
-                view.showMessage(e.getMessage());
+            if(validViewModel()) {
+                try {
+                    List<CostItem> items = model.getReportSummary(fromDate, toDate);
+                    view.showReportSummary(items);
+                    if (items.size() != 0)
+                        view.showMessage("Report summary loaded successfully");
+                    else view.showMessage("No data to display");
+                } catch (CostManagerException e) {
+                    view.showMessage(e.getMessage());
+                }
             }
         });
     }
@@ -215,14 +244,16 @@ public class ViewModel implements IViewModel {
     @Override
     public void getPieChartSummary(Date fromDate, Date toDate, Currency currency) {
         pool.submit(() -> {
-            try {
-                Map<Category, Double> pieChartSummary = model.getPieChartSummary(fromDate, toDate, currency);
-                view.showPieChartSummary(pieChartSummary);
-                if(pieChartSummary.size() != 0)
-                    view.showMessage("Pie Chart loaded successfully");
-                else view.showMessage("No data to display");
-            } catch(CostManagerException e) {
-                view.showMessage(e.getMessage());
+            if(validViewModel()) {
+                try {
+                    Map<Category, Double> pieChartSummary = model.getPieChartSummary(fromDate, toDate, currency);
+                    view.showPieChartSummary(pieChartSummary);
+                    if (pieChartSummary.size() != 0)
+                        view.showMessage("Pie Chart loaded successfully");
+                    else view.showMessage("No data to display");
+                } catch (CostManagerException e) {
+                    view.showMessage(e.getMessage());
+                }
             }
         });
     }
@@ -235,7 +266,8 @@ public class ViewModel implements IViewModel {
     public void shutdownDB() {
         pool.submit(() -> {
             try {
-                model.shutdownDB();
+                if(model != null)
+                    model.shutdownDB();
             } catch(CostManagerException e) {
                 System.out.println(e.getMessage());
             }

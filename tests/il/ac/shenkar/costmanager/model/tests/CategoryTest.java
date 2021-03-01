@@ -1,6 +1,7 @@
 package il.ac.shenkar.costmanager.model.tests;
 
 import il.ac.shenkar.costmanager.model.Category;
+import il.ac.shenkar.costmanager.model.CostManagerException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,7 +13,7 @@ class CategoryTest {
     private Category category;
 
     @BeforeEach
-    void setUp() { category = new Category("Food"); }
+    void setUp() throws CostManagerException  { category = new Category("Food"); }
 
     @AfterEach
     void tearDown() { category = null; }
@@ -32,7 +33,7 @@ class CategoryTest {
     }
 
     @Test
-    void setCategoryName() {
+    void setCategoryName() throws CostManagerException{
         String expected = "Electric";
         category.setCategoryName("Electric");
         String actual = category.getCategoryName();
