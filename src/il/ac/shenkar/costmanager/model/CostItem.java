@@ -15,7 +15,27 @@ public class CostItem {
     private double totalPrice;
 
     /**
-     * CostItem Parameterized Constructor that builds CostItem object from Database.
+     * CostItem Parameterized Constructor that builds CostItem object (from Database data).
+     *
+     @param id          Variable for holding the cost id from the database.
+     @param date        Represents the date of the purchase.
+     @param category    Represents the category that the cost item belong to.
+     @param description Represents any info about the cost item.
+     @param currency    The currency that used during the purchase.
+     @param totalPrice  The total price of the cost.
+     *
+     */
+    public CostItem(int id, Date date, Category category, String description, Currency currency, double totalPrice) throws CostManagerException {
+        setId(id);
+        setDate(date);
+        setCategory(category);
+        setDescription(description);
+        setCurrency(currency);
+        setTotalPrice(totalPrice);
+    }
+
+    /**
+     * CostItem Parameterized Constructor that builds CostItem object (from GUI Inputs).
      *
      @param id          Variable for holding the cost id from the database.
      @param date        Represents the date of the purchase.
@@ -35,7 +55,7 @@ public class CostItem {
     }
 
     /**
-     * CostItem Parameterized Constructor that builds CostItem object without id.
+     * CostItem Parameterized Constructor that builds CostItem object without id (from GUI Inputs).
      *
      @param date        Represents the date of the purchase.
      @param category    Represents the category that the cost item belong to.
@@ -89,6 +109,9 @@ public class CostItem {
         }
         this.date = validDate(date);
     }
+    public void setDate(Date date) {
+        this.date = date;
+    }
     public void setCategory(Category category) {
         this.category = category;
     }
@@ -98,23 +121,21 @@ public class CostItem {
         }
         this.description = description;
     }
+    public void setCurrency(Currency currency) { this.currency = currency; }
     public void setCurrency(String currency) throws CostManagerException {
         switch (currency) {
-            case "EUR":
-                this.currency = Currency.EUR;
-                break;
-            case "USD":
-                this.currency = Currency.USD;
-                break;
-            case "GBP":
-                this.currency = Currency.GBP;
-                break;
-            case "ILS":
-                this.currency = Currency.ILS;
-                break;
-            default:
-                throw new CostManagerException("Invalid currency!");
+            case "EUR" -> this.currency = Currency.EUR;
+            case "USD" -> this.currency = Currency.USD;
+            case "GBP" -> this.currency = Currency.GBP;
+            case "ILS" -> this.currency = Currency.ILS;
+            default -> throw new CostManagerException("Invalid currency!");
         }
+    }
+    public void setTotalPrice(double totalPrice) throws CostManagerException {
+        if (totalPrice <= 0)
+            throw new CostManagerException("Invalid price!");
+        else
+            this.totalPrice = totalPrice;
     }
     public void setTotalPrice(String totalPrice) throws CostManagerException {
         double totalPriceConverted = 0;
@@ -124,10 +145,9 @@ public class CostItem {
         catch (NumberFormatException ex){
             throw new CostManagerException("Invalid price!");
         }
-        finally {
-            if (totalPriceConverted <= 0) throw new CostManagerException("Invalid price!");
-            else this.totalPrice = totalPriceConverted;
-        }
+
+        if (totalPriceConverted <= 0) throw new CostManagerException("Invalid price!");
+        else this.totalPrice = totalPriceConverted;
     }
 
     /**
@@ -146,7 +166,7 @@ public class CostItem {
             throw new CostManagerException("Invalid date!");
         }
 
-        Date dateConverted = null;
+        Date dateConverted;
 
         try{
            dateConverted = Date.valueOf(date);

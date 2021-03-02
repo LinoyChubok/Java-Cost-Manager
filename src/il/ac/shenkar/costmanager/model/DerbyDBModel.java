@@ -496,11 +496,11 @@ public class DerbyDBModel implements IModel {
                 rs = statement.executeQuery("SELECT * FROM CostItems ORDER BY date");
                 while (rs.next()) {
                     CostItem item = new CostItem (rs.getInt("id"),
-                            rs.getDate("date").toString(),
+                            rs.getDate("date"),
                             new Category(rs.getString("category")),
                             rs.getString("description"),
-                            (rs.getString("currency")),
-                            Double.toString(rs.getDouble("totalPrice")));
+                            Currency.valueOf(rs.getString("currency")),
+                            rs.getDouble("totalPrice"));
                     items.add(item);
                 }
             } catch(SQLException | CostManagerException e) {
@@ -560,7 +560,7 @@ public class DerbyDBModel implements IModel {
             try {
                 rs = statement.executeQuery("SELECT * FROM CostItems WHERE date BETWEEN DATE('" + fromDate.toLocalDate() + "') and DATE('" + toDate.toLocalDate() + "') ORDER BY date");
                 while (rs.next()) {
-                    CostItem item = new CostItem(rs.getInt("id"), rs.getDate("date").toString(), new Category(rs.getString("category")), rs.getString("description"), (rs.getString("currency")), Double.toString(rs.getDouble("totalPrice")));
+                    CostItem item = new CostItem(rs.getInt("id"), rs.getDate("date"), new Category(rs.getString("category")), rs.getString("description"), Currency.valueOf(rs.getString("currency")), rs.getDouble("totalPrice"));
                     items.add(item);
                 }
             } catch(SQLException e) {
