@@ -76,7 +76,11 @@ public enum Currency {
     public double convert(double price, Currency currency) throws CostManagerException
     {
         if(data != null)
-            return price / (Double) data.get(currency.name());
+        {
+            if(this.name() == currency.name())
+                return price;
+            else return price / (Double) data.get(currency.name());
+        }
         else
             throw new CostManagerException("Error using rates API - Convert Currency.");
     }

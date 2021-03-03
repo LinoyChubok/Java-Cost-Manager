@@ -334,7 +334,7 @@ public class View implements IView {
                 currencyCB.addItem("ILS");
                 currencyCB.addItem("USD");
                 currencyCB.addItem("EUR");
-                currencyCB.addItem("GPB");
+                currencyCB.addItem("GBP");
 
                 // Set light weight to currencyCB (to make sure that items not hidden)
                 currencyCB.setLightWeightPopupEnabled(false);
@@ -956,7 +956,7 @@ public class View implements IView {
                 currencyCB.addItem("ILS");
                 currencyCB.addItem("USD");
                 currencyCB.addItem("EUR");
-                currencyCB.addItem("GPB");
+                currencyCB.addItem("GBP");
 
                 // Set light weight to currencyCB (to make sure that items not hidden)
                 currencyCB.setLightWeightPopupEnabled(false);
